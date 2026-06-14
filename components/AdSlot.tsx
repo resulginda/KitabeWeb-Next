@@ -31,6 +31,8 @@ export function AdSlot({ position }: { position: AdPosition }) {
 
   if (!clientId || !slotId) return null;
 
+  const isInArticle = position === 'in-content';
+
   return (
     <aside
       className={`ad-slot ad-${position}`}
@@ -39,11 +41,12 @@ export function AdSlot({ position }: { position: AdPosition }) {
     >
       <ins
         className="adsbygoogle"
-        style={{ display: 'block' }}
+        style={isInArticle ? { display: 'block', textAlign: 'center' } : { display: 'block' }}
         data-ad-client={clientId}
         data-ad-slot={slotId}
-        data-ad-format="auto"
-        data-full-width-responsive="true"
+        {...(isInArticle
+          ? { 'data-ad-layout': 'in-article', 'data-ad-format': 'fluid' }
+          : { 'data-ad-format': 'auto', 'data-full-width-responsive': 'true' })}
       />
       <span className="ad-slot-label">{LABELS[position]}</span>
     </aside>
