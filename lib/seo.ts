@@ -1,7 +1,13 @@
 import type { Metadata } from 'next';
 import { pickText, type Locale, type SeoPlace, LOCALES } from './places';
+import { encodePathSegments } from './detectLocale';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
+
+function absolutePlaceUrl(locale: Locale, citySlug: string, placeSlugParts: string[]): string {
+  const path = encodePathSegments(`/${locale}/${citySlug}/${placeSlugParts.join('/')}`);
+  return `${SITE}${path}`;
+}
 
 export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
   const name = pickText(place.name as never, locale);
@@ -19,7 +25,7 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
 
   const fullSlug = place.slug?.[locale] ?? '';
   const [citySlug, ...rest] = fullSlug.split('/');
-  const canonical = `${SITE}/${locale}/${citySlug}/${rest.join('/')}`;
+  const canonical = absolutePlaceUrl(locale, citySlug, rest);
   const image = place.imageUrl || place.thumbnailUrl;
 
   const languages: Record<string, string> = {};
@@ -27,11 +33,11 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
     const s = place.slug?.[loc];
     if (!s) continue;
     const [c, ...r] = s.split('/');
-    languages[loc] = `${SITE}/${loc}/${c}/${r.join('/')}`;
+    languages[loc] = absolutePlaceUrl(loc, c, r);
   }
   if (place.slug?.tr) {
     const [c, ...r] = place.slug.tr.split('/');
-    languages['x-default'] = `${SITE}/tr/${c}/${r.join('/')}`;
+    languages['x-default'] = absolutePlaceUrl('tr', c, r);
   }
 
   return {
@@ -69,7 +75,7 @@ export function buildPlaceJsonLd(place: SeoPlace, locale: Locale) {
     name,
     description,
     image: place.imageUrl || place.thumbnailUrl,
-    url: `${SITE}/${locale}/${citySlug}/${rest.join('/')}`,
+    url: absolutePlaceUrl(locale, citySlug, rest),
     geo: {
       '@type': 'GeoCoordinates',
       latitude: place.latitude,

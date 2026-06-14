@@ -39,16 +39,19 @@ export function isSupportedLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value);
 }
 
-/** Tarayıcı navigator.languages (client) */
-export function detectLocaleFromNavigator(): Locale {
-  if (typeof navigator === 'undefined') return DEFAULT_LOCALE;
-  const langs =
-    navigator.languages?.length > 0 ? navigator.languages : [navigator.language];
-  for (const lang of langs) {
-    const locale = resolveLocaleFromLanguageTag(lang);
-    if (locale) return locale;
-  }
-  return DEFAULT_LOCALE;
+/** Kiril/Arap slug'lar — HTTP Location header yalnızca ASCII kabul eder */
+export function encodePathSegments(path: string): string {
+  return path
+    .split('/')
+    .map((segment) => {
+      if (!segment) return segment;
+      try {
+        return encodeURIComponent(decodeURIComponent(segment));
+      } catch {
+        return encodeURIComponent(segment);
+      }
+    })
+    .join('/');
 }
 
 export function slugPathForLocale(
@@ -59,5 +62,18 @@ export function slugPathForLocale(
   if (!full) return null;
   const [city, ...rest] = full.split('/');
   if (!city || rest.length === 0) return null;
-  return `/${locale}/${city}/${rest.join('/')}`;
+  const raw = `/${locale}/${city}/${rest.join('/')}`;
+  return encodePathSegments(raw);
+}
+
+/** Tarayıcı navigator.languages (client) */
+export function detectLocaleFromNavigator(): Locale {
+  if (typeof navigator === 'undefined') return DEFAULT_LOCALE;
+  const langs =
+    navigator.languages?.length > 0 ? navigator.languages : [navigator.language];
+  for (const lang of langs) {
+    const locale = resolveLocaleFromLanguageTag(lang);
+    if (locale) return locale;
+  }
+  return DEFAULT_LOCALE;
 }
