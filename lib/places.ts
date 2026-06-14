@@ -1,6 +1,9 @@
 import { cache } from 'react';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.kitabe.org';
+/** Sunucu tarafı fetch — backend rate-limit bypass (REVALIDATE_SECRET ile aynı) */
+const SERVER_KEY = process.env.SERVER_API_KEY || process.env.REVALIDATE_SECRET;
+
 export const LOCALES = ['tr', 'en', 'ru', 'ar'] as const;
 export type Locale = (typeof LOCALES)[number];
 
@@ -42,6 +45,26 @@ export type SeoPlace = {
   updatedAt?: string;
 };
 
+function apiHeaders(): HeadersInit {
+  if (!SERVER_KEY) return {};
+  return { 'X-Kitabe-Internal-Key': SERVER_KEY };
+}
+
+async function fetchApi(url: string, init?: RequestInit): Promise<Response> {
+  const maxRetries = 4;
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    const res = await fetch(url, {
+      ...init,
+      headers: { ...apiHeaders(), ...(init?.headers ?? {}) },
+    });
+    if (res.status !== 429 || attempt === maxRetries - 1) return res;
+    const waitMs = 1000 * 2 ** attempt;
+    console.warn(`[places] HTTP 429, retry ${attempt + 1}/${maxRetries - 1} in ${waitMs}ms`);
+    await new Promise((r) => setTimeout(r, waitMs));
+  }
+  throw new Error('fetchApi: unreachable');
+}
+
 export function pickText(
   field: MultilingualText | string | undefined,
   locale: Locale,
@@ -54,7 +77,7 @@ export function pickText(
 
 export const getPlaceIndex = cache(async (): Promise<PlaceIndexEntry[]> => {
   try {
-    const res = await fetch(`${API}/api/places/seo/index`, {
+    const res = await fetchApi(`${API}/api/places/seo/index`, {
       next: { tags: ['places-index'], revalidate: 3600 },
     });
     if (!res.ok) {
@@ -80,7 +103,7 @@ export const getPlaceBySlug = cache(async (
   placeSlug: string
 ): Promise<SeoPlace | null> => {
   try {
-    const res = await fetch(
+    const res = await fetchApi(
       `${API}/api/places/by-slug/${locale}/${encodeURIComponent(citySlug)}/${encodeURIComponent(placeSlug)}`,
       { next: { revalidate: 86400 } }
     );
