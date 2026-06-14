@@ -6,12 +6,10 @@ import tr from '@kitabe/i18n/locales/tr.json';
 import en from '@kitabe/i18n/locales/en.json';
 import ru from '@kitabe/i18n/locales/ru.json';
 import ar from '@kitabe/i18n/locales/ar.json';
+import { getInitialAppLanguage } from '@kitabe/utils/detectLocale';
 
 if (!i18n.isInitialized) {
-  const saved =
-    typeof window !== 'undefined'
-      ? localStorage.getItem('kitabe_language') || 'tr'
-      : 'tr';
+  const initial = typeof window !== 'undefined' ? getInitialAppLanguage() : 'en';
 
   i18n.use(initReactI18next).init({
     resources: {
@@ -20,8 +18,8 @@ if (!i18n.isInitialized) {
       ru: { translation: ru },
       ar: { translation: ar },
     },
-    lng: saved as 'tr' | 'en' | 'ru' | 'ar',
-    fallbackLng: 'tr',
+    lng: initial,
+    fallbackLng: 'en',
     interpolation: { escapeValue: false },
   });
 }

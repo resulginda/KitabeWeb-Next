@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { getPreferredLocale } from '@/lib/preferredLocale';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org'),
@@ -7,9 +8,11 @@ export const metadata: Metadata = {
   description: 'Türkiye\'nin tarihi ve kültürel yerlerini keşfedin.',
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getPreferredLocale();
+
   return (
-    <html lang="tr">
+    <html lang={locale}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

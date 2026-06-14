@@ -1,6 +1,8 @@
 import { redirect } from 'next/navigation';
-import { LOCALES } from '@/lib/places';
+import { ensureLocaleCookie } from '@/lib/preferredLocale';
 
-export default function HomePage() {
-  redirect('/tr');
+/** Middleware yönlendirmesi yedek — cookie + algılanan dile git */
+export default async function HomePage() {
+  const locale = await ensureLocaleCookie();
+  redirect(`/${locale}`);
 }
