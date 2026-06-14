@@ -9,8 +9,8 @@
     "prebuild": "node scripts/sync-vendor.mjs",
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p ${PORT:-3000}",
-    "start:standalone": "node .next/standalone/server.js",
+    "start": "node .next/standalone/server.js",
+    "start:next": "next start -p ${PORT:-3000}",
     "lint": "next lint",
     "postinstall": "node scripts/sync-vendor.mjs || true"
   },
