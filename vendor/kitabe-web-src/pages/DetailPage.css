@@ -74,6 +74,21 @@
   pointer-events: none;
 }
 
+.detail-no-photo-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 88px;
+  padding: 1.25rem 1rem;
+  background: linear-gradient(135deg, #e8f0ea 0%, #d4e5d8 55%, #c5d9c9 100%);
+  border-bottom: 1px solid #d4e5d8;
+}
+
+.detail-no-photo-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
 .header-actions {
   position: absolute;
   top: 1.5rem;
@@ -144,6 +159,11 @@
   margin-top: 0;
   border-radius: 0;
   padding-top: 2rem;
+}
+
+.detail-page .detail-content.no-header {
+  margin-top: 0;
+  padding-top: 1.75rem;
 }
 
 .open-in-app-banner {
@@ -239,6 +259,12 @@
   .detail-content {
     padding: 3rem;
     margin-top: -100px;
+  }
+
+  .detail-content.no-header,
+  .detail-page .detail-content.no-header {
+    margin-top: 0;
+    padding-top: 2rem;
   }
 }
 

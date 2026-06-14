@@ -395,6 +395,11 @@
     max-width: 1000px;
   }
 
+  .detail-page .detail-content.no-header {
+    margin-top: 0;
+    padding-top: 1.75rem;
+  }
+
   .detail-page .back-btn {
     top: 1rem;
     left: 1rem;

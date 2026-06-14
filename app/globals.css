@@ -304,7 +304,12 @@
   }
 }
 
-/* Fotoğrafsız detay — büyük boş header yerine kompakt şerit */
+/* Fotoğrafsız detay — negatif margin iptal (desktop-density ile çakışmayı önle) */
+.detail-page .detail-content.no-header {
+  margin-top: 0;
+  padding-top: 1.75rem;
+}
+
 .detail-no-photo-hero {
   display: flex;
   align-items: center;
@@ -332,8 +337,4 @@
   color: #5a7a5e;
   font-size: 1.25rem;
   font-weight: 700;
-}
-
-.detail-content.no-header {
-  padding-top: 0.5rem;
 }
