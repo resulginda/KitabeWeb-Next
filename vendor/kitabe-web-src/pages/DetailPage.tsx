@@ -21,6 +21,13 @@ import { notifyAdminsAndEditorsAboutNewPhoto } from '../services/notificationSer
 import type { Place } from '../types/place';
 import './DetailPage.css';
 
+const DATE_LOCALES: Record<string, string> = {
+  tr: 'tr-TR',
+  en: 'en-US',
+  ru: 'ru-RU',
+  ar: 'ar-SA',
+};
+
 /** Mobil tarayıcı: iOS -> Apple Maps, diger -> OpenStreetMap. */
 function externalMapOpenUrl(lat: number, lng: number, label?: string): string {
   if (typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)) {
@@ -111,7 +118,7 @@ const DetailPage = ({
   // Güvenli veri çıkarma - null/undefined kontrolü
   const name = place?.name 
     ? (typeof place.name === 'string' ? place.name : getLocalizedText(place.name, currentLanguage))
-    : 'İsimsiz Yer';
+    : t('detail.unnamedPlace');
   const city = place?.city 
     ? (typeof place.city === 'string' ? place.city : getLocalizedText(place.city, currentLanguage))
     : '';
@@ -120,7 +127,7 @@ const DetailPage = ({
     : '';
   const description = place?.description 
     ? (typeof place.description === 'string' ? place.description : getLocalizedText(place.description, currentLanguage))
-    : 'Açıklama bulunmuyor.';
+    : t('detail.noDescription');
   const story = place?.story 
     ? (typeof place.story === 'string' ? place.story : getLocalizedText(place.story, currentLanguage))
     : '';
@@ -273,7 +280,7 @@ const DetailPage = ({
     if (!place || !kullanici) return;
     
     if (userRating === 0) {
-      alert('Lütfen puan verin (1-5 yıldız).');
+      alert(t('detail.rateRequired'));
       return;
     }
     
@@ -281,15 +288,15 @@ const DetailPage = ({
     try {
       if (currentUserRating) {
         await updateRating(currentUserRating.id, userRating, ratingComment);
-        alert('Değerlendirmeniz güncellendi.');
+        alert(t('detail.ratingUpdated'));
       } else {
         await addRating(place.id, userRating, ratingComment);
-        alert('Değerlendirmeniz gönderildi. Editör onayından sonra yayınlanacaktır.');
+        alert(t('detail.ratingSubmitted'));
       }
       setRatingModalVisible(false);
     } catch (error: any) {
       console.error('Rating submit error:', error);
-      alert(error.message || 'Değerlendirme gönderilemedi. Lütfen tekrar deneyin.');
+      alert(error.message || t('detail.ratingSubmitFailed'));
     } finally {
       setIsSubmittingRating(false);
     }
@@ -298,16 +305,16 @@ const DetailPage = ({
   const handleDeleteRating = async () => {
     if (!currentUserRating) return;
     
-    if (confirm('Değerlendirmenizi silmek istediğinizden emin misiniz?')) {
+    if (confirm(t('detail.ratingDeleteConfirm'))) {
       try {
         await deleteRating(currentUserRating.id);
-        alert('Değerlendirmeniz silindi.');
+        alert(t('detail.ratingDeleted'));
         setRatingModalVisible(false);
         setUserRating(0);
         setRatingComment('');
       } catch (error: any) {
         console.error('Delete rating error:', error);
-        alert(error.message || 'Değerlendirme silinemedi.');
+        alert(error.message || t('detail.ratingDeleteFailed'));
       }
     }
   };
@@ -330,7 +337,7 @@ const DetailPage = ({
     if (!selectedPhoto || !place || !kullanici) return;
     const token = await getToken();
     if (!token) {
-      alert('Giriş yapmanız gerekiyor.');
+      alert(t('detail.loginRequiredShort'));
       return;
     }
     setUploadingPhoto(true);
@@ -344,7 +351,7 @@ const DetailPage = ({
       });
       const uploadData = await uploadRes.json();
       if (!uploadData.success || !uploadData.url) {
-        throw new Error(uploadData.message || 'Fotoğraf yüklenemedi.');
+        throw new Error(uploadData.message || t('detail.photoUploadFailed'));
       }
       const photoUrl = uploadData.url;
 
@@ -357,10 +364,10 @@ const DetailPage = ({
         body: JSON.stringify({ placeId: place.id, photoUrl }),
       });
       const subData = await subRes.json();
-      if (!subData.success) throw new Error(subData.message || 'Gönderim kaydedilemedi.');
+      if (!subData.success) throw new Error(subData.message || t('detail.submissionSaveFailed'));
       const submissionId = subData.data?.id ?? '';
 
-      const userName = [kullanici.isim, kullanici.soyad].filter(Boolean).join(' ').trim() || 'Anonim';
+      const userName = [kullanici.isim, kullanici.soyad].filter(Boolean).join(' ').trim() || t('detail.anonymous');
       const placeName = {
         tr: getLocalizedText(place.name, 'tr'),
         en: getLocalizedText(place.name, 'en'),
@@ -377,13 +384,13 @@ const DetailPage = ({
         photoUrl
       );
 
-      alert('Fotoğrafınız gönderildi. Editör onayından sonra yayınlanacaktır.');
+      alert(t('detail.photoSubmitted'));
       setPhotoModalVisible(false);
       setSelectedPhoto(null);
       setPhotoPreview(null);
     } catch (err: unknown) {
       console.error('Photo upload error:', err);
-      alert(err instanceof Error ? err.message : 'Fotoğraf yüklenirken bir hata oluştu.');
+      alert(err instanceof Error ? err.message : t('detail.photoUploadError'));
     } finally {
       setUploadingPhoto(false);
     }
@@ -392,14 +399,14 @@ const DetailPage = ({
   // Visited handlers
   const handleVisitedToggle = async () => {
     if (!kullanici) {
-      alert('Bu özelliği kullanmak için lütfen giriş yapın');
+      alert(t('detail.visitedLoginRequired'));
       return;
     }
     
     if (!place) return;
     
     if (visited) {
-      if (confirm('Bu yeri gezdiğiniz yerlerden çıkarmak istediğinizden emin misiniz?')) {
+      if (confirm(t('detail.visitedRemoveConfirm'))) {
         await removeFromVisited(place.id);
       }
     } else {
@@ -409,16 +416,16 @@ const DetailPage = ({
         if (!check.canMark) {
           const messages: string[] = [];
           if (check.reasons.includes('location')) {
-            messages.push('Buraya 100m yakın olmalısınız');
+            messages.push(t('detail.visitedTooFar'));
           }
           if (check.reasons.includes('photo')) {
-            messages.push('Bu yer için fotoğraf eklemeniz gerekiyor');
+            messages.push(t('detail.visitedPhotoRequired'));
           }
           if (check.reasons.includes('cooldown')) {
-            messages.push('24 saat beklemeniz gerekiyor');
+            messages.push(t('detail.visitedCooldown'));
           }
           if (check.reasons.includes('rateLimit')) {
-            messages.push('Günlük limit aşıldı (20 yer)');
+            messages.push(t('detail.visitedRateLimit'));
           }
           alert(messages.join('\n'));
         } else {
@@ -431,7 +438,7 @@ const DetailPage = ({
         }
       } catch (error) {
         console.error('Gezdim işaretleme hatası:', error);
-        alert('Bir hata oluştu');
+        alert(t('detail.visitedGenericError'));
       } finally {
         setCheckingVisit(false);
       }
@@ -439,9 +446,9 @@ const DetailPage = ({
   };
   
   const formatUserName = (userName: string) => {
-    if (!userName) return 'Anonim';
+    if (!userName) return t('detail.anonymous');
     const parts = userName.trim().split(' ');
-    if (parts.length === 0) return 'Anonim';
+    if (parts.length === 0) return t('detail.anonymous');
     if (parts.length === 1) return parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
     return parts[0].charAt(0).toUpperCase() + parts[0].slice(1) + ' ' + parts[parts.length - 1].charAt(0).toUpperCase() + '.';
   };
@@ -456,7 +463,7 @@ const DetailPage = ({
   }
 
   if (!place) {
-    return <div className="detail-page">Place not found</div>;
+    return <div className="detail-page">{t('detail.noData')}</div>;
   }
 
   return (
@@ -506,7 +513,7 @@ const DetailPage = ({
                 className={`visited-btn-large ${visited ? 'active' : ''}`}
                 onClick={handleVisitedToggle}
                 disabled={checkingVisit}
-                title={visited ? 'Gezdim işaretini kaldır' : 'Gezdim olarak işaretle'}
+                title={visited ? t('detail.unmarkVisited') : t('detail.markVisited')}
               >
                 {visited ? '✓' : '○'}
               </button>
@@ -583,7 +590,7 @@ const DetailPage = ({
 
         <div className="section">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2>Fotoğraflar</h2>
+            <h2>{t('detail.photos')}</h2>
             {kullanici && (
               <label className="add-photo-btn">
                 <input
@@ -593,21 +600,21 @@ const DetailPage = ({
                   style={{ display: 'none' }}
                 />
                 <span className="material-icons">add_a_photo</span>
-                Fotoğraf Ekle
+                {t('detail.addPhoto')}
               </label>
             )}
           </div>
           {allPhotos.length > 0 ? (
             <PhotoLightbox photos={allPhotos} altPrefix={name} />
           ) : (
-            <p style={{ color: '#718096', fontStyle: 'italic' }}>Henüz fotoğraf eklenmemiş.</p>
+            <p style={{ color: '#718096', fontStyle: 'italic' }}>{t('detail.noPhotosYet')}</p>
           )}
         </div>
         
         {/* Rating Section */}
         <div className="section">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2>Değerlendirmeler</h2>
+            <h2>{t('detail.ratings')}</h2>
             {ratingSummary && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2d3748' }}>
@@ -615,7 +622,7 @@ const DetailPage = ({
                 </span>
                 <StarRating rating={ratingSummary.averageRating} readonly size={20} showEmptyStars={false} />
                 <span style={{ fontSize: '0.9rem', color: '#718096' }}>
-                  ({ratingSummary.totalRatings} değerlendirme)
+                  {t('detail.ratingsCount', { count: ratingSummary.totalRatings })}
                 </span>
               </div>
             )}
@@ -627,7 +634,7 @@ const DetailPage = ({
               onClick={() => setRatingModalVisible(true)}
             >
               <span className="material-icons">star</span>
-              {currentUserRating ? 'Değerlendirmenizi Düzenle' : 'Puan Ver ve Yorum Yap'}
+              {currentUserRating ? t('detail.editYourRating') : t('detail.rateAndComment')}
             </button>
           ) : (
             <button
@@ -635,7 +642,7 @@ const DetailPage = ({
               onClick={() => navigate('/login')}
             >
               <span className="material-icons">star_border</span>
-              Puan Ver ve Yorum Yap (Giriş Yapın)
+              {t('detail.rateLoginRequired')}
             </button>
           )}
           
@@ -649,7 +656,11 @@ const DetailPage = ({
                     </span>
                     <StarRating rating={rating.rating} readonly size={14} showEmptyStars={false} />
                     <span style={{ fontSize: '0.85rem', color: '#718096' }}>
-                      {rating.createdAt?.toDate ? new Date(rating.createdAt.toDate()).toLocaleDateString('tr-TR') : ''}
+                      {rating.createdAt?.toDate
+                        ? new Date(rating.createdAt.toDate()).toLocaleDateString(
+                            DATE_LOCALES[currentLanguage] || 'en-US'
+                          )
+                        : ''}
                     </span>
                   </div>
                   {rating.comment && (
@@ -659,7 +670,7 @@ const DetailPage = ({
               ))}
               {approvedRatings.length > 5 && (
                 <p style={{ fontSize: '0.9rem', color: '#718096', fontStyle: 'italic', marginTop: '0.5rem' }}>
-                  +{approvedRatings.length - 5} değerlendirme daha
+                  {t('detail.moreRatings', { count: approvedRatings.length - 5 })}
                 </p>
               )}
             </div>
@@ -677,11 +688,16 @@ const DetailPage = ({
                   zoom={15}
                 />
               </div>
-              <p>Koordinatlar: {place.latitude.toFixed(6)}, {place.longitude.toFixed(6)}</p>
+              <p>
+                {t('detail.coordinates', {
+                  lat: place.latitude.toFixed(6),
+                  lng: place.longitude.toFixed(6),
+                })}
+              </p>
             </>
           ) : (
             <p style={{ color: '#ef4444', padding: '1rem' }}>
-              Bu yer için geçerli konum bilgisi bulunmuyor.
+              {t('detail.noLocationInfo')}
             </p>
           )}
           <div className="action-buttons">
@@ -729,12 +745,12 @@ const DetailPage = ({
         <div className="modal-overlay" onClick={() => setRatingModalVisible(false)}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h2 style={{ margin: 0 }}>Değerlendirme</h2>
-              <button className="close-btn" onClick={() => setRatingModalVisible(false)}>×</button>
+              <h2 style={{ margin: 0 }}>{t('detail.ratingTitle')}</h2>
+              <button className="close-btn" onClick={() => setRatingModalVisible(false)} aria-label={t('detail.lightboxClose')}>×</button>
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#2d3748' }}>
-                Puanınız
+                {t('detail.yourRating')}
               </label>
               <StarRating 
                 rating={userRating} 
@@ -744,12 +760,12 @@ const DetailPage = ({
             </div>
             <div style={{ marginBottom: '1.5rem' }}>
               <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#2d3748' }}>
-                Yorumunuz (Opsiyonel)
+                {t('detail.yourComment')}
               </label>
               <textarea
                 value={ratingComment}
                 onChange={(e) => setRatingComment(e.target.value)}
-                placeholder="Yorumunuzu buraya yazın..."
+                placeholder={t('detail.commentPlaceholder')}
                 rows={4}
                 style={{
                   width: '100%',
@@ -768,14 +784,18 @@ const DetailPage = ({
                 onClick={handleSubmitRating}
                 disabled={isSubmittingRating || userRating === 0}
               >
-                {isSubmittingRating ? 'Gönderiliyor...' : currentUserRating ? 'Güncelle' : 'Gönder'}
+                {isSubmittingRating
+                  ? t('detail.submitting')
+                  : currentUserRating
+                    ? t('detail.update')
+                    : t('detail.submit')}
               </button>
               {currentUserRating && (
                 <button
                   className="delete-rating-btn"
                   onClick={handleDeleteRating}
                 >
-                  Sil
+                  {t('detail.delete')}
                 </button>
               )}
             </div>
@@ -792,12 +812,12 @@ const DetailPage = ({
         }}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h2 style={{ margin: 0 }}>Fotoğraf Yükle</h2>
+              <h2 style={{ margin: 0 }}>{t('detail.uploadPhotoTitle')}</h2>
               <button className="close-btn" onClick={() => {
                 setPhotoModalVisible(false);
                 setSelectedPhoto(null);
                 setPhotoPreview(null);
-              }}>×</button>
+              }} aria-label={t('detail.lightboxClose')}>×</button>
             </div>
             {photoPreview && (
               <div style={{ marginBottom: '1.5rem', textAlign: 'center' }}>
@@ -813,7 +833,7 @@ const DetailPage = ({
               onClick={handleUploadPhoto}
               disabled={uploadingPhoto}
             >
-              {uploadingPhoto ? 'Yükleniyor...' : 'Fotoğrafı Yükle'}
+              {uploadingPhoto ? t('detail.uploading') : t('detail.uploadPhoto')}
             </button>
           </div>
         </div>

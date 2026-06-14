@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type PhotoLightboxProps = {
   photos: string[];
@@ -6,6 +7,7 @@ type PhotoLightboxProps = {
 };
 
 export function PhotoLightbox({ photos, altPrefix }: PhotoLightboxProps) {
+  const { t } = useTranslation();
   const [index, setIndex] = useState<number | null>(null);
 
   const close = useCallback(() => setIndex(null), []);
@@ -58,13 +60,13 @@ export function PhotoLightbox({ photos, altPrefix }: PhotoLightboxProps) {
           className="photo-lightbox-overlay"
           role="dialog"
           aria-modal="true"
-          aria-label={`${altPrefix} — fotoğraf ${index + 1}`}
+          aria-label={`${altPrefix} — ${index + 1}`}
           onClick={close}
         >
           <button
             type="button"
             className="photo-lightbox-close"
-            aria-label="Kapat"
+            aria-label={t('detail.lightboxClose')}
             onClick={close}
           >
             ×
@@ -74,7 +76,7 @@ export function PhotoLightbox({ photos, altPrefix }: PhotoLightboxProps) {
             <button
               type="button"
               className="photo-lightbox-nav photo-lightbox-prev"
-              aria-label="Önceki fotoğraf"
+              aria-label={t('detail.lightboxPrev')}
               onClick={(e) => {
                 e.stopPropagation();
                 showPrev();
@@ -96,7 +98,7 @@ export function PhotoLightbox({ photos, altPrefix }: PhotoLightboxProps) {
             <button
               type="button"
               className="photo-lightbox-nav photo-lightbox-next"
-              aria-label="Sonraki fotoğraf"
+              aria-label={t('detail.lightboxNext')}
               onClick={(e) => {
                 e.stopPropagation();
                 showNext();

@@ -1,17 +1,11 @@
 import { collectGalleryUrls, pickText, type Locale, type SeoPlace } from '@/lib/places';
 import { pickArray } from '@/lib/placeText';
+import { DETAIL_LABELS } from '@/lib/detailLabels';
 import { PhotoGalleryClient } from '@/components/PhotoGalleryClient';
-
-const SECTION_LABELS: Record<Locale, { description: string; story: string; visitTips: string; photos: string }> = {
-  tr: { description: 'Açıklama', story: 'Hikaye', visitTips: 'Ziyaret İpuçları', photos: 'Fotoğraflar' },
-  en: { description: 'Description', story: 'Story', visitTips: 'Visit Tips', photos: 'Photos' },
-  ru: { description: 'Описание', story: 'История', visitTips: 'Советы', photos: 'Фотографии' },
-  ar: { description: 'الوصف', story: 'القصة', visitTips: 'نصائح الزيارة', photos: 'الصور' },
-};
 
 /** KitabeWeb DetailPage ile aynı görünüm — sunucuda anında render (SEO + LCP) */
 export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: Locale }) {
-  const labels = SECTION_LABELS[locale];
+  const labels = DETAIL_LABELS[locale];
   const name = pickText(place.name as never, locale);
   const city = pickText(place.city as never, locale);
   const district = pickText(place.district as never, locale);
@@ -78,7 +72,7 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
           <PhotoGalleryClient
             photos={photos}
             altPrefix={name}
-            emptyText={locale === 'tr' ? 'Henüz fotoğraf eklenmemiş.' : 'No photos yet.'}
+            emptyText={labels.noPhotosYet}
           />
         </div>
       </div>

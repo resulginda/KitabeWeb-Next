@@ -93,7 +93,7 @@ export function PlaceDetailClient({
     <div id="place-detail-interactive">
       <HelmetProvider>
         <AuthProvider>
-          <LanguageProvider defaultLanguage={locale}>
+          <LanguageProvider defaultLanguage={locale} localeFromUrl={locale}>
             <LocaleSync locale={locale} />
             <CategoriesProvider>
               <PlacesProvider>
