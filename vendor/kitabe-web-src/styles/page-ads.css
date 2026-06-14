@@ -1,0 +1,70 @@
+/* SPA sayfa reklam yerleşimi — home, list, nearby, route, favorites, blog vb. */
+
+.spa-ad-shell {
+  width: 100%;
+}
+
+.spa-page-layout {
+  display: grid;
+  grid-template-columns: minmax(100px, 160px) minmax(0, 1fr) minmax(100px, 300px);
+  gap: 1rem 1.25rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 0.75rem;
+  align-items: start;
+}
+
+.spa-main-column {
+  min-width: 0;
+}
+
+.spa-ad-left,
+.spa-ad-right {
+  position: sticky;
+  top: 1rem;
+}
+
+.spa-ad-below {
+  max-width: 1200px;
+  margin: 0.5rem auto 1rem;
+  padding: 0 1rem;
+}
+
+.spa-ad-shell .ad-slot {
+  position: relative;
+  min-height: 90px;
+  margin: 0.5rem 0;
+  overflow: hidden;
+}
+
+.spa-ad-shell .ad-slot.ad-left-sidebar,
+.spa-ad-shell .ad-slot.ad-sidebar {
+  min-height: 250px;
+}
+
+.spa-ad-shell .ad-slot.ad-in-content {
+  min-height: 90px;
+  margin: 0 0 1rem;
+}
+
+@media (max-width: 1100px) {
+  .spa-page-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(100px, 200px);
+  }
+
+  .spa-ad-left {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .spa-page-layout {
+    grid-template-columns: 1fr;
+    padding: 0;
+  }
+
+  .spa-ad-left,
+  .spa-ad-right {
+    display: none;
+  }
+}

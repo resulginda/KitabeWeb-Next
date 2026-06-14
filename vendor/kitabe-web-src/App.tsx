@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
@@ -11,11 +11,12 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import { PhotoSubmissionProvider } from './contexts/PhotoSubmissionContext';
 import { RatingProvider } from './contexts/RatingContext';
 import { VisitedPlacesProvider } from './contexts/VisitedPlacesContext';
-import Navigation from './components/Navigation';
-import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import { AdSenseLoader } from './components/AdSenseLoader';
+import { MainLayout } from './components/MainLayout';
 import './i18n';
 import './App.css';
+import './styles/page-ads.css';
 
 import LandingPage from './pages/LandingPage';
 import HomePage from './pages/HomePage';
@@ -57,59 +58,53 @@ import EditSuggestionPage from './pages/EditSuggestionPage';
 import './styles/desktop-density.css';
 
 function AppContent() {
-  const location = useLocation();
-  const isLandingPage = location.pathname === '/';
-
-  // Footer'ın gösterilmeyeceği sayfalar
-  const noFooterPages = ['/', '/login', '/register', '/reset-password'];
-  const showFooter = !noFooterPages.includes(location.pathname);
-
   return (
     <>
+      <AdSenseLoader />
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/list" element={<ListPage />} />
-        <Route path="/nearby" element={<NearbyPage />} />
-        <Route path="/detail/:id" element={<DetailPage />} />
-        <Route path="/route" element={<TripRoutePage />} />
-        <Route path="/account" element={<AccountPage />} />
-        <Route path="/favorites" element={<FavoritesPage />} />
-        <Route path="/suggestion" element={<SuggestionPage />} />
-        <Route path="/edit-suggestion/:placeId" element={<EditSuggestionPage />} />
-        <Route path="/my-suggestions" element={<MySuggestionsPage />} />
-        <Route path="/editor-panel" element={<EditorPanelPage />} />
-        <Route path="/admin-panel" element={<AdminPanelPage />} />
-        <Route path="/admin-hub" element={<AdminHubPage />} />
-        <Route path="/admin-push" element={<AdminPushBroadcastPage />} />
-        <Route path="/admin-push-logs" element={<AdminPushLogsPage />} />
-        <Route path="/admin-contact-forms" element={<AdminContactFormsPage />} />
-        <Route path="/user-management" element={<UserManagementPage />} />
-        <Route path="/account-settings" element={<AccountSettingsPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/stats" element={<StatsPage />} />
-        <Route path="/legal" element={<LegalPage />} />
-        <Route path="/hakkimizda" element={<AboutPage />} />
-        <Route path="/gizlilik-politikasi" element={<PrivacyPolicyPage />} />
-        <Route path="/kullanim-sartlari" element={<TermsPage />} />
-        <Route path="/iletisim" element={<ContactPage />} />
-        <Route path="/blog" element={<BlogPage />} />
-        <Route path="/blog/:slug" element={<BlogDetailPage />} />
-        <Route path="/delete-account" element={<DeleteAccountPage />} />
-        <Route path="/hesap-silme" element={<DeleteAccountPage />} />
-        <Route path="/reset-password" element={<ResetPasswordPage />} />
-        <Route path="/notifications" element={<NotificationPage />} />
-        <Route path="/notification-settings" element={<NotificationSettingsPage />} />
-        <Route path="/photo-approval" element={<PhotoApprovalPage />} />
-        <Route path="/rating-approval" element={<RatingApprovalPage />} />
-        <Route path="/profile" element={<UserProfilePage />} />
-        <Route path="/language-selection" element={<LanguageSelectionPage />} />
-        <Route path="*" element={<Navigate to="/home" replace />} />
+        <Route element={<MainLayout />}>
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/list" element={<ListPage />} />
+          <Route path="/nearby" element={<NearbyPage />} />
+          <Route path="/detail/:id" element={<DetailPage />} />
+          <Route path="/route" element={<TripRoutePage />} />
+          <Route path="/account" element={<AccountPage />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/suggestion" element={<SuggestionPage />} />
+          <Route path="/edit-suggestion/:placeId" element={<EditSuggestionPage />} />
+          <Route path="/my-suggestions" element={<MySuggestionsPage />} />
+          <Route path="/editor-panel" element={<EditorPanelPage />} />
+          <Route path="/admin-panel" element={<AdminPanelPage />} />
+          <Route path="/admin-hub" element={<AdminHubPage />} />
+          <Route path="/admin-push" element={<AdminPushBroadcastPage />} />
+          <Route path="/admin-push-logs" element={<AdminPushLogsPage />} />
+          <Route path="/admin-contact-forms" element={<AdminContactFormsPage />} />
+          <Route path="/user-management" element={<UserManagementPage />} />
+          <Route path="/account-settings" element={<AccountSettingsPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/stats" element={<StatsPage />} />
+          <Route path="/legal" element={<LegalPage />} />
+          <Route path="/hakkimizda" element={<AboutPage />} />
+          <Route path="/gizlilik-politikasi" element={<PrivacyPolicyPage />} />
+          <Route path="/kullanim-sartlari" element={<TermsPage />} />
+          <Route path="/iletisim" element={<ContactPage />} />
+          <Route path="/blog" element={<BlogPage />} />
+          <Route path="/blog/:slug" element={<BlogDetailPage />} />
+          <Route path="/delete-account" element={<DeleteAccountPage />} />
+          <Route path="/hesap-silme" element={<DeleteAccountPage />} />
+          <Route path="/reset-password" element={<ResetPasswordPage />} />
+          <Route path="/notifications" element={<NotificationPage />} />
+          <Route path="/notification-settings" element={<NotificationSettingsPage />} />
+          <Route path="/photo-approval" element={<PhotoApprovalPage />} />
+          <Route path="/rating-approval" element={<RatingApprovalPage />} />
+          <Route path="/profile" element={<UserProfilePage />} />
+          <Route path="/language-selection" element={<LanguageSelectionPage />} />
+          <Route path="*" element={<Navigate to="/home" replace />} />
+        </Route>
       </Routes>
-      {!isLandingPage && <Navigation />}
-      {showFooter && <Footer />}
     </>
   );
 }
