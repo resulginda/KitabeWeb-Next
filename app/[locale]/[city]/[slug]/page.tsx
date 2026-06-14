@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { buildPlaceJsonLd, buildPlaceMetadata } from '@/lib/seo';
 import {
@@ -7,9 +7,9 @@ import {
   LOCALES,
   type Locale,
 } from '@/lib/places';
-import { PlacePhotoStrip } from '@/components/PlacePhotoStrip';
+import { PlaceDetailStatic } from '@/components/PlaceDetailStatic';
 import { PlaceDetailClient } from '@/components/PlaceDetailClient';
-import { AdSlot } from '@/components/AdSlot';
+import { KitabeNavigation } from '@/components/KitabeNavigation';
 
 export const revalidate = 86400;
 
@@ -17,7 +17,6 @@ type PageProps = {
   params: Promise<{ locale: string; city: string; slug: string }>;
 };
 
-/** Tüm yayınlanmış yerler × 4 dil — build sırasında statik HTML üretilir */
 export async function generateStaticParams() {
   const index = await getPlaceIndex();
   const params: { locale: string; city: string; slug: string }[] = [];
@@ -36,7 +35,6 @@ export async function generateStaticParams() {
   return params;
 }
 
-/** Build'de olmayan yeni slug'lar ilk istekte ISR ile üretilir */
 export const dynamicParams = true;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -66,19 +64,12 @@ export default async function PlacePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      {/* Sunucu tarafı fotoğraf şeridi — her sayfada görünür, botlar tarar */}
-      <PlacePhotoStrip place={place} locale={locale as Locale} />
-
-      <div className="place-page-layout">
-        <div>
-          <PlaceDetailClient place={place as unknown as Record<string, unknown>} locale={locale as Locale} />
-          <AdSlot position="in-content" />
-          <AdSlot position="below-content" />
-        </div>
-        <aside className="place-sidebar">
-          <AdSlot position="sidebar" />
-        </aside>
-      </div>
+      <PlaceDetailStatic place={place} locale={locale as Locale} />
+      <PlaceDetailClient
+        place={place as unknown as Record<string, unknown>}
+        locale={locale as Locale}
+      />
+      <KitabeNavigation locale={locale as Locale} />
     </>
   );
 }

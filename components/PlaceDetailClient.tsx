@@ -82,38 +82,47 @@ export function PlaceDetailClient({
     [place, locale]
   );
 
+  useEffect(() => {
+    const root = document.getElementById('place-detail-interactive');
+    const statik = document.getElementById('place-detail-static');
+    if (root) root.classList.add('is-ready');
+    if (statik) statik.classList.add('is-hidden');
+  }, []);
+
   return (
-    <HelmetProvider>
-      <AuthProvider>
-        <LanguageProvider defaultLanguage={locale}>
-          <LocaleSync locale={locale} />
-          <CategoriesProvider>
-            <PlacesProvider>
-              <FavoritesProvider>
-                <FiltreProvider>
-                  <RouteProvider>
-                    <NotificationProvider>
-                      <PhotoSubmissionProvider>
-                        <RatingProvider>
-                          <VisitedPlacesProvider>
-                            <MemoryRouter initialEntries={[`/detail/${initialPlace.id}`]}>
-                              <DetailPage
-                                placeIdOverride={initialPlace.id}
-                                skipHelmet
-                                initialPlace={initialPlace}
-                              />
-                            </MemoryRouter>
-                          </VisitedPlacesProvider>
-                        </RatingProvider>
-                      </PhotoSubmissionProvider>
-                    </NotificationProvider>
-                  </RouteProvider>
-                </FiltreProvider>
-              </FavoritesProvider>
-            </PlacesProvider>
-          </CategoriesProvider>
-        </LanguageProvider>
-      </AuthProvider>
-    </HelmetProvider>
+    <div id="place-detail-interactive">
+      <HelmetProvider>
+        <AuthProvider>
+          <LanguageProvider defaultLanguage={locale}>
+            <LocaleSync locale={locale} />
+            <CategoriesProvider>
+              <PlacesProvider>
+                <FavoritesProvider>
+                  <FiltreProvider>
+                    <RouteProvider>
+                      <NotificationProvider>
+                        <PhotoSubmissionProvider>
+                          <RatingProvider>
+                            <VisitedPlacesProvider>
+                              <MemoryRouter initialEntries={[`/detail/${initialPlace.id}`]}>
+                                <DetailPage
+                                  placeIdOverride={initialPlace.id}
+                                  skipHelmet
+                                  initialPlace={initialPlace}
+                                />
+                              </MemoryRouter>
+                            </VisitedPlacesProvider>
+                          </RatingProvider>
+                        </PhotoSubmissionProvider>
+                      </NotificationProvider>
+                    </RouteProvider>
+                  </FiltreProvider>
+                </FavoritesProvider>
+              </PlacesProvider>
+            </CategoriesProvider>
+          </LanguageProvider>
+        </AuthProvider>
+      </HelmetProvider>
+    </div>
   );
 }
