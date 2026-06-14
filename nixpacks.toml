@@ -1,19 +1,18 @@
-# Dokploy — Buildpack (Nixpacks) ayarları
-# Build: npm run build  |  Start: standalone server.js
-
-[phases.setup]
-nixPkgs = ["nodejs_20"]
-
-[phases.install]
-cmds = ["npm ci --legacy-peer-deps"]
-
-[phases.build]
-cmds = [
-  "npm run build",
-  "cp -r public .next/standalone/public",
-  "cp -r .next/static .next/standalone/.next/static",
-]
-
-[start]
-cmd = "HOSTNAME=0.0.0.0 node .next/standalone/server.js"
-
+# Dokploy — Buildpack (Nixpacks) ayarlari
+# Build: npm run build | Start: standalone server.js
+
+[phases.setup]
+nixPkgs = ["nodejs_20"]
+
+[phases.install]
+cmds = ["npm ci --legacy-peer-deps"]
+
+[phases.build]
+cmds = [
+  "npm run build",
+  "cp -r public .next/standalone/public",
+  "cp -r .next/static .next/standalone/.next/static"
+]
+
+[start]
+cmd = "HOSTNAME=0.0.0.0 node .next/standalone/server.js"
