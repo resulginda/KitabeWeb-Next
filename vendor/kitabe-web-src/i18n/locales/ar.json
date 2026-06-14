@@ -823,7 +823,14 @@
     "subtitle": "مقالات حول التراث الثقافي لتركيا والأماكن التاريخية وأدلة السفر",
     "readMore": "اقرأ المزيد →",
     "notFound": "المقال غير موجود",
-    "backToBlog": "← العودة إلى المدونة"
+    "backToBlog": "← العودة إلى المدونة",
+    "minutesRead": "{{count}} د",
+    "categories": {
+      "culturalHeritage": "التراث الثقافي",
+      "travelGuide": "دليل السفر",
+      "tourism": "السياحة",
+      "museums": "المتاحف"
+    }
   }
 }
 

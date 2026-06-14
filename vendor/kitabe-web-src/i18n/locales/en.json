@@ -823,7 +823,14 @@
     "subtitle": "Articles about Turkey's cultural heritage, historical places, and travel guides",
     "readMore": "Read More →",
     "notFound": "Article Not Found",
-    "backToBlog": "← Back to Blog"
+    "backToBlog": "← Back to Blog",
+    "minutesRead": "{{count}} min",
+    "categories": {
+      "culturalHeritage": "Cultural Heritage",
+      "travelGuide": "Travel Guide",
+      "tourism": "Tourism",
+      "museums": "Museums"
+    }
   }
 }
 

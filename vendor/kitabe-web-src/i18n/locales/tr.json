@@ -832,7 +832,14 @@
     "subtitle": "Türkiye'nin kültürel mirası, tarihi yerler ve gezi rehberleri hakkında yazılar",
     "readMore": "Devamını Oku →",
     "notFound": "Yazı Bulunamadı",
-    "backToBlog": "← Blog'a Dön"
+    "backToBlog": "← Blog'a Dön",
+    "minutesRead": "{{count}} dk",
+    "categories": {
+      "culturalHeritage": "Kültürel Miras",
+      "travelGuide": "Gezi Rehberi",
+      "tourism": "Turizm",
+      "museums": "Müzeler"
+    }
   }
 }
 
