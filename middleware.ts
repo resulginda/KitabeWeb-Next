@@ -6,6 +6,7 @@ import {
   isSupportedLocale,
   type Locale,
 } from '@/lib/detectLocale';
+import { HUB_SLUGS } from '@/lib/listings';
 
 const SPA_BASE =
   process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://kitabe.org';
@@ -27,26 +28,40 @@ function withLocaleCookie(response: NextResponse, locale: Locale, request: NextR
   return response;
 }
 
-/** /tr, /en — yalnızca dil segmenti (detay değil) */
+function pathParts(pathname: string): string[] {
+  return pathname.split('/').filter(Boolean);
+}
+
+/** /tr, /en — yalnızca dil segmenti */
 function isLocaleOnlyPath(pathname: string): boolean {
-  const parts = pathname.split('/').filter(Boolean);
+  const parts = pathParts(pathname);
   return parts.length === 1 && isSupportedLocale(parts[0]);
 }
 
-/** /tr/antalya/yer-slug */
-function isDetailPath(pathname: string): boolean {
-  const parts = pathname.split('/').filter(Boolean);
-  return parts.length === 3 && isSupportedLocale(parts[0]);
+function isHubSegmentForLocale(locale: Locale, segment: string): boolean {
+  const expected = HUB_SLUGS[locale];
+  return segment?.toLowerCase() === expected?.toLowerCase();
+}
+
+/** /tr/antalya/yer-slug veya /tr/antalya/kesfet/... */
+function isCityContentPath(pathname: string): boolean {
+  const parts = pathParts(pathname);
+  if (parts.length < 3 || !isSupportedLocale(parts[0])) return false;
+  const locale = parts[0] as Locale;
+  const third = parts[2];
+  if (parts.length === 3) {
+    return isHubSegmentForLocale(locale, third) || third.length > 0;
+  }
+  return isHubSegmentForLocale(locale, third);
 }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const preferred = readPreferred(request);
 
-  // Ana sayfa ve dil kökü → KitabeWeb SPA
   if (pathname === '/' || isLocaleOnlyPath(pathname)) {
     const locale = isLocaleOnlyPath(pathname)
-      ? (pathname.split('/').filter(Boolean)[0] as Locale)
+      ? (pathParts(pathname)[0] as Locale)
       : preferred;
     return withLocaleCookie(
       NextResponse.redirect(`${SPA_BASE}/home`),
@@ -55,10 +70,10 @@ export function middleware(request: NextRequest) {
     );
   }
 
-  if (pathname.startsWith('/detail/') || isDetailPath(pathname)) {
+  if (pathname.startsWith('/detail/') || isCityContentPath(pathname)) {
     const response = NextResponse.next();
-    if (isDetailPath(pathname)) {
-      const locale = pathname.split('/').filter(Boolean)[0] as Locale;
+    const locale = pathParts(pathname)[0] as Locale;
+    if (isSupportedLocale(locale)) {
       response.cookies.set(LOCALE_COOKIE, locale, {
         path: '/',
         maxAge: 60 * 60 * 24 * 365,
@@ -78,6 +93,6 @@ export const config = {
     '/',
     '/detail/:path*',
     '/:locale(tr|en|ru|ar)',
-    '/:locale(tr|en|ru|ar)/:city/:slug',
+    '/:locale(tr|en|ru|ar)/:city/:segments*',
   ],
 };

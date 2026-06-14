@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   revalidateTag('places-index');
+  revalidateTag('listings-index');
   if (purgeSitemap) {
     revalidatePath('/sitemap.xml');
   }
