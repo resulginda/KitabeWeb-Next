@@ -56,7 +56,18 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname.startsWith('/detail/') || isDetailPath(pathname)) {
-    return withLocaleCookie(NextResponse.next(), preferred, request);
+    const response = NextResponse.next();
+    if (isDetailPath(pathname)) {
+      const locale = pathname.split('/').filter(Boolean)[0] as Locale;
+      response.cookies.set(LOCALE_COOKIE, locale, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 365,
+        sameSite: 'lax',
+      });
+    } else {
+      withLocaleCookie(response, preferred, request);
+    }
+    return response;
   }
 
   return NextResponse.next();

@@ -7,7 +7,6 @@ import {
   LOCALES,
   type Locale,
 } from '@/lib/places';
-import { setLocaleCookie } from '@/lib/preferredLocale';
 import { PlaceDetailLayout } from '@/components/PlaceDetailLayout';
 import { KitabeNavigation } from '@/components/KitabeNavigation';
 
@@ -51,8 +50,6 @@ export default async function PlacePage({ params }: PageProps) {
   const { locale, city, slug } = await params;
 
   if (!LOCALES.includes(locale as Locale)) notFound();
-
-  await setLocaleCookie(locale as Locale);
 
   const place = await resolvePlaceForDetail(locale as Locale, city, slug);
   if (!place) notFound();
