@@ -2,8 +2,8 @@ import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { buildPlaceJsonLd, buildPlaceMetadata } from '@/lib/seo';
 import {
-  getPlaceBySlug,
   getPlaceIndex,
+  resolvePlaceForDetail,
   LOCALES,
   type Locale,
 } from '@/lib/places';
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { locale, city, slug } = await params;
   if (!LOCALES.includes(locale as Locale)) return { title: 'Kitabe' };
 
-  const place = await getPlaceBySlug(locale as Locale, city, slug);
+  const place = await resolvePlaceForDetail(locale as Locale, city, slug);
   if (!place) return { title: 'Yer bulunamadı | Kitabe' };
 
   return buildPlaceMetadata(place, locale as Locale);
@@ -56,7 +56,7 @@ export default async function PlacePage({ params }: PageProps) {
 
   const preferred = await ensureLocaleCookie();
 
-  const place = await getPlaceBySlug(locale as Locale, city, slug);
+  const place = await resolvePlaceForDetail(locale as Locale, city, slug);
   if (!place) notFound();
 
   if (preferred !== locale) {

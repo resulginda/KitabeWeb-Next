@@ -97,20 +97,32 @@ export const getPlaceIndex = cache(async (): Promise<PlaceIndexEntry[]> => {
   }
 });
 
+function normalizeSlugSegment(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) return trimmed;
+  try {
+    const decoded = decodeURIComponent(trimmed);
+    return decoded.normalize('NFC');
+  } catch {
+    return trimmed.normalize('NFC');
+  }
+}
+
 export const getPlaceBySlug = cache(async (
   locale: Locale,
   citySlug: string,
   placeSlug: string
 ): Promise<SeoPlace | null> => {
+  const city = normalizeSlugSegment(citySlug);
+  const slug = normalizeSlugSegment(placeSlug);
+
   try {
-    const res = await fetchApi(
-      `${API}/api/places/by-slug/${locale}/${encodeURIComponent(citySlug)}/${encodeURIComponent(placeSlug)}`,
-      { next: { revalidate: 86400 } }
-    );
+    const url = `${API}/api/places/by-slug/${locale}/${encodeURIComponent(city)}/${encodeURIComponent(slug)}`;
+    const res = await fetchApi(url, { next: { revalidate: 86400 } });
     if (res.status === 404) return null;
     if (!res.ok) {
       console.warn(
-        `[places] by-slug HTTP ${res.status}: ${locale}/${citySlug}/${placeSlug}`
+        `[places] by-slug HTTP ${res.status}: ${locale}/${city}/${slug} → ${url}`
       );
       return null;
     }
@@ -120,6 +132,46 @@ export const getPlaceBySlug = cache(async (
     console.warn(`[places] by-slug fetch failed: ${locale}/${citySlug}/${placeSlug}`, err);
     return null;
   }
+});
+
+export const getPlaceById = cache(async (id: string): Promise<SeoPlace | null> => {
+  try {
+    const res = await fetchApi(`${API}/api/places/${id}`, {
+      next: { revalidate: 86400 },
+    });
+    if (res.status === 404) return null;
+    if (!res.ok) {
+      console.warn(`[places] by-id HTTP ${res.status}: ${id}`);
+      return null;
+    }
+    const json = await res.json();
+    return json.data ?? null;
+  } catch (err) {
+    console.warn(`[places] by-id fetch failed: ${id}`, err);
+    return null;
+  }
+});
+
+/** Kiril/Arap slug API eşleşmezse SEO index + id ile yedek çözüm */
+export const resolvePlaceForDetail = cache(async (
+  locale: Locale,
+  citySlug: string,
+  placeSlug: string
+): Promise<SeoPlace | null> => {
+  const place = await getPlaceBySlug(locale, citySlug, placeSlug);
+  if (place) return place;
+
+  const city = normalizeSlugSegment(citySlug);
+  const slug = normalizeSlugSegment(placeSlug);
+  const targetPath = `${city}/${slug}`;
+
+  const index = await getPlaceIndex();
+  const entry = index.find((row) =>
+    LOCALES.some((l) => row.slug[l] === targetPath)
+  );
+  if (!entry) return null;
+
+  return getPlaceById(entry.id);
 });
 
 export function collectGalleryUrls(place: SeoPlace): string[] {
