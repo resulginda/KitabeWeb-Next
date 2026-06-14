@@ -186,7 +186,8 @@
     "other": "Diğer",
     "distance": "Mesafe",
     "radiusIndicator": "yarıçapında",
-    "yourLocation": "Konumunuz"
+    "yourLocation": "Konumunuz",
+    "noNearbyPlaces": "Seçilen yarıçap içinde yer bulunamadı. Lütfen mesafeyi artırın."
   },
   "categories": {
     "Doğal Alan": "Doğal Alan",

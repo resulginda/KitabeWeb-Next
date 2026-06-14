@@ -7,6 +7,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { getPlaceListImageUri, resolveListImageFallbackUri } from '../utils/imageUtils';
 import { openPlaceDetail } from '../utils/placeDetailUrl';
 import { useCategories } from '../contexts/CategoriesContext';
+import { getLocalizedText } from '../utils/multilang';
 import './ListPage.css';
 
 const ListPage = () => {
@@ -176,7 +177,7 @@ const ListPage = () => {
                 const active = (selectedSubCategories[mainId] || []).includes(sub.id);
                 const subLabel = typeof sub.name === 'string'
                   ? sub.name
-                  : sub.name?.tr || sub.name?.en || sub.id;
+                  : getLocalizedText(sub.name, currentLanguage) || sub.id;
                 return (
                   <button
                     key={`${mainId}-${sub.id}`}
@@ -209,9 +210,9 @@ const ListPage = () => {
           </div>
         ) : (
           filteredPlaces.map(place => {
-            const name = typeof place.name === 'string' ? place.name : place.name.tr || '';
-            const city = typeof place.city === 'string' ? place.city : place.city.tr || '';
-            const desc = typeof place.description === 'string' ? place.description : place.description.tr || '';
+            const name = typeof place.name === 'string' ? place.name : getLocalizedText(place.name, currentLanguage);
+            const city = typeof place.city === 'string' ? place.city : getLocalizedText(place.city, currentLanguage);
+            const desc = typeof place.description === 'string' ? place.description : getLocalizedText(place.description, currentLanguage);
             const imageUrl = imageFallbacks[place.id] || getPlaceListImageUri(place);
 
             return (

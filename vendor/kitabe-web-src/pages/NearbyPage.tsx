@@ -5,6 +5,7 @@ import { useFavorites } from '../contexts/FavoritesContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPlaceImageUri } from '../utils/imageUtils';
 import { openPlaceDetail } from '../utils/placeDetailUrl';
+import { getLocalizedText } from '../utils/multilang';
 import MapView from '../components/MapView';
 import './NearbyPage.css';
 
@@ -131,8 +132,8 @@ const NearbyPage = () => {
           {!userLocation && !locationError && (
             <div className="places-grid">
               {places.slice(0, 10).map(place => {
-                const name = typeof place.name === 'string' ? place.name : place.name.tr || '';
-                const city = typeof place.city === 'string' ? place.city : place.city.tr || '';
+                const name = typeof place.name === 'string' ? place.name : getLocalizedText(place.name, currentLanguage);
+                const city = typeof place.city === 'string' ? place.city : getLocalizedText(place.city, currentLanguage);
                 const imageUrl = getPlaceImageUri(place);
 
                 return (
@@ -177,9 +178,9 @@ const NearbyPage = () => {
               </div>
 
               {nearbyPlaces.map(({ place, distance }) => {
-                const name = typeof place.name === 'string' ? place.name : place.name.tr || '';
-                const city = typeof place.city === 'string' ? place.city : place.city.tr || '';
-                const desc = typeof place.description === 'string' ? place.description : place.description.tr || '';
+                const name = typeof place.name === 'string' ? place.name : getLocalizedText(place.name, currentLanguage);
+                const city = typeof place.city === 'string' ? place.city : getLocalizedText(place.city, currentLanguage);
+                const desc = typeof place.description === 'string' ? place.description : getLocalizedText(place.description, currentLanguage);
                 const imageUrl = getPlaceImageUri(place);
 
                 return (

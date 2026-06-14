@@ -1,4 +1,4 @@
-import { notFound, redirect } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { buildPlaceJsonLd, buildPlaceMetadata } from '@/lib/seo';
 import {
@@ -7,8 +7,7 @@ import {
   LOCALES,
   type Locale,
 } from '@/lib/places';
-import { slugPathForLocale } from '@/lib/detectLocale';
-import { ensureLocaleCookie } from '@/lib/preferredLocale';
+import { setLocaleCookie } from '@/lib/preferredLocale';
 import { PlaceDetailLayout } from '@/components/PlaceDetailLayout';
 import { KitabeNavigation } from '@/components/KitabeNavigation';
 
@@ -53,15 +52,10 @@ export default async function PlacePage({ params }: PageProps) {
 
   if (!LOCALES.includes(locale as Locale)) notFound();
 
-  const preferred = await ensureLocaleCookie();
+  await setLocaleCookie(locale as Locale);
 
   const place = await resolvePlaceForDetail(locale as Locale, city, slug);
   if (!place) notFound();
-
-  if (preferred !== locale) {
-    const target = slugPathForLocale(place.slug, preferred);
-    if (target) redirect(target);
-  }
 
   const jsonLd = buildPlaceJsonLd(place, locale as Locale);
 

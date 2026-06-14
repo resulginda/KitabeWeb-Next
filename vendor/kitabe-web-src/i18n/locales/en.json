@@ -21,7 +21,8 @@
     "close": "Close",
     "back": "Back",
     "next": "Next",
-    "done": "Done"
+    "done": "Done",
+    "details": "Details"
   },
   "place": {
     "description": "Description",
@@ -185,7 +186,8 @@
     "other": "Other",
     "distance": "Distance",
     "radiusIndicator": "radius",
-    "yourLocation": "Your Location"
+    "yourLocation": "Your Location",
+    "noNearbyPlaces": "No places found within the selected radius. Please increase the distance."
   },
   "categories": {
     "Doğal Alan": "Natural Area",
@@ -501,7 +503,8 @@
       "editorReview": "Editor Review",
       "published": "Published",
       "rejected": "Rejected",
-      "needsFix": "Needs Fix"
+      "needsFix": "Needs Fix",
+      "unknown": "Unknown"
     },
     "searchPlaceholder": "Search (name, city, category...)",
     "city": "City",
@@ -671,6 +674,14 @@
     "consentContent": "CONSENT STATEMENT\n\nIn accordance with the Personal Data Protection Law No. 6698 (\"KVKK\"), your explicit consent is required for the processing of your personal data.\n\n1. SCOPE OF CONSENT\n\nBy this consent statement, you accept that you give explicit consent to the processing of the following personal data by the Kitabe application:\n\n• Your identity information (name, surname)\n• Your contact information (email address)\n• Your user transaction information (favorites, suggestions, route information)\n• Your location information (if you grant permission)\n• Your technical information (device information, IP address)\n\n2. PROCESSING PURPOSES\n\nYour personal data will be processed for the following purposes:\n\n• Provision and development of application services\n• User account management\n• Provision of favorites and route features\n• Evaluation of place suggestions\n• Statistical analysis and reporting\n• Fulfillment of legal obligations\n\n3. GIVING CONSENT\n\nBy accepting this consent statement, you declare that you give explicit consent to the processing of your personal data specified above for the stated purposes.\n\n4. WITHDRAWAL OF CONSENT\n\nIn accordance with Article 5 of KVKK, you have the right to withdraw your explicit consent at any time. You can contact us to withdraw your consent using the following contact information:\n\nEmail: info@kitabe.org\n\n5. YOUR RIGHTS\n\nAll your rights under KVKK are reserved. You can review the Privacy Policy for detailed information about your rights.\n\nLast Updated: 2026",
     "termsContent": "TERMS OF SERVICE\n\n1. GENERAL PROVISIONS\n\nThese Terms of Service set forth the terms and conditions for the use of the Kitabe application. By using the application, you are deemed to have accepted these terms.\n\nThis application is developed and published by individual developer Resul GINDA.\n\n2. APPLICATION USE\n\n2.1. The Kitabe application is designed for users to discover cultural heritage places, add to favorites, and create routes.\n\n2.2. You may only use the application for lawful purposes.\n\n2.3. It is prohibited to misuse the application, share harmful content, or violate the rights of others.\n\n3. USER ACCOUNTS\n\n3.1. You must provide accurate and up-to-date information when creating an account.\n\n3.2. You are responsible for the security of your account information.\n\n3.3. If you suspect unauthorized use of your account, please contact us immediately.\n\n4. CONTENT AND SUGGESTIONS\n\n4.1. Places suggested by users are subject to editor and admin approval.\n\n4.2. It is prohibited to share false, misleading, or inappropriate content.\n\n4.3. It is prohibited to infringe copyright.\n\n5. INTELLECTUAL PROPERTY\n\n5.1. The application content, design, and software are protected by copyright.\n\n5.2. It is prohibited to copy, distribute, or use the application content without permission.\n\n6. SERVICE CHANGES\n\n6.1. We reserve the right to change, suspend, or terminate application services without prior notice.\n\n6.2. Application updates may be made automatically.\n\n7. LIMITATIONS\n\n7.1. The application is provided \"as is\". No warranty is given.\n\n7.2. We are not responsible for any damage arising from the use of the application.\n\n8. TERMINATION\n\n8.1. We reserve the right to suspend or terminate your account if you violate these terms.\n\n9. CHANGES\n\n9.1. These Terms of Service may be updated from time to time. Updates will be announced within the application.\n\n10. LEGAL DISPUTES\n\n10.1. These terms are subject to the laws of the Republic of Turkey.\n\n10.2. The courts of the Republic of Turkey are authorized in resolving disputes.\n\n11. CONTACT\n\nFor questions, suggestions, or complaints, you can contact us:\n\nEmail: info@kitabe.org\n\nLast Updated: 2026",
     "disclaimerContent": "DISCLAIMER\n\n1. GENERAL DISCLAIMER\n\nThe Kitabe application is provided to users for the purpose of providing information about cultural heritage places. The application content is for general information purposes and is provided \"as is\".\n\n2. CONTENT ACCURACY\n\n2.1. No guarantee is given regarding the accuracy, currency, or completeness of the application content.\n\n2.2. Place information, descriptions, and photos are subject to editor and admin approval, but errors or omissions may occur.\n\n2.3. We are not responsible for the accuracy of content suggested by users.\n\n3. LOCATION AND DIRECTIONS\n\n3.1. Location information and directions within the application are for general information purposes.\n\n3.2. It is recommended to use current map applications and official sources for actual travel.\n\n3.3. We are not responsible for errors in location information or inaccuracies in directions.\n\n4. VISITS AND SAFETY\n\n4.1. It is recommended to check current information before visiting places listed in the application.\n\n4.2. Visiting hours, entrance fees, and access conditions may change.\n\n4.3. We are not responsible for any damage or accident that may occur during the visit.\n\n4.4. You must comply with safety rules, especially for historical places and archaeological sites.\n\n5. THIRD-PARTY LINKS\n\n5.1. Links to third-party websites or applications may be found within the application.\n\n5.2. We are not responsible for the content, privacy policies, or practices of these links.\n\n6. TECHNICAL ISSUES\n\n6.1. We are not responsible for technical problems, data loss, or service interruptions arising from the use of the application.\n\n6.2. The application may not be continuously accessible and interruptions may occur due to maintenance work.\n\n7. ADVERTISEMENTS\n\n7.1. Third-party advertisements may be displayed within the application.\n\n7.2. We are not responsible for the content of advertisements or the practices of advertisers.\n\n8. LEGAL LIMITATIONS\n\n8.1. To the extent permitted by applicable laws, we are not responsible for direct, indirect, incidental, or consequential damages arising from the use of the application.\n\n8.2. This disclaimer does not affect your rights that cannot be legally invalidated.\n\n9. USER RESPONSIBILITY\n\n9.1. You use the application at your own risk.\n\n9.2. You are responsible for decisions you make based on the application content.\n\n10. UPDATES\n\n10.1. This disclaimer may be updated from time to time.\n\n10.2. Updates will be announced within the application.\n\nLast Updated: 2026"
+  },
+  "landing": {
+    "welcomeMessage": "Discover Turkey's cultural heritage",
+    "downloadApp": "Download the App",
+    "downloadOn": "Download on",
+    "getItOn": "GET IT ON",
+    "continueWeb": "Continue on Web",
+    "webNote": "Keep using the web version"
   },
   "userManagement": {
     "changeRole": "Change Role",

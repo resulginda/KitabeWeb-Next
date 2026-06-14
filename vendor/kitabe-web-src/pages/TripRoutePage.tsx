@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useRoute } from '../contexts/RouteContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { getPlaceImageUri } from '../utils/imageUtils';
+import { getLocalizedText } from '../utils/multilang';
 import './TripRoutePage.css';
 
 const TripRoutePage = () => {
   const { t } = useTranslation();
+  const { currentLanguage } = useLanguage();
   const { routePlaces, removeFromRoute, clearRoute } = useRoute();
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
 
@@ -87,8 +90,8 @@ const TripRoutePage = () => {
         <>
           <div className="route-list">
             {routePlaces.map((place, index) => {
-              const name = typeof place.name === 'string' ? place.name : place.name.tr || '';
-              const city = typeof place.city === 'string' ? place.city : place.city.tr || '';
+              const name = typeof place.name === 'string' ? place.name : getLocalizedText(place.name, currentLanguage);
+              const city = typeof place.city === 'string' ? place.city : getLocalizedText(place.city, currentLanguage);
               const imageUrl = getPlaceImageUri(place);
 
               return (
