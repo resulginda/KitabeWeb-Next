@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -7,11 +6,11 @@ import { getLocalizedText } from '../utils/multilang';
 import { useCategories } from '../contexts/CategoriesContext';
 import { getPlaceImageUri } from '../utils/imageUtils';
 import { placeMatchesCategoryFilter } from '../utils/categoryUtils';
+import { openPlaceDetail } from '../utils/placeDetailUrl';
 import './FavoritesPage.css';
 
 const FavoritesPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { favorites, toggleFavorite } = useFavorites();
   const { currentLanguage } = useLanguage();
   const { categories } = useCategories();
@@ -124,7 +123,7 @@ const FavoritesPage = () => {
             const imageUrl = getPlaceImageUri(place);
 
             return (
-              <div key={place.id} className="favorite-item" onClick={() => navigate(`/detail/${place.id}`)}>
+              <div key={place.id} className="favorite-item" onClick={() => void openPlaceDetail(place, currentLanguage)}>
                 {imageUrl && (
                   <img src={imageUrl} alt={name} onError={(e) => {
                     (e.target as HTMLImageElement).style.display = 'none';

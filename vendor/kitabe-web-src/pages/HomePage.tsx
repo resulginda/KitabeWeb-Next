@@ -7,6 +7,8 @@ import MapView from '../components/MapView';
 import { useCategories } from '../contexts/CategoriesContext';
 import { getPlaceImageUri } from '../utils/imageUtils';
 import { useFavorites } from '../contexts/FavoritesContext';
+import { useLanguage } from '../contexts/LanguageContext';
+import { openPlaceDetail } from '../utils/placeDetailUrl';
 import './HomePage.css';
 
 const HomePage = () => {
@@ -16,6 +18,7 @@ const HomePage = () => {
   const { filtre, setFiltre } = useFiltre();
   const { categories } = useCategories();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { currentLanguage } = useLanguage();
 
   const [showFilters, setShowFilters] = useState(false);
   const [selectedMainCategories, setSelectedMainCategories] = useState<string[]>([]);
@@ -191,7 +194,7 @@ const HomePage = () => {
                 <div
                   key={place.id}
                   className="featured-card"
-                  onClick={() => navigate(`/detail/${place.id}`)}
+                  onClick={() => void openPlaceDetail(place, currentLanguage)}
                 >
                   <div className="card-image-wrapper">
                     {imageUrl ? (
@@ -342,7 +345,7 @@ const HomePage = () => {
             zoom={filtre.selectedDistrict ? 12 : filtre.selectedCity ? 10 : undefined}
             onPlaceClick={(place) => {
               setSelectedPlaceId(place.id);
-              navigate(`/detail/${place.id}`);
+              void openPlaceDetail(place, currentLanguage);
             }}
             selectedPlaceId={selectedPlaceId || undefined}
             showInfoWindow={true}

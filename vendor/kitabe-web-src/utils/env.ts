@@ -1,7 +1,4 @@
-/** Vite ve Next.js ortamlarında env değişkenlerini okur */
-export function readEnv(key: string): string | undefined {
-  if (typeof process !== 'undefined' && process.env[key]) {
-    return process.env[key];
-  }
+/** Vite client — Next.js vendor uyumluluğu için boş stub (KitabeWeb yalnızca Vite kullanır) */
+export function readEnv(_key: string): string | undefined {
   return undefined;
 }

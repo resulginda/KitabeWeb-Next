@@ -13,6 +13,7 @@ import { usePhotoSubmissions } from '../contexts/PhotoSubmissionContext';
 import { useVisitedPlaces } from '../contexts/VisitedPlacesContext';
 import { getLocalizedText, getLocalizedArray } from '../utils/multilang';
 import { getPlaceImageUri, getGooglePhotoGalleryUrls } from '../utils/imageUtils';
+import { getPlaceDetailAbsoluteUrl, getPlaceDetailUrl } from '../utils/placeDetailUrl';
 import MapView from '../components/MapView';
 import AdSenseBanner from '../components/AdSenseBanner';
 import StarRating from '../components/StarRating';
@@ -115,6 +116,16 @@ const DetailPage = ({
     loadPlace();
   }, [id, fetchPlaceById, initialPlace]);
 
+  // Eski /detail/:id URL → SEO slug sayfasına yönlendir (Next.js veya nginx proxy)
+  useEffect(() => {
+    if (placeIdOverride || skipHelmet || !place) return;
+    const slugPath = getPlaceDetailUrl(place, currentLanguage);
+    if (slugPath.startsWith('/detail/')) return;
+    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/detail/')) {
+      window.location.replace(slugPath);
+    }
+  }, [place, currentLanguage, placeIdOverride, skipHelmet]);
+
   // Güvenli veri çıkarma - null/undefined kontrolü
   const name = place?.name 
     ? (typeof place.name === 'string' ? place.name : getLocalizedText(place.name, currentLanguage))
@@ -166,7 +177,9 @@ const DetailPage = ({
 
   // Paylaşma fonksiyonu
   const handleShare = async () => {
-    const shareUrl = `${window.location.origin}/detail/${place?.id || ''}`;
+    const shareUrl = place
+      ? getPlaceDetailAbsoluteUrl(place, currentLanguage)
+      : `${window.location.origin}/detail/${id || ''}`;
 
     // Web Share API desteği varsa kullan
     if (navigator.share) {
@@ -454,7 +467,10 @@ const DetailPage = ({
   };
   
   // Deep link URL'i
-  const shareUrl = typeof window !== 'undefined' ? `${window.location.origin}/detail/${place?.id || ''}` : '';
+  const shareUrl =
+    typeof window !== 'undefined' && place
+      ? getPlaceDetailAbsoluteUrl(place, currentLanguage)
+      : '';
   const metaDescription = description.length > 160 ? description.substring(0, 160) + '...' : description;
   const fullTitle = `${name} - ${city}${district ? `, ${district}` : ''} | Kitabe`;
 

@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { usePlaces } from '../contexts/PlacesContext';
 import { useFavorites } from '../contexts/FavoritesContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { getPlaceImageUri } from '../utils/imageUtils';
+import { openPlaceDetail } from '../utils/placeDetailUrl';
 import MapView from '../components/MapView';
 import './NearbyPage.css';
 
@@ -14,9 +15,9 @@ interface UserLocation {
 
 const NearbyPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { places, loading } = usePlaces();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { currentLanguage } = useLanguage();
   const [userLocation, setUserLocation] = useState<UserLocation | null>(null);
   const [locationError, setLocationError] = useState('');
   const [selectedRadius, setSelectedRadius] = useState(10); // km
@@ -111,7 +112,7 @@ const NearbyPage = () => {
                 places={nearbyPlaces.map(item => item.place)}
                 center={{ lat: userLocation.latitude, lng: userLocation.longitude }}
                 zoom={12}
-                onPlaceClick={(place) => navigate(`/detail/${place.id}`)}
+                onPlaceClick={(place) => void openPlaceDetail(place, currentLanguage)}
                 showInfoWindow={true}
               />
             </div>
@@ -135,7 +136,7 @@ const NearbyPage = () => {
                 const imageUrl = getPlaceImageUri(place);
 
                 return (
-                  <div key={place.id} className="place-card" onClick={() => navigate(`/detail/${place.id}`)}>
+                  <div key={place.id} className="place-card" onClick={() => void openPlaceDetail(place, currentLanguage)}>
                     <div className="card-image-wrapper">
                       {imageUrl ? (
                         <img className="card-image" src={imageUrl} alt={name} onError={(e) => {
@@ -182,7 +183,7 @@ const NearbyPage = () => {
                 const imageUrl = getPlaceImageUri(place);
 
                 return (
-                  <div key={place.id} className="nearby-item glass-card" onClick={() => navigate(`/detail/${place.id}`)}>
+                  <div key={place.id} className="nearby-item glass-card" onClick={() => void openPlaceDetail(place, currentLanguage)}>
                     <div className="item-image-wrapper">
                       {imageUrl ? (
                         <img src={imageUrl} alt={name} onError={(e) => {

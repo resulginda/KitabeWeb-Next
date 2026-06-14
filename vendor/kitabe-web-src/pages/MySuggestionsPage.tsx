@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { usePlaces } from '../contexts/PlacesContext';
 import { apiFetch } from '../utils/apiClient';
 import { getLocalizedText } from '../utils/multilang';
+import { openPlaceDetailById } from '../utils/placeDetailUrl';
 import './MySuggestionsPage.css';
 
 interface PlaceSuggestion {
@@ -38,6 +40,7 @@ const MySuggestionsPage = () => {
   const navigate = useNavigate();
   const { kullanici } = useAuth();
   const { currentLanguage } = useLanguage();
+  const { getPlaceById } = usePlaces();
   const [suggestions, setSuggestions] = useState<PlaceSuggestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
@@ -186,7 +189,7 @@ const MySuggestionsPage = () => {
                   <button
                     type="button"
                     className="link-to-detail"
-                    onClick={() => navigate(`/detail/${pid}`)}
+                    onClick={() => void openPlaceDetailById(pid, currentLanguage, getPlaceById)}
                   >
                     {t('suggestion.viewPlace') || 'Yeri görüntüle'}
                   </button>

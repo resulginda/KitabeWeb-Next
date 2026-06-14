@@ -1,19 +1,20 @@
 import { useState, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { usePlaces } from '../contexts/PlacesContext';
 import { useFiltre } from '../contexts/FiltreContext';
 import { useFavorites } from '../contexts/FavoritesContext';
+import { useLanguage } from '../contexts/LanguageContext';
 import { getPlaceListImageUri, resolveListImageFallbackUri } from '../utils/imageUtils';
+import { openPlaceDetail } from '../utils/placeDetailUrl';
 import { useCategories } from '../contexts/CategoriesContext';
 import './ListPage.css';
 
 const ListPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { places, loading } = usePlaces();
   const { filtre, setFiltre } = useFiltre();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { currentLanguage } = useLanguage();
   const { categories } = useCategories();
 
   const [selectedMainCategories, setSelectedMainCategories] = useState<string[]>([]);
@@ -214,7 +215,7 @@ const ListPage = () => {
             const imageUrl = imageFallbacks[place.id] || getPlaceListImageUri(place);
 
             return (
-              <div key={place.id} className="list-item" onClick={() => navigate(`/detail/${place.id}`)}>
+              <div key={place.id} className="list-item" onClick={() => void openPlaceDetail(place, currentLanguage)}>
                 <div className="list-item-image-wrapper">
                   {imageUrl ? (
                     <img

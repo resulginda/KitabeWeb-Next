@@ -50,6 +50,8 @@ export type Place = {
   /** Google Place Details ile koordinat senkronu yapıldıysa ISO tarih */
   googleCoordsSyncedAt?: string | null;
   listGalleryThumbs?: string[];
+  /** SEO URL: { tr: "antalya/yer-slug", en: "...", ... } */
+  slug?: Partial<Record<'tr' | 'en' | 'ru' | 'ar', string>>;
   status?: string;
   createdBy?: string;
   createdAt?: any;

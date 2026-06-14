@@ -4,7 +4,9 @@ import { Helmet } from 'react-helmet-async';
 import { useNotifications } from '../contexts/NotificationContext';
 import type { Notification } from '../contexts/NotificationContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { usePlaces } from '../contexts/PlacesContext';
 import { getLocalizedText } from '../utils/multilang';
+import { openPlaceDetailById } from '../utils/placeDetailUrl';
 import { colors } from '../theme/colors';
 import './NotificationPage.css';
 
@@ -12,6 +14,7 @@ const NotificationPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { currentLanguage } = useLanguage();
+  const { getPlaceById } = usePlaces();
   const { notifications, unreadCount, loading, markAsRead, markAllAsRead } = useNotifications();
 
   const formatDate = (timestamp: any) => {
@@ -90,8 +93,8 @@ const NotificationPage = () => {
         break;
       case 'photo_approved':
       case 'photo_rejected':
-        if (data?.placeId) {
-          navigate(`/detail/${data.placeId}`);
+        if (typeof data?.placeId === 'string') {
+          void openPlaceDetailById(data.placeId, currentLanguage, getPlaceById);
         }
         break;
       case 'new_rating_for_review':
@@ -99,8 +102,8 @@ const NotificationPage = () => {
         break;
       case 'rating_approved':
       case 'rating_rejected':
-        if (data?.placeId) {
-          navigate(`/detail/${data.placeId}`);
+        if (typeof data?.placeId === 'string') {
+          void openPlaceDetailById(data.placeId, currentLanguage, getPlaceById);
         }
         break;
       case 'new_suggestion_for_review':

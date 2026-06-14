@@ -59,6 +59,10 @@ function mapApiPlaceToPlace(apiPlace: Record<string, unknown>, lang: string): Pl
     googlePhotos:
       mapApiGooglePhotos(apiPlace.googlePhotos) ??
       mapApiGooglePhotos(apiPlace.google_photos),
+    slug:
+      apiPlace.slug && typeof apiPlace.slug === 'object'
+        ? (apiPlace.slug as Place['slug'])
+        : undefined,
     status: typeof apiPlace.status === 'string' ? apiPlace.status : 'published',
     createdBy: apiPlace.createdBy as string | undefined,
     createdAt: apiPlace.createdAt,
