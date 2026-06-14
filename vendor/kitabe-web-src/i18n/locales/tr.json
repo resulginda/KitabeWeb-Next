@@ -140,6 +140,13 @@
     "tripRoute": "Gezi Rotası"
   },
   "home": {
+    "heroTitle": "Türkiye'nin Kültürel Mirası",
+    "heroSubtitle": "Binlerce yıllık tarihi keşfedin, unutulmaz anılar biriktirin",
+    "featuredPlaces": "Öne Çıkan Yerler",
+    "viewAll": "Tümünü Gör",
+    "exploreOnMap": "Haritada Keşfet",
+    "mapSubtitle": "Türkiye'nin dört bir yanındaki kültürel mirası keşfedin",
+    "subCategories": "{{name}} Alt Kategorileri",
     "searchPlaceholder": "Ara (ad, şehir, kategori...)",
     "city": "Şehir",
     "district": "İlçe",

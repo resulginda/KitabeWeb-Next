@@ -8,6 +8,7 @@ import { useCategories } from '../contexts/CategoriesContext';
 import { getPlaceImageUri } from '../utils/imageUtils';
 import { useFavorites } from '../contexts/FavoritesContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { getLocalizedText } from '../utils/multilang';
 import { openPlaceDetail } from '../utils/placeDetailUrl';
 import './HomePage.css';
 
@@ -154,8 +155,8 @@ const HomePage = () => {
       <section className="hero-section">
         <div className="hero-overlay"></div>
         <div className="hero-content">
-          <h1 className="hero-title">Türkiye'nin Kültürel Mirası</h1>
-          <p className="hero-subtitle">Binlerce yıllık tarihi keşfedin, unutulmaz anılar biriktirin</p>
+          <h1 className="hero-title">{t('home.heroTitle')}</h1>
+          <p className="hero-subtitle">{t('home.heroSubtitle')}</p>
           <div className="hero-search">
             <input
               type="text"
@@ -179,15 +180,19 @@ const HomePage = () => {
       {featuredPlaces.length > 0 && (
         <section className="featured-section">
           <div className="section-header">
-            <h2>Öne Çıkan Yerler</h2>
+            <h2>{t('home.featuredPlaces')}</h2>
             <button className="view-all-btn" onClick={() => navigate('/list')}>
-              Tümünü Gör <span>→</span>
+              {t('home.viewAll')} <span>→</span>
             </button>
           </div>
           <div className="featured-grid">
             {featuredPlaces.map(place => {
-              const name = typeof place.name === 'string' ? place.name : place.name.tr || '';
-              const city = typeof place.city === 'string' ? place.city : place.city.tr || '';
+              const name = typeof place.name === 'string'
+                ? place.name
+                : getLocalizedText(place.name, currentLanguage);
+              const city = typeof place.city === 'string'
+                ? place.city
+                : getLocalizedText(place.city, currentLanguage);
               const imageUrl = getPlaceImageUri(place);
 
               return (
@@ -239,8 +244,8 @@ const HomePage = () => {
       {/* Map Section */}
       <section className="map-section">
         <div className="section-header">
-          <h2>Haritada Keşfet</h2>
-          <p>Türkiye'nin dört bir yanındaki kültürel mirası keşfedin</p>
+          <h2>{t('home.exploreOnMap')}</h2>
+          <p>{t('home.mapSubtitle')}</p>
         </div>
 
         {showFilters && (
@@ -294,13 +299,13 @@ const HomePage = () => {
               if (subs.length === 0) return null;
               return (
                 <div key={`subs-${mainId}`} className="filter-group">
-                  <label>{(typeof main?.name === 'string' && main.name) || mainId} Alt Kategorileri</label>
+                  <label>{t('home.subCategories', { name: (typeof main?.name === 'string' && main.name) || mainId })}</label>
                   <div className="category-chips">
                     {subs.map((sub) => {
                       const active = (selectedSubCategories[mainId] || []).includes(sub.id);
                       const subLabel = typeof sub.name === 'string'
                         ? sub.name
-                        : sub.name?.tr || sub.name?.en || sub.id;
+                        : getLocalizedText(sub.name, currentLanguage);
                       return (
                         <button
                           key={`${mainId}-${sub.id}`}

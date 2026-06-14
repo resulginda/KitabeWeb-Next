@@ -1,15 +1,26 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import i18n from '../i18n';
-import { detectBrowserLanguage } from '../utils/detectLocale';
+import {
+  detectBrowserLanguage,
+  getInitialAppLanguage,
+  getStoredLanguage,
+  hasManualLanguageChoice,
+  persistLanguageChoice,
+} from '../utils/detectLocale';
 
 export type Language = 'tr' | 'en' | 'ru' | 'ar';
 
 interface LanguageContextType {
   currentLanguage: Language;
-  setLanguage: (lang: Language) => void;
+  setLanguage: (lang: Language, options?: { manual?: boolean }) => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+function resolveLanguage(localeFromUrl?: Language): Language {
+  if (localeFromUrl) return localeFromUrl;
+  return getInitialAppLanguage();
+}
 
 export const LanguageProvider = ({
   children,
@@ -18,27 +29,19 @@ export const LanguageProvider = ({
 }: {
   children: ReactNode;
   defaultLanguage?: Language;
-  /** Next.js /[locale]/... — URL dili localStorage'dan öncelikli */
+  /** Next.js /[locale]/... — URL dili manuel tercih sayılır */
   localeFromUrl?: Language;
 }) => {
-  const resolvedDefault = localeFromUrl ?? defaultLanguage;
-
   const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
-    if (typeof window === 'undefined') return resolvedDefault;
+    if (typeof window === 'undefined') return localeFromUrl ?? defaultLanguage;
+    const lang = resolveLanguage(localeFromUrl);
+    if (i18n.language !== lang) i18n.changeLanguage(lang);
     if (localeFromUrl) {
-      if (i18n.language !== localeFromUrl) i18n.changeLanguage(localeFromUrl);
-      localStorage.setItem('kitabe_language', localeFromUrl);
-      return localeFromUrl;
+      persistLanguageChoice(localeFromUrl, true);
+    } else if (!hasManualLanguageChoice()) {
+      persistLanguageChoice(lang, false);
     }
-    const saved = localStorage.getItem('kitabe_language') as Language | null;
-    if (saved === 'tr' || saved === 'en' || saved === 'ru' || saved === 'ar') {
-      if (i18n.language !== saved) i18n.changeLanguage(saved);
-      return saved;
-    }
-    const detected = detectBrowserLanguage();
-    if (i18n.language !== detected) i18n.changeLanguage(detected);
-    localStorage.setItem('kitabe_language', detected);
-    return detected;
+    return lang;
   });
 
   useEffect(() => {
@@ -46,30 +49,33 @@ export const LanguageProvider = ({
     if (localeFromUrl) {
       setCurrentLanguage(localeFromUrl);
       i18n.changeLanguage(localeFromUrl);
+      persistLanguageChoice(localeFromUrl, true);
       return;
     }
-    const saved = localStorage.getItem('kitabe_language') as Language | null;
-    const lang =
-      saved === 'tr' || saved === 'en' || saved === 'ru' || saved === 'ar'
-        ? saved
-        : detectBrowserLanguage();
-    if (i18n.language !== lang) {
-      i18n.changeLanguage(lang);
+    const lang = hasManualLanguageChoice()
+      ? (getStoredLanguage() ?? detectBrowserLanguage())
+      : detectBrowserLanguage();
+    setCurrentLanguage(lang);
+    if (i18n.language !== lang) i18n.changeLanguage(lang);
+    if (!hasManualLanguageChoice()) {
+      persistLanguageChoice(lang, false);
     }
   }, [localeFromUrl]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    localStorage.setItem('kitabe_language', currentLanguage);
-    // i18next dilini de güncelle
     if (i18n.language !== currentLanguage) {
       i18n.changeLanguage(currentLanguage);
     }
+    if (hasManualLanguageChoice()) {
+      persistLanguageChoice(currentLanguage, true);
+    }
   }, [currentLanguage]);
 
-  const setLanguage = (lang: Language) => {
+  const setLanguage = (lang: Language, options?: { manual?: boolean }) => {
+    const manual = options?.manual !== false;
+    persistLanguageChoice(lang, manual);
     setCurrentLanguage(lang);
-    // i18next dilini hemen değiştir
     i18n.changeLanguage(lang);
   };
 
@@ -85,4 +91,3 @@ export const useLanguage = () => {
   if (!context) throw new Error('useLanguage must be used within LanguageProvider');
   return context;
 };
-

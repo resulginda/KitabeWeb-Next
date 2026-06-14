@@ -139,6 +139,13 @@
     "tripRoute": "Trip Route"
   },
   "home": {
+    "heroTitle": "Cultural Heritage of Turkey",
+    "heroSubtitle": "Discover millennia of history and create unforgettable memories",
+    "featuredPlaces": "Featured Places",
+    "viewAll": "View All",
+    "exploreOnMap": "Explore on Map",
+    "mapSubtitle": "Discover cultural heritage across Turkey",
+    "subCategories": "{{name}} Subcategories",
     "searchPlaceholder": "Search (name, city, category...)",
     "city": "City",
     "district": "District",
