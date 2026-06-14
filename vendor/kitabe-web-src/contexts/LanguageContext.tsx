@@ -10,11 +10,11 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+export const LanguageProvider = ({ children, defaultLanguage = 'tr' }: { children: ReactNode; defaultLanguage?: Language }) => {
   const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
+    if (typeof window === 'undefined') return defaultLanguage;
     const saved = localStorage.getItem('kitabe_language');
-    const lang = (saved as Language) || 'tr';
-    // i18next dilini de başlat
+    const lang = (saved as Language) || defaultLanguage;
     if (i18n.language !== lang) {
       i18n.changeLanguage(lang);
     }
@@ -23,6 +23,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   // İlk yüklemede i18next dilini ayarla
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const saved = localStorage.getItem('kitabe_language');
     const lang = (saved as Language) || 'tr';
     if (i18n.language !== lang) {
@@ -31,6 +32,7 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     localStorage.setItem('kitabe_language', currentLanguage);
     // i18next dilini de güncelle
     if (i18n.language !== currentLanguage) {

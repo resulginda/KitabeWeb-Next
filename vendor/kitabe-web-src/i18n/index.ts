@@ -5,8 +5,9 @@ import en from './locales/en.json';
 import ru from './locales/ru.json';
 import ar from './locales/ar.json';
 
-// localStorage'dan dil tercihini oku
-const savedLanguage = localStorage.getItem('kitabe_language') || 'tr';
+// localStorage'dan dil tercihini oku (SSR güvenli)
+const savedLanguage =
+  typeof window !== 'undefined' ? localStorage.getItem('kitabe_language') || 'tr' : 'tr';
 
 i18n
   .use(initReactI18next)

@@ -79,14 +79,24 @@ export const getPlaceBySlug = cache(async (
   citySlug: string,
   placeSlug: string
 ): Promise<SeoPlace | null> => {
-  const res = await fetch(
-    `${API}/api/places/by-slug/${locale}/${encodeURIComponent(citySlug)}/${encodeURIComponent(placeSlug)}`,
-    { next: { tags: [`place:${locale}/${citySlug}/${placeSlug}`], revalidate: 86400 } }
-  );
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error('Yer detayı alınamadı');
-  const json = await res.json();
-  return json.data ?? null;
+  try {
+    const res = await fetch(
+      `${API}/api/places/by-slug/${locale}/${encodeURIComponent(citySlug)}/${encodeURIComponent(placeSlug)}`,
+      { next: { revalidate: 86400 } }
+    );
+    if (res.status === 404) return null;
+    if (!res.ok) {
+      console.warn(
+        `[places] by-slug HTTP ${res.status}: ${locale}/${citySlug}/${placeSlug}`
+      );
+      return null;
+    }
+    const json = await res.json();
+    return json.data ?? null;
+  } catch (err) {
+    console.warn(`[places] by-slug fetch failed: ${locale}/${citySlug}/${placeSlug}`, err);
+    return null;
+  }
 });
 
 export function collectGalleryUrls(place: SeoPlace): string[] {

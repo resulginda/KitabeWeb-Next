@@ -13,11 +13,13 @@ const RouteContext = createContext<RouteContextType | undefined>(undefined);
 
 export const RouteProvider = ({ children }: { children: ReactNode }) => {
   const [routePlaces, setRoutePlaces] = useState<Place[]>(() => {
+    if (typeof window === 'undefined') return [];
     const saved = localStorage.getItem('kitabe_route');
     return saved ? JSON.parse(saved) : [];
   });
 
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     localStorage.setItem('kitabe_route', JSON.stringify(routePlaces));
   }, [routePlaces]);
 

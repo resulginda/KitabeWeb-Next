@@ -4,6 +4,7 @@
 export const AUTH_TOKEN_KEY = 'kitabe_auth_token';
 
 export function getStoredToken(): string | null {
+  if (typeof window === 'undefined') return null;
   try {
     return localStorage.getItem(AUTH_TOKEN_KEY);
   } catch {
@@ -12,6 +13,7 @@ export function getStoredToken(): string | null {
 }
 
 export function setStoredToken(token: string): void {
+  if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(AUTH_TOKEN_KEY, token);
   } catch (e) {
@@ -20,6 +22,7 @@ export function setStoredToken(token: string): void {
 }
 
 export function clearStoredToken(): void {
+  if (typeof window === 'undefined') return;
   try {
     localStorage.removeItem(AUTH_TOKEN_KEY);
   } catch {}

@@ -10,6 +10,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start -p ${PORT:-3000}",
+    "start:standalone": "node .next/standalone/server.js",
     "lint": "next lint",
     "postinstall": "node scripts/sync-vendor.mjs || true"
   },

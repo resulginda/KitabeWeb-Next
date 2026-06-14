@@ -4,7 +4,6 @@ import path from 'path';
 const kitabeSrc = path.join(__dirname, 'vendor/kitabe-web-src');
 
 const nextConfig: NextConfig = {
-  output: 'standalone',
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'api.kitabe.org' },

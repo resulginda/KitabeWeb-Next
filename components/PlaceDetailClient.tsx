@@ -1,7 +1,9 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useEffect, useMemo } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
+import { MemoryRouter } from 'react-router-dom';
 import { AuthProvider } from '@kitabe/contexts/AuthContext';
 import { LanguageProvider, useLanguage, type Language } from '@kitabe/contexts/LanguageContext';
 import { PlacesProvider } from '@kitabe/contexts/PlacesContext';
@@ -13,9 +15,14 @@ import { NotificationProvider } from '@kitabe/contexts/NotificationContext';
 import { PhotoSubmissionProvider } from '@kitabe/contexts/PhotoSubmissionContext';
 import { RatingProvider } from '@kitabe/contexts/RatingContext';
 import { VisitedPlacesProvider } from '@kitabe/contexts/VisitedPlacesContext';
-import DetailPage from '@kitabe/pages/DetailPage';
 import type { Place } from '@kitabe/types/place';
 import '@/lib/i18n-client';
+
+/** Leaflet / react-router SSR'da patlamasın — sadece tarayıcıda yükle */
+const DetailPage = dynamic(() => import('@kitabe/pages/DetailPage'), {
+  ssr: false,
+  loading: () => <div className="detail-page loading">Yükleniyor...</div>,
+});
 
 function LocaleSync({ locale }: { locale: Language }) {
   const { setLanguage } = useLanguage();
@@ -78,7 +85,7 @@ export function PlaceDetailClient({
   return (
     <HelmetProvider>
       <AuthProvider>
-        <LanguageProvider>
+        <LanguageProvider defaultLanguage={locale}>
           <LocaleSync locale={locale} />
           <CategoriesProvider>
             <PlacesProvider>
@@ -89,11 +96,13 @@ export function PlaceDetailClient({
                       <PhotoSubmissionProvider>
                         <RatingProvider>
                           <VisitedPlacesProvider>
-                            <DetailPage
-                              placeIdOverride={initialPlace.id}
-                              skipHelmet
-                              initialPlace={initialPlace}
-                            />
+                            <MemoryRouter initialEntries={[`/detail/${initialPlace.id}`]}>
+                              <DetailPage
+                                placeIdOverride={initialPlace.id}
+                                skipHelmet
+                                initialPlace={initialPlace}
+                              />
+                            </MemoryRouter>
                           </VisitedPlacesProvider>
                         </RatingProvider>
                       </PhotoSubmissionProvider>
