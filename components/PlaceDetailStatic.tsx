@@ -2,6 +2,7 @@ import { collectGalleryUrls, pickText, type Locale, type SeoPlace } from '@/lib/
 import { pickArray } from '@/lib/placeText';
 import { DETAIL_LABELS } from '@/lib/detailLabels';
 import { PhotoGalleryClient } from '@/components/PhotoGalleryClient';
+import { AdSlot } from '@/components/AdSlot';
 
 /** KitabeWeb DetailPage ile aynı görünüm — sunucuda anında render (SEO + LCP) */
 export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: Locale }) {
@@ -66,6 +67,8 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
             </ul>
           </div>
         )}
+
+        <AdSlot position="in-content" />
 
         <div className="section">
           <h2>{labels.photos}</h2>

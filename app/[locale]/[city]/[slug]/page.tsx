@@ -9,8 +9,7 @@ import {
 } from '@/lib/places';
 import { slugPathForLocale } from '@/lib/detectLocale';
 import { ensureLocaleCookie } from '@/lib/preferredLocale';
-import { PlaceDetailStatic } from '@/components/PlaceDetailStatic';
-import { PlaceDetailClient } from '@/components/PlaceDetailClient';
+import { PlaceDetailLayout } from '@/components/PlaceDetailLayout';
 import { KitabeNavigation } from '@/components/KitabeNavigation';
 
 export const revalidate = 86400;
@@ -73,11 +72,7 @@ export default async function PlacePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <PlaceDetailStatic place={place} locale={locale as Locale} />
-      <PlaceDetailClient
-        place={place as unknown as Record<string, unknown>}
-        locale={locale as Locale}
-      />
+      <PlaceDetailLayout place={place} locale={locale as Locale} />
       <KitabeNavigation locale={locale as Locale} />
     </>
   );

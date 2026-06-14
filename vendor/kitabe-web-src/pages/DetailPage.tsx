@@ -15,7 +15,6 @@ import { getLocalizedText, getLocalizedArray } from '../utils/multilang';
 import { getPlaceImageUri, getGooglePhotoGalleryUrls } from '../utils/imageUtils';
 import { getPlaceDetailAbsoluteUrl, getPlaceDetailUrl } from '../utils/placeDetailUrl';
 import MapView from '../components/MapView';
-import AdSenseBanner from '../components/AdSenseBanner';
 import StarRating from '../components/StarRating';
 import { PhotoLightbox } from '../components/PhotoLightbox';
 import { notifyAdminsAndEditorsAboutNewPhoto } from '../services/notificationService';
@@ -601,8 +600,6 @@ const DetailPage = ({
             </ul>
           </div>
         )}
-
-        <AdSenseBanner slot="1122334455" format="horizontal" style={{ margin: '1rem 0', minHeight: '100px' }} />
 
         <div className="section">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>

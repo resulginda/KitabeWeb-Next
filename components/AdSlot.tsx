@@ -1,17 +1,35 @@
-type AdPosition = 'sidebar' | 'in-content' | 'below-content';
+'use client';
+
+import { useEffect, useRef } from 'react';
+import {
+  getAdClientId,
+  getAdSlotId,
+  type AdPosition,
+} from '@/lib/adsense';
 
 const LABELS: Record<AdPosition, string> = {
-  sidebar: 'Reklam — Kenar çubuğu',
-  'in-content': 'Reklam — İçerik ortası',
-  'below-content': 'Reklam — İçerik altı',
+  'left-sidebar': 'Reklam',
+  sidebar: 'Reklam',
+  'in-content': 'Reklam',
+  'below-content': 'Reklam',
 };
 
 export function AdSlot({ position }: { position: AdPosition }) {
-  const slotMap: Record<AdPosition, string> = {
-    sidebar: '1122334455',
-    'in-content': '2233445566',
-    'below-content': '3344556677',
-  };
+  const pushed = useRef(false);
+  const slotId = getAdSlotId(position);
+  const clientId = getAdClientId();
+
+  useEffect(() => {
+    if (!slotId || pushed.current) return;
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      pushed.current = true;
+    } catch {
+      /* script henüz yüklenmemiş olabilir */
+    }
+  }, [slotId]);
+
+  if (!clientId || !slotId) return null;
 
   return (
     <aside
@@ -22,14 +40,12 @@ export function AdSlot({ position }: { position: AdPosition }) {
       <ins
         className="adsbygoogle"
         style={{ display: 'block' }}
-        data-ad-client="ca-pub-PLACEHOLDER"
-        data-ad-slot={slotMap[position]}
+        data-ad-client={clientId}
+        data-ad-slot={slotId}
         data-ad-format="auto"
         data-full-width-responsive="true"
       />
-      <span style={{ position: 'absolute', opacity: 0.4, fontSize: '0.75rem' }}>
-        {LABELS[position]}
-      </span>
+      <span className="ad-slot-label">{LABELS[position]}</span>
     </aside>
   );
 }
