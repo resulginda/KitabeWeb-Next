@@ -16,6 +16,7 @@ import { getPlaceImageUri, getGooglePhotoGalleryUrls } from '../utils/imageUtils
 import MapView from '../components/MapView';
 import AdSenseBanner from '../components/AdSenseBanner';
 import StarRating from '../components/StarRating';
+import { PhotoLightbox } from '../components/PhotoLightbox';
 import { notifyAdminsAndEditorsAboutNewPhoto } from '../services/notificationService';
 import type { Place } from '../types/place';
 import './DetailPage.css';
@@ -597,20 +598,7 @@ const DetailPage = ({
             )}
           </div>
           {allPhotos.length > 0 ? (
-            <div className="photo-gallery">
-              {allPhotos.map((photoUrl, idx) => (
-                <img 
-                  key={idx} 
-                  src={photoUrl} 
-                  alt={`${name} - Foto ${idx + 1}`} 
-                  onClick={() => window.open(photoUrl, '_blank')}
-                  style={{ cursor: 'pointer' }}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }} 
-                />
-              ))}
-            </div>
+            <PhotoLightbox photos={allPhotos} altPrefix={name} />
           ) : (
             <p style={{ color: '#718096', fontStyle: 'italic' }}>Henüz fotoğraf eklenmemiş.</p>
           )}

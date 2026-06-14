@@ -1,5 +1,6 @@
 import { collectGalleryUrls, pickText, type Locale, type SeoPlace } from '@/lib/places';
 import { pickArray } from '@/lib/placeText';
+import { PhotoGalleryClient } from '@/components/PhotoGalleryClient';
 
 const SECTION_LABELS: Record<Locale, { description: string; story: string; visitTips: string; photos: string }> = {
   tr: { description: 'Açıklama', story: 'Hikaye', visitTips: 'Ziyaret İpuçları', photos: 'Fotoğraflar' },
@@ -74,18 +75,11 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
 
         <div className="section">
           <h2>{labels.photos}</h2>
-          {photos.length > 0 ? (
-            <div className="photo-gallery">
-              {photos.map((url, idx) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img key={`${url}-${idx}`} src={url} alt={`${name} — ${idx + 1}`} />
-              ))}
-            </div>
-          ) : (
-            <p style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}>
-              {locale === 'tr' ? 'Henüz fotoğraf eklenmemiş.' : 'No photos yet.'}
-            </p>
-          )}
+          <PhotoGalleryClient
+            photos={photos}
+            altPrefix={name}
+            emptyText={locale === 'tr' ? 'Henüz fotoğraf eklenmemiş.' : 'No photos yet.'}
+          />
         </div>
       </div>
     </div>
