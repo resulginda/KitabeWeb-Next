@@ -1,0 +1,85 @@
+import type { Metadata } from 'next';
+import { pickText, type Locale, type SeoPlace, LOCALES } from './places';
+
+const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
+
+export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
+  const name = pickText(place.name as never, locale);
+  const city = pickText(place.city as never, locale);
+  const district = pickText(place.district as never, locale);
+  const description =
+    pickText(place.metaDescription, locale) ||
+    pickText(place.description as never, locale);
+  const title =
+    pickText(place.metaTitle, locale) ||
+    `${name} - ${city}${district ? `, ${district}` : ''} | Kitabe`;
+
+  const metaDesc =
+    description.length > 160 ? `${description.slice(0, 157)}...` : description;
+
+  const fullSlug = place.slug?.[locale] ?? '';
+  const [citySlug, ...rest] = fullSlug.split('/');
+  const canonical = `${SITE}/${locale}/${citySlug}/${rest.join('/')}`;
+  const image = place.imageUrl || place.thumbnailUrl;
+
+  const languages: Record<string, string> = {};
+  for (const loc of LOCALES) {
+    const s = place.slug?.[loc];
+    if (!s) continue;
+    const [c, ...r] = s.split('/');
+    languages[loc] = `${SITE}/${loc}/${c}/${r.join('/')}`;
+  }
+  if (place.slug?.tr) {
+    const [c, ...r] = place.slug.tr.split('/');
+    languages['x-default'] = `${SITE}/tr/${c}/${r.join('/')}`;
+  }
+
+  return {
+    title,
+    description: metaDesc,
+    alternates: { canonical, languages },
+    openGraph: {
+      type: 'website',
+      url: canonical,
+      title,
+      description: metaDesc,
+      siteName: 'Kitabe',
+      locale: locale === 'tr' ? 'tr_TR' : locale === 'en' ? 'en_US' : locale,
+      images: image ? [{ url: image, width: 1200, height: 630, alt: name }] : [],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: metaDesc,
+      images: image ? [image] : [],
+    },
+    robots: { index: true, follow: true },
+  };
+}
+
+export function buildPlaceJsonLd(place: SeoPlace, locale: Locale) {
+  const name = pickText(place.name as never, locale);
+  const description = pickText(place.description as never, locale);
+  const fullSlug = place.slug?.[locale] ?? '';
+  const [citySlug, ...rest] = fullSlug.split('/');
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'TouristAttraction',
+    name,
+    description,
+    image: place.imageUrl || place.thumbnailUrl,
+    url: `${SITE}/${locale}/${citySlug}/${rest.join('/')}`,
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: place.latitude,
+      longitude: place.longitude,
+    },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: pickText(place.city as never, locale),
+      addressRegion: pickText(place.district as never, locale),
+      addressCountry: 'TR',
+    },
+  };
+}

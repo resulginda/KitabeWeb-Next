@@ -1,0 +1,406 @@
+/* Premium AccountPage Styles */
+
+.account-page {
+  min-height: calc(100vh - 100px);
+  background: var(--bg-main);
+  padding: 2rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  font-family: var(--font-body);
+}
+
+.account-container {
+  background: var(--bg-surface);
+  border-radius: var(--radius-2xl);
+  padding: 2.5rem;
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 550px;
+  position: relative;
+  border: 1px solid var(--border-light);
+  animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Language Header & Dropdown */
+.account-language-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 10;
+}
+
+.account-language-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-full);
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+  font-family: var(--font-sans);
+}
+
+.account-language-button:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.account-language-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+}
+
+.account-language-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  min-width: 200px;
+  overflow: hidden;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.account-language-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.account-language-dropdown-item.last {
+  border-bottom: none;
+}
+
+.account-language-dropdown-item:hover {
+  background: var(--bg-hover);
+}
+
+.account-language-dropdown-item.selected {
+  background: rgba(79, 70, 229, 0.05);
+  /* Light primary */
+}
+
+.account-language-flag {
+  font-size: 1.2rem;
+  margin-right: 12px;
+}
+
+.account-language-text {
+  flex: 1;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+}
+
+.account-language-text.selected {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.account-language-check {
+  font-size: 20px;
+  color: var(--primary);
+}
+
+/* User Info Section */
+.account-container h1 {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.account-email {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.account-role {
+  display: inline-block;
+  background: var(--bg-hover);
+  color: var(--primary);
+  padding: 0.35rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 auto 0.75rem auto;
+  text-align: center;
+  display: block;
+  width: fit-content;
+}
+
+.account-registration,
+.account-membership {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.account-membership {
+  margin-bottom: 2.5rem;
+}
+
+/* Menu Items Collection */
+.account-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-main);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: all var(--transition-normal);
+  font-weight: 600;
+  font-size: 1.05rem;
+  font-family: var(--font-sans);
+  position: relative;
+  overflow: hidden;
+}
+
+.menu-item:hover {
+  background: white;
+  border-color: var(--primary);
+  transform: translateX(5px);
+  box-shadow: var(--shadow-sm);
+  color: var(--primary);
+}
+
+.menu-item-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  border: none;
+}
+
+.menu-item-primary:hover {
+  background: linear-gradient(135deg, var(--secondary) 0%, var(--primary) 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.menu-icon {
+  font-size: 1.4rem;
+  background: var(--bg-surface);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm);
+}
+
+.menu-item-primary .menu-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.account-badge {
+  background: var(--danger);
+  border-radius: var(--radius-full);
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: 0 2px 5px rgba(239, 68, 68, 0.3);
+}
+
+/* Buttons */
+.auth-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.btn {
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-full);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-sans);
+  display: block;
+  width: 100%;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-secondary {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+}
+
+.btn-secondary:hover {
+  background: var(--border-light);
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  border: 1px solid transparent;
+}
+
+.btn-danger:hover {
+  background: var(--danger);
+  color: white;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px);
+}
+
+.loading {
+  text-align: center;
+  padding: 5rem;
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Guest View Selectors */
+.language-selector {
+  margin-bottom: 2rem;
+}
+
+.language-selector label {
+  display: block;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.language-selector select {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  font-size: 1rem;
+  background: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.language-selector select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+  .account-page {
+    padding: 1rem;
+  }
+
+  .account-container {
+    padding: 1.5rem;
+    border-radius: var(--radius-xl);
+  }
+
+  .account-container h1 {
+    font-size: 1.7rem;
+  }
+
+  .menu-item {
+    font-size: 1rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .menu-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+  }
+
+  .account-language-dropdown {
+    right: -1rem;
+  }
+}

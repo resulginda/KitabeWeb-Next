@@ -1,0 +1,42 @@
+.star-rating-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.star-button:hover:not(.readonly) {
+  transform: scale(1.2);
+}
+
+.star-button:disabled {
+  cursor: default;
+}
+
+.star-button .material-icons {
+  font-size: inherit;
+  color: #ffc107;
+  transition: color 0.2s;
+}
+
+.star-button .material-icons.empty {
+  color: #cccccc;
+}
+
+.star-button .material-icons.half {
+  color: #ffc107;
+}
+
+.star-button .material-icons.filled {
+  color: #ffc107;
+}

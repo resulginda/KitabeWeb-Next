@@ -1,0 +1,245 @@
+.editor-panel-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+  padding-bottom: 100px;
+}
+
+.panel-header {
+  background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
+  padding: 2rem 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.panel-header h1 {
+  color: white;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* Desktop için daha kompakt header */
+@media (min-width: 1024px) {
+  .panel-header {
+    padding: 1.5rem 2rem;
+  }
+
+  .panel-header h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.tabs button {
+  padding: 0.75rem 1.5rem;
+  border: 2px solid rgba(255,255,255,0.3);
+  background: rgba(255,255,255,0.2);
+  color: white;
+  border-radius: 25px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.tabs button:hover {
+  background: rgba(255,255,255,0.3);
+  transform: translateY(-2px);
+}
+
+.tabs button.active {
+  background: white;
+  color: #D2691E;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.suggestions-list {
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Desktop için grid layout */
+@media (min-width: 1024px) {
+  .suggestions-list {
+    padding: 1.5rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .suggestion-item {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 1400px) {
+  .suggestions-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.suggestion-item {
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s;
+  border: 1px solid #e2e8f0;
+}
+
+.suggestion-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+}
+
+.suggestion-info {
+  flex: 1;
+}
+
+.suggestion-info h3 {
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.suggestion-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.suggestion-actions button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.suggestion-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+.approve-btn {
+  background: #34d399;
+  color: white;
+}
+
+.reject-btn {
+  background: #ef4444;
+  color: white;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2.5rem;
+  border-radius: 25px;
+  max-width: 700px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.modal-details p {
+  margin-bottom: 0.5rem;
+  color: #5D4037;
+  line-height: 1.6;
+}
+
+.modal-details ul {
+  margin-top: 0.5rem;
+  padding-left: 1.5rem;
+  color: #5D4037;
+}
+
+.modal-details li {
+  margin-bottom: 0.25rem;
+}
+
+.modal-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.close-btn {
+  padding: 0.75rem 1.5rem;
+  background: #8D6E63;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.access-denied, .no-suggestions, .loading {
+  text-align: center;
+  padding: 3rem;
+  color: #5D4037;
+}
+
+@media (max-width: 768px) {
+  .suggestion-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .suggestion-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .tabs {
+    flex-direction: column;
+  }
+}
+

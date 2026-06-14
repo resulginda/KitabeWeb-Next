@@ -1,0 +1,96 @@
+/* Global App Layout & Overrides */
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page Content Wrapper (to push footer down and avoid overlap with Navigation) */
+.page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 5rem;
+  /* Space for Bottom Navigation */
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 768px) {
+  .page-container {
+    padding-bottom: 0;
+    padding-left: 5rem;
+    /* Space for Side Navigation if implemented */
+  }
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Premium Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Selection */
+::selection {
+  background: rgba(79, 70, 229, 0.2);
+  /* Primary color with opacity */
+  color: inherit;
+}
+
+/* Image defaults */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Common Page Header Style */
+.page-header {
+  padding: 2rem 0;
+  text-align: center;
+  position: relative;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.025em;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Utility to hide scrollbar but allow scrolling (useful for horizontal lists) */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}

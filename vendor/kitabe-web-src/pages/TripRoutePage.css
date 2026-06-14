@@ -1,0 +1,331 @@
+/* Modern TripRoutePage Styles */
+
+.trip-route-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%);
+  padding-bottom: 120px;
+}
+
+.route-header {
+  background: white;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.route-header h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 1rem;
+  text-align: center;
+  background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.route-stats {
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+  border-radius: 20px;
+  margin-top: 1rem;
+}
+
+.route-stats span {
+  color: #2d3748;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.empty-route {
+  text-align: center;
+  padding: 5rem 2rem;
+  max-width: 600px;
+  margin: 3rem auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.empty-route p {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 1rem;
+}
+
+.empty-route-sub {
+  margin-top: 1rem;
+  color: #718096;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.route-list {
+  padding: 2rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.route-item {
+  background: white;
+  border-radius: 20px;
+  padding: 0;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.route-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+}
+
+.route-number {
+  background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+  margin: 1rem;
+  box-shadow: 0 2px 8px rgba(210, 105, 30, 0.3);
+}
+
+.route-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 15px;
+  flex-shrink: 0;
+  margin-right: 1.5rem;
+  transition: transform 0.3s;
+}
+
+.route-item:hover img {
+  transform: scale(1.05);
+}
+
+.route-item-info {
+  flex: 1;
+  padding: 1.5rem 0;
+}
+
+.route-item-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.route-item-info p {
+  color: #D2691E;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.remove-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 1.5rem;
+  transition: all 0.3s;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.3);
+}
+
+.remove-btn:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+.route-actions {
+  position: fixed;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+  padding: 1rem 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 -4px 30px rgba(0,0,0,0.1);
+  display: flex;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  z-index: 99;
+}
+
+.btn-clear {
+  flex: 1;
+  padding: 0.9rem 1.5rem;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%);
+  color: #2d3748;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.btn-clear:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.btn-open-maps {
+  flex: 2;
+  padding: 0.9rem 1.5rem;
+  background: linear-gradient(135deg, #D2691E 0%, #CD853F 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-open-maps:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(210, 105, 30, 0.4);
+}
+
+.btn-open-maps:active {
+  transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .route-item img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .route-number {
+    width: 50px;
+    height: 50px;
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .route-header {
+    padding: 1.5rem 1rem;
+  }
+
+  .route-header h1 {
+    font-size: 2rem;
+  }
+
+  .route-stats {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .route-stats span {
+    width: 100%;
+    text-align: center;
+  }
+
+  .route-list {
+    padding: 1rem;
+  }
+
+  .route-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .route-number {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    width: 32px;
+    height: 32px;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .route-item img {
+    width: 100%;
+    height: 200px;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .route-item-info {
+    padding: 1.5rem;
+    width: 100%;
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    margin: 0;
+  }
+
+  .route-actions {
+    flex-direction: column;
+    padding: 1rem;
+    bottom: 70px;
+  }
+
+  .btn-clear,
+  .btn-open-maps {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .route-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .route-item-info h3 {
+    font-size: 1rem;
+    padding-right: 2rem;
+  }
+}

@@ -1,0 +1,302 @@
+/* Premium LoginPage Styles */
+
+.login-page {
+  min-height: calc(100vh - 100px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Animated subtle gradient background */
+  background: radial-gradient(circle at 0% 0%, rgba(139, 69, 19, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(139, 69, 19, 0.08) 0%, transparent 50%),
+    var(--bg-main);
+  background-size: 200% 200%;
+  animation: gradientSlow 15s ease infinite;
+  padding: 2rem;
+  font-family: var(--font-body);
+}
+
+@keyframes gradientSlow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.login-container {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  padding: 3rem 2.5rem;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-xl), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  width: 100%;
+  max-width: 440px;
+  animation: scaleUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.login-container h1 {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  text-align: center;
+  margin: 0 0 2.5rem 0;
+  font-size: 2.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.login-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.login-container input {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  font-size: 1rem;
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  transition: all var(--transition-fast);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.login-container input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.1), inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.login-container input::placeholder {
+  color: var(--text-muted);
+}
+
+.login-container button[type="submit"] {
+  padding: 1.1rem;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: white;
+  border: none;
+  border-radius: var(--radius-xl);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-family: var(--font-sans);
+  margin-top: 0.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.login-container button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.login-container button[type="submit"]:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-container button[type="submit"]:disabled {
+  background: var(--border-light);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.reset-btn {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border: none !important;
+  text-decoration: none !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  padding: 0.5rem !important;
+  margin-top: 0.5rem !important;
+  transition: color var(--transition-fast) !important;
+  cursor: pointer !important;
+}
+
+.reset-btn:hover {
+  color: var(--primary) !important;
+}
+
+.error-message {
+  color: var(--danger);
+  font-size: 0.95rem;
+  text-align: center;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 0.75rem;
+  border-radius: var(--radius-lg);
+  font-weight: 500;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 2.5rem;
+  color: var(--text-secondary);
+  font-size: 1rem;
+}
+
+.register-link a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 700;
+  transition: color var(--transition-fast);
+  margin-left: 0.25rem;
+}
+
+.register-link a:hover {
+  text-decoration: underline;
+  color: var(--secondary);
+}
+
+/* Modal Styling */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+  background: var(--bg-surface);
+  padding: 2.5rem;
+  border-radius: var(--radius-2xl);
+  max-width: 440px;
+  width: 100%;
+  box-shadow: var(--shadow-xl);
+  border: 1px solid var(--border-light);
+  animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modal-content h2 {
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.modal-content p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.modal-content input {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-xl);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  background: var(--bg-hover);
+  transition: all var(--transition-fast);
+}
+
+.modal-content input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(139, 69, 19, 0.1);
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 1rem;
+  border-radius: var(--radius-xl);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-sans);
+}
+
+.modal-buttons button:first-child {
+  background: var(--primary);
+  color: white;
+  border: none;
+  box-shadow: var(--shadow-sm);
+}
+
+.modal-buttons button:first-child:hover:not(:disabled) {
+  background: var(--secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.modal-buttons button:last-child {
+  background: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-light);
+}
+
+.modal-buttons button:last-child:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+/* Responsive Overrides */
+@media (max-width: 480px) {
+  .login-page {
+    padding: 1rem;
+    align-items: flex-start;
+    padding-top: 4rem;
+  }
+
+  .login-container {
+    padding: 2.5rem 1.5rem;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .login-container h1 {
+    font-size: 2rem;
+  }
+}

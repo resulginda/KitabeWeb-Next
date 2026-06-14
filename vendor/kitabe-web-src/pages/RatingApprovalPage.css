@@ -1,0 +1,200 @@
+.rating-approval-page {
+  min-height: calc(100vh - 200px);
+  background-color: #fff9ee;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.rating-approval-header {
+  padding: 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.rating-approval-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #8B4513;
+  margin: 0 0 4px 0;
+}
+
+.rating-approval-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+}
+
+.rating-approval-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 32px;
+  text-align: center;
+}
+
+.rating-approval-empty-icon {
+  font-size: 48px;
+  color: #ccc;
+  margin-bottom: 16px;
+}
+
+.rating-approval-empty-text {
+  font-size: 16px;
+  color: #666;
+}
+
+.rating-approval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.rating-approval-card {
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  margin: 0 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.rating-approval-card-content {
+  padding: 12px;
+}
+
+.rating-approval-place-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.rating-approval-place-title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: bold;
+  color: #8B4513;
+  margin: 0;
+}
+
+.rating-approval-rating-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.star-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 18px;
+  color: #ddd;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.rating-approval-rating-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: #8B4513;
+}
+
+.rating-approval-user-info {
+  font-size: 13px;
+  color: #666;
+  margin: 4px 0;
+}
+
+.rating-approval-date-info {
+  font-size: 13px;
+  color: #666;
+  margin: 4px 0;
+}
+
+.rating-approval-comment {
+  margin-top: 8px;
+}
+
+.rating-approval-comment-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 4px 0;
+}
+
+.rating-approval-comment-text {
+  font-size: 14px;
+  color: #333;
+  line-height: 20px;
+  margin: 0;
+}
+
+.rating-approval-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.rating-approval-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  flex: 1;
+  transition: all 0.2s;
+}
+
+.rating-approval-btn-approve {
+  background-color: #D4A574;
+  color: #fff;
+}
+
+.rating-approval-btn-approve:hover {
+  background-color: #B8956A;
+}
+
+.rating-approval-btn-reject {
+  background-color: #ef4444;
+  color: #fff;
+}
+
+.rating-approval-btn-reject:hover {
+  background-color: #dc2626;
+}
+
+.rating-approval-btn .material-icons {
+  font-size: 18px;
+}
+
+@media (max-width: 768px) {
+  .rating-approval-page {
+    padding: 12px;
+  }
+
+  .rating-approval-card {
+    margin: 0;
+  }
+
+  .rating-approval-place-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .rating-approval-rating-display {
+    width: 100%;
+  }
+}

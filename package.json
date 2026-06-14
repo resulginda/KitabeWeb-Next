@@ -1,0 +1,34 @@
+{
+  "name": "KitabeWeb-Next",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "prebuild": "node scripts/sync-vendor.mjs",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start -p ${PORT:-3000}",
+    "lint": "next lint",
+    "postinstall": "node scripts/sync-vendor.mjs || true"
+  },
+  "dependencies": {
+    "i18next": "^25.7.1",
+    "leaflet": "^1.9.4",
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-helmet-async": "^2.0.5",
+    "react-i18next": "^16.4.0",
+    "react-leaflet": "^5.0.0",
+    "react-router-dom": "^7.17.0"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.21",
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.0"
+  }
+}

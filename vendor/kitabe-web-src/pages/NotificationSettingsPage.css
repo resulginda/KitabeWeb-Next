@@ -1,0 +1,290 @@
+/* Premium NotificationSettingsPage Styles */
+
+.notification-settings-page {
+  min-height: calc(100vh - 100px);
+  background-color: var(--bg-main);
+  padding-bottom: 6rem;
+  font-family: var(--font-body);
+}
+
+.notification-settings-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--border-light);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-small {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-light);
+  border-top: 2px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.notification-settings-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: var(--glass-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow-sm);
+  animation: slideDown 0.5s ease-out;
+}
+
+.notification-settings-back-btn {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  padding: 10px;
+  margin-right: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
+}
+
+.notification-settings-back-btn:hover {
+  background-color: white;
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+  color: var(--primary);
+}
+
+.notification-settings-title {
+  flex: 1;
+  font-size: 1.5rem;
+  font-family: var(--font-sans);
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.notification-settings-save-btn {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-sans);
+}
+
+.notification-settings-save-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.notification-settings-save-btn:disabled {
+  background: var(--text-muted);
+  box-shadow: none;
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.notification-settings-content {
+  padding: 3rem 1.5rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.notification-settings-section {
+  background: var(--bg-surface);
+  border-radius: var(--radius-2xl);
+  padding: 2rem 2.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  transition: all var(--transition-normal);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.notification-settings-section:hover {
+  box-shadow: var(--shadow-md);
+  border-color: rgba(139, 69, 19, 0.2);
+}
+
+.notification-settings-section-title {
+  font-size: 1.3rem;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-light);
+}
+
+.notification-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border-light);
+  transition: background var(--transition-fast);
+}
+
+.notification-setting-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.notification-setting-row:first-of-type {
+  padding-top: 0;
+}
+
+.notification-setting-row.disabled {
+  opacity: 0.6;
+}
+
+.notification-setting-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.notification-setting-icon {
+  font-size: 22px;
+  color: var(--secondary);
+  margin-right: 1rem;
+  background: rgba(139, 69, 19, 0.08);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.notification-setting-label {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.notification-setting-label.disabled {
+  color: var(--text-muted);
+}
+
+/* Modern Switch Toggle */
+.notification-switch {
+  position: relative;
+  display: inline-block;
+  width: 54px;
+  height: 28px;
+}
+
+.notification-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.notification-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-light);
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 34px;
+}
+
+.notification-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.notification-switch input:checked+.notification-slider {
+  background-color: var(--primary);
+}
+
+.notification-switch input:checked+.notification-slider:before {
+  transform: translateX(26px);
+}
+
+.notification-switch input:disabled+.notification-slider {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notification-settings-disabled-note {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.5rem;
+  font-weight: 500;
+  padding-left: 3.5rem;
+}
+
+@media (max-width: 768px) {
+  .notification-settings-header {
+    padding: 1.25rem 1rem;
+  }
+
+  .notification-settings-title {
+    font-size: 1.25rem;
+  }
+
+  .notification-settings-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .notification-settings-section {
+    padding: 1.5rem;
+  }
+
+  .notification-setting-row {
+    padding: 1rem 0;
+  }
+}

@@ -1,0 +1,18 @@
+# dependencies
+node_modules
+npm-debug.log
+
+# next.js
+.next
+out
+
+# env (Dokploy panelden girilir)
+.env
+.env.local
+.env.*.local
+
+# misc
+.DS_Store
+*.pem
+
+# vendor kaynak kopyası repoda tutulur — ignore etme
