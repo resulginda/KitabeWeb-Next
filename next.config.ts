@@ -24,11 +24,6 @@ const nextConfig: NextConfig = {
     };
     return config;
   },
-  async redirects() {
-    return [
-      { source: '/home', destination: '/tr', permanent: true },
-    ];
-  },
 };
 
 export default nextConfig;

@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import type { Locale } from '@/lib/places';
 
 const LABELS: Record<Locale, { home: string; list: string; nearby: string; route: string; account: string }> = {
@@ -16,7 +15,7 @@ export function KitabeNavigation({ locale }: { locale: Locale }) {
   const spa = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://kitabe.org';
 
   const items = [
-    { href: `/${locale}`, label: t.home, icon: '🏠', external: false },
+    { href: `${spa}/home`, label: t.home, icon: '🏠', external: true },
     { href: `${spa}/list`, label: t.list, icon: '📋', external: true },
     { href: `${spa}/nearby`, label: t.nearby, icon: '📍', external: true },
     { href: `${spa}/route`, label: t.route, icon: '🗺️', external: true },
@@ -25,19 +24,12 @@ export function KitabeNavigation({ locale }: { locale: Locale }) {
 
   return (
     <nav className="bottom-nav" aria-label="Main navigation">
-      {items.map((item) =>
-        item.external ? (
+      {items.map((item) => (
           <a key={item.href} href={item.href} className="nav-item">
             <span className="nav-icon">{item.icon}</span>
             <span className="nav-label">{item.label}</span>
           </a>
-        ) : (
-          <Link key={item.href} href={item.href} className="nav-item active">
-            <span className="nav-icon">{item.icon}</span>
-            <span className="nav-label">{item.label}</span>
-          </Link>
-        )
-      )}
+      ))}
     </nav>
   );
 }
