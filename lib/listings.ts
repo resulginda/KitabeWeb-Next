@@ -115,21 +115,26 @@ export const getListingByFilter = cache(async (
 });
 
 export const getTaxonomyIndex = cache(async (): Promise<TaxonomyCombination[]> => {
-  try {
-    const res = await fetch(`${API}/api/places/seo/taxonomy-index`, {
-      headers: apiHeaders(),
-      next: { tags: ['listings-index'], revalidate: 3600 },
-    });
-    if (!res.ok) {
-      console.warn(`[listings] taxonomy-index HTTP ${res.status}`);
-      return [];
+  const all: TaxonomyCombination[] = [];
+  for (const locale of LOCALES) {
+    try {
+      const qs = new URLSearchParams({ locale, minimal: '1' });
+      const res = await fetch(`${API}/api/places/seo/taxonomy-index?${qs}`, {
+        headers: apiHeaders(),
+        next: { tags: ['listings-index'], revalidate: 3600 },
+      });
+      if (!res.ok) {
+        console.warn(`[listings] taxonomy-index HTTP ${res.status} (${locale})`);
+        continue;
+      }
+      const json = await res.json();
+      const batch = json.data?.combinations ?? [];
+      all.push(...batch);
+    } catch (err) {
+      console.warn(`[listings] taxonomy-index fetch failed (${locale}):`, err);
     }
-    const json = await res.json();
-    return json.data?.combinations ?? [];
-  } catch (err) {
-    console.warn('[listings] taxonomy-index fetch failed:', err);
-    return [];
   }
+  return all;
 });
 
 export function listingTitle(data: ListingFilterResult, locale: Locale): string {

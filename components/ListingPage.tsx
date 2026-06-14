@@ -17,6 +17,7 @@ export function PlaceListingCard({
   const name = pickListingText(place.name, locale);
   const district = pickListingText(place.district, locale);
   const image = place.thumbnailUrl || place.imageUrl;
+  const initial = name.trim().charAt(0).toUpperCase() || 'K';
   const href = place.detailPath
     ? encodePathSegments(place.detailPath)
     : place.citySlug && place.placeSlug
@@ -30,7 +31,7 @@ export function PlaceListingCard({
           <img src={image} alt={name} loading="lazy" />
         ) : (
           <div className="listing-card-placeholder" aria-hidden>
-            <span className="material-icons">place</span>
+            <span className="listing-card-initial">{initial}</span>
           </div>
         )}
       </div>

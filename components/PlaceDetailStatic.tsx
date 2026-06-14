@@ -17,13 +17,19 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
   const categories = pickArray(place.category, locale);
   const photos = collectGalleryUrls(place);
   const heroUrl = photos[0] ?? null;
+  const initial = name.trim().charAt(0).toUpperCase() || 'K';
 
   return (
     <div className="detail-page" id="place-detail-static">
-      {heroUrl && (
+      {heroUrl ? (
         <div className="detail-header">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={heroUrl} alt={name} />
+        </div>
+      ) : (
+        <div className="detail-no-photo-hero">
+          <span className="detail-no-photo-icon" aria-hidden>🏛️</span>
+          <span className="detail-no-photo-initial" aria-hidden>{initial}</span>
         </div>
       )}
 
