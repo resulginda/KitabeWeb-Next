@@ -76,15 +76,22 @@ export function isHubSegment(locale: Locale, segment: string): boolean {
   return segment.trim().toLowerCase() === expected.toLowerCase();
 }
 
+/** kesfet-muzeler gibi tek segment (nginx 3-segment uyumlu) */
+export function isHubDashSegment(locale: Locale, segment: string): boolean {
+  const hub = HUB_SLUGS[locale].toLowerCase();
+  const s = segment.trim().toLowerCase();
+  return s === hub || s.startsWith(`${hub}-`);
+}
+
 export function buildListingPath(
   locale: Locale,
   citySlug: string,
   filter: string[] = []
 ): string {
   const hub = HUB_SLUGS[locale];
-  const base = `/${locale}/${citySlug}/${hub}`;
-  if (!filter.length) return base;
-  return `${base}/${filter.join('/')}`;
+  const base = `/${locale}/${citySlug}`;
+  if (!filter.length) return `${base}/${hub}`;
+  return `${base}/${hub}-${filter.join('-')}`;
 }
 
 export const getListingByFilter = cache(async (
@@ -92,9 +99,18 @@ export const getListingByFilter = cache(async (
   citySlug: string,
   filterSegments: string[] = []
 ): Promise<ListingFilterResult | null> => {
-  const filter = filterSegments.join('/');
   const qs = new URLSearchParams({ locale, city: citySlug });
-  if (filter) qs.set('filter', filter);
+
+  if (filterSegments.length === 1) {
+    const seg = filterSegments[0];
+    if (isHubDashSegment(locale, seg) && !isHubSegment(locale, seg)) {
+      qs.set('hubSegment', seg);
+    } else if (!isHubSegment(locale, seg)) {
+      qs.set('filter', seg);
+    }
+  } else if (filterSegments.length > 1) {
+    qs.set('filter', filterSegments.join('/'));
+  }
 
   try {
     const res = await fetch(`${API}/api/places/seo/filter?${qs}`, {
