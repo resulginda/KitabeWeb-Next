@@ -1,0 +1,150 @@
+.explore-cities-section {
+  padding: 0 0 2.5rem;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1023px) {
+  .explore-cities-section {
+    padding: 2rem 1.25rem 3rem;
+    max-width: 1200px;
+  }
+}
+
+.explore-cities-section .section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.explore-cities-section h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.explore-cities-subtitle {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  max-width: 520px;
+}
+
+.explore-cities-section .view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 0;
+  border: none;
+  background: none;
+  color: var(--primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.explore-cities-section .view-all-btn:hover {
+  text-decoration: underline;
+}
+
+.explore-cities-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+@media (min-width: 1280px) {
+  .explore-cities-grid {
+    gap: 1.35rem;
+  }
+}
+
+.explore-city-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl, 16px);
+  overflow: hidden;
+  background: var(--bg-surface, #fff);
+  border: 1px solid var(--border-light, #e8e8e8);
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow-sm, 0 2px 8px rgba(0, 0, 0, 0.06));
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.explore-city-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md, 0 8px 24px rgba(0, 0, 0, 0.1));
+}
+
+.explore-city-image-wrap {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: #e8f0ea;
+}
+
+.explore-city-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.35s ease;
+}
+
+.explore-city-card:hover .explore-city-image {
+  transform: scale(1.05);
+}
+
+.explore-city-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.45) 100%);
+}
+
+.explore-city-body {
+  padding: 1rem 1.1rem 1.15rem;
+}
+
+.explore-city-name {
+  margin: 0 0 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+@media (min-width: 768px) {
+  .explore-city-name {
+    font-size: 1.1rem;
+  }
+}
+
+.explore-city-cta {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--primary, #5a7a5e);
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .explore-cities-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.65rem;
+  }
+
+  .explore-cities-section h2 {
+    font-size: 1.25rem;
+  }
+
+  .explore-city-body {
+    padding: 0.65rem 0.5rem 0.75rem;
+  }
+
+  .explore-city-cta {
+    font-size: 0.72rem;
+  }
+}

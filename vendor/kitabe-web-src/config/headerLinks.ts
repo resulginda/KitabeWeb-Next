@@ -1,5 +1,4 @@
-import type { ExploreCityLocale } from '../data/featuredExploreCities';
-import { buildLocaleHubUrl } from '../data/featuredExploreCities';
+export type ExploreCityLocale = 'tr' | 'en' | 'ru' | 'ar';
 
 export type HeaderLinkId = 'cities' | 'blog' | 'about' | 'contact' | 'suggest';
 
@@ -10,6 +9,12 @@ export interface HeaderLinkConfig {
   path?: string;
   getHref?: (locale: ExploreCityLocale) => string;
   isActive: (pathname: string, locale: ExploreCityLocale) => boolean;
+}
+
+function buildLocaleHubUrl(locale: ExploreCityLocale): string {
+  const origin =
+    typeof window !== 'undefined' ? window.location.origin : 'https://kitabe.org';
+  return `${origin}/${locale}`;
 }
 
 export const HEADER_LINKS: HeaderLinkConfig[] = [
@@ -41,6 +46,7 @@ export const HEADER_LINKS: HeaderLinkConfig[] = [
     id: 'suggest',
     labelKey: 'header.suggest',
     path: '/suggestion',
-    isActive: (pathname) => pathname === '/suggestion' || pathname.startsWith('/edit-suggestion'),
+    isActive: (pathname) =>
+      pathname === '/suggestion' || pathname.startsWith('/edit-suggestion'),
   },
 ];
