@@ -338,3 +338,123 @@
   font-size: 1.25rem;
   font-weight: 700;
 }
+
+/* ——— Dil hub (/tr, /en) ——— */
+.locale-hub-shell {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 5rem;
+}
+
+.locale-hub-header {
+  margin-bottom: 2rem;
+}
+
+.locale-hub-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  margin: 0 0 0.75rem;
+  line-height: 1.2;
+}
+
+.locale-hub-intro {
+  margin: 0 0 0.5rem;
+  color: #555;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  max-width: 720px;
+}
+
+.locale-hub-stats {
+  margin: 0 0 1rem;
+  color: #777;
+  font-size: 0.9rem;
+}
+
+.locale-hub-web-link {
+  display: inline-block;
+  color: #5a7a5e;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.locale-hub-web-link:hover {
+  text-decoration: underline;
+}
+
+.locale-hub-section {
+  margin-bottom: 2.5rem;
+}
+
+.locale-hub-section h2 {
+  font-size: 1.25rem;
+  margin: 0 0 1rem;
+}
+
+.locale-hub-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.locale-hub-grid-featured {
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.locale-hub-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e8e8e8;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.locale-hub-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.locale-hub-card-image {
+  aspect-ratio: 16 / 10;
+  background: #e8f0ea;
+  overflow: hidden;
+}
+
+.locale-hub-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.locale-hub-card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #5a7a5e;
+}
+
+.locale-hub-card-body {
+  padding: 0.85rem 1rem;
+}
+
+.locale-hub-card-body h3 {
+  margin: 0 0 0.2rem;
+  font-size: 1.05rem;
+}
+
+.locale-hub-card-body p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #5a7a5e;
+  font-weight: 600;
+}
+
+.locale-hub-card-large .locale-hub-card-body h3 {
+  font-size: 1.15rem;
+}

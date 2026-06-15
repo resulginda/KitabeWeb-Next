@@ -59,15 +59,16 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const preferred = readPreferred(request);
 
-  if (pathname === '/' || isLocaleOnlyPath(pathname)) {
-    const locale = isLocaleOnlyPath(pathname)
-      ? (pathParts(pathname)[0] as Locale)
-      : preferred;
+  if (pathname === '/') {
     return withLocaleCookie(
       NextResponse.redirect(`${SPA_BASE}/home`),
-      locale,
+      preferred,
       request
     );
+  }
+
+  if (isLocaleOnlyPath(pathname)) {
+    return withLocaleCookie(NextResponse.next(), preferred, request);
   }
 
   if (pathname.startsWith('/detail/') || isCityContentPath(pathname)) {
