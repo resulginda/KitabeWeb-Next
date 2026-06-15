@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AdSenseScript } from '@/components/AdSenseScript';
+import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 import { getPreferredLocale } from '@/lib/preferredLocale';
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body>
+        <GoogleAnalytics />
         <AdSenseScript />
         <div className="page-container">{children}</div>
       </body>
