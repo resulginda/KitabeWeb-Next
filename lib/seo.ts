@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { pickText, type Locale, type SeoPlace, LOCALES } from './places';
 import { encodePathSegments } from './detectLocale';
+import { absoluteOgImage, DEFAULT_OG } from './og';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
 
@@ -26,7 +27,7 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
   const fullSlug = place.slug?.[locale] ?? '';
   const [citySlug, ...rest] = fullSlug.split('/');
   const canonical = absolutePlaceUrl(locale, citySlug, rest);
-  const image = place.imageUrl || place.thumbnailUrl;
+  const image = absoluteOgImage(place.imageUrl || place.thumbnailUrl);
 
   const languages: Record<string, string> = {};
   for (const loc of LOCALES) {
@@ -49,15 +50,15 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
       url: canonical,
       title,
       description: metaDesc,
-      siteName: 'Kitabe',
+      siteName: DEFAULT_OG.siteName,
       locale: locale === 'tr' ? 'tr_TR' : locale === 'en' ? 'en_US' : locale,
-      images: image ? [{ url: image, width: 1200, height: 630, alt: name }] : [],
+      images: [{ url: image, width: 1200, height: 630, alt: name }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description: metaDesc,
-      images: image ? [image] : [],
+      images: [image],
     },
     robots: { index: true, follow: true },
   };

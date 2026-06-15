@@ -3,8 +3,7 @@ import { KitabeNavigation } from '@/components/KitabeNavigation';
 import { LocaleHubPage } from '@/components/LocaleHubPage';
 import { LOCALES, type Locale } from '@/lib/places';
 import { setLocaleCookie } from '@/lib/preferredLocale';
-
-const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
+import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 
 const META: Record<Locale, { title: string; description: string }> = {
   tr: {
@@ -44,21 +43,28 @@ export async function generateMetadata({
 
   const languages: Record<string, string> = {};
   for (const l of LOCALES) {
-    languages[l] = `${SITE}/${l}`;
+    languages[l] = `${SITE_URL}/${l}`;
   }
-  languages['x-default'] = `${SITE}/tr`;
+  languages['x-default'] = `${SITE_URL}/tr`;
 
   return {
     title: m.title,
     description: m.description,
-    alternates: { canonical: `${SITE}/${loc}`, languages },
+    alternates: { canonical: `${SITE_URL}/${loc}`, languages },
     openGraph: {
+      type: 'website',
+      url: `${SITE_URL}/${loc}`,
       title: m.title,
       description: m.description,
-      url: `${SITE}/${loc}`,
-      siteName: 'Kitabe',
-      locale: loc,
-      type: 'website',
+      siteName: DEFAULT_OG.siteName,
+      locale: loc === 'tr' ? 'tr_TR' : loc === 'en' ? 'en_US' : loc,
+      images: DEFAULT_OG.images,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: m.title,
+      description: m.description,
+      images: [DEFAULT_OG.images[0].url],
     },
   };
 }

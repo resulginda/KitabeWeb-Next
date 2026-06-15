@@ -9,6 +9,7 @@ import {
   HUB_SLUGS,
 } from './listings';
 import { LOCALES } from './places';
+import { cityOgImage, DEFAULT_OG } from './og';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
 
@@ -28,6 +29,8 @@ export function buildListingMetadata(
   }
   languages['x-default'] = languages.tr || canonical;
 
+  const ogImage = cityOgImage(data.citySlug);
+
   return {
     title,
     description,
@@ -37,10 +40,11 @@ export function buildListingMetadata(
       url: canonical,
       title,
       description,
-      siteName: 'Kitabe',
+      siteName: DEFAULT_OG.siteName,
       locale: locale === 'tr' ? 'tr_TR' : locale === 'en' ? 'en_US' : locale,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
-    twitter: { card: 'summary_large_image', title, description },
+    twitter: { card: 'summary_large_image', title, description, images: [ogImage] },
     robots: { index: true, follow: true },
   };
 }
