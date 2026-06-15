@@ -12,16 +12,13 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 5rem;
-  /* Space for Bottom Navigation */
   position: relative;
   z-index: 1;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .page-container {
     padding-bottom: 0;
-    padding-left: 5rem;
-    /* Space for Side Navigation if implemented */
   }
 }
 

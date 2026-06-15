@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
-import { KitabeNavigation } from '@/components/KitabeNavigation';
-import { LocaleHubPage } from '@/components/LocaleHubPage';
-import { LOCALES, type Locale } from '@/lib/places';
+import { LocaleHubPage } from '@/components/LocaleHubPage';import { LOCALES, type Locale } from '@/lib/places';
 import { setLocaleCookie } from '@/lib/preferredLocale';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 
@@ -84,7 +82,6 @@ export default async function LocaleRootPage({
   return (
     <>
       <LocaleHubPage locale={loc} />
-      <KitabeNavigation locale={loc} />
     </>
   );
 }

@@ -1,4 +1,4 @@
-/* Premium Navigation Styles */
+/* Mobile bottom navigation — hidden on desktop (sidebar replaces it) */
 
 .bottom-nav {
   position: fixed;
@@ -66,11 +66,14 @@
 }
 
 .nav-icon {
-  font-size: 1.35rem;
-  /* Reduced from 1.5rem */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
   margin-bottom: 0.15rem;
-  /* Reduced from 0.25rem */
   transition: transform var(--transition-normal);
+  color: inherit;
 }
 
 .nav-item:hover .nav-icon {
@@ -92,15 +95,15 @@
   font-weight: 700;
 }
 
+@media (min-width: 1024px) {
+  .bottom-nav {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
   .nav-label {
     font-size: 0.65rem;
-    /* Reduced from 0.7rem */
-  }
-
-  .nav-icon {
-    font-size: 1.25rem;
-    /* Reduced from 1.4rem */
   }
 
   .nav-item {

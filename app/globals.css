@@ -2,6 +2,9 @@
 @import '@kitabe/App.css';
 @import '@kitabe/pages/DetailPage.css';
 @import '@kitabe/components/Navigation.css';
+@import '@kitabe/components/AppShell.css';
+@import '@kitabe/components/DesktopSidebar.css';
+@import '@kitabe/components/DesktopHeader.css';
 @import '@kitabe/styles/desktop-density.css';
 
 :root {
@@ -457,4 +460,45 @@
 
 .locale-hub-card-large .locale-hub-card-body h3 {
   font-size: 1.15rem;
+}
+
+/* ——— App shell (Next.js SEO sayfaları) ——— */
+@media (min-width: 1024px) {
+  .bottom-nav {
+    display: none !important;
+  }
+
+  .locale-hub-shell {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 2rem;
+  }
+
+  .listing-page-layout {
+    max-width: min(1480px, calc(100vw - var(--shell-sidebar-collapsed, 72px) - 2rem));
+    padding-top: 0.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .place-page-layout {
+    max-width: min(1480px, calc(100vw - var(--shell-sidebar-collapsed, 72px) - 2rem));
+  }
+
+  .page-container {
+    padding-bottom: 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  .locale-hub-shell {
+    padding-bottom: 5.5rem;
+  }
+
+  .listing-page-layout {
+    padding-bottom: 5.5rem;
+  }
+
+  .place-detail-shell {
+    padding-bottom: 5rem;
+  }
 }

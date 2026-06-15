@@ -6,11 +6,10 @@ import {
   ListingBreadcrumbs,
   PlaceListingCard,
 } from '@/components/ListingPage';
-import { KitabeNavigation } from '@/components/KitabeNavigation';
-import { buildListingJsonLd, buildListingMetadata } from '@/lib/listingSeo';
-import {
+import { buildListingJsonLd, buildListingMetadata } from '@/lib/listingSeo';import {
   getListingByFilter,
   isHubSegment,
+  isHubDashSegment,
   listingTitle,
 } from '@/lib/listings';
 import { buildPlaceJsonLd, buildPlaceMetadata } from '@/lib/seo';
@@ -100,11 +99,9 @@ async function renderListing(
           </aside>
         </div>
       </div>
-      <KitabeNavigation locale={locale} />
     </>
   );
 }
-
 async function renderDetail(locale: Locale, city: string, placeSlugParts: string[]) {
   const slug = placeSlugParts.join('/');
   const place = await resolvePlaceForDetail(locale, city, slug);
@@ -119,11 +116,9 @@ async function renderDetail(locale: Locale, city: string, placeSlugParts: string
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <PlaceDetailLayout place={place} locale={locale} />
-      <KitabeNavigation locale={locale} />
     </>
   );
 }
-
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale, city, segments = [] } = await params;
   if (!LOCALES.includes(locale as Locale)) return { title: 'Kitabe' };
@@ -133,6 +128,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (segs.length > 0 && isHubSegment(loc, segs[0])) {
     const data = await getListingByFilter(loc, city, segs.slice(1));
+    if (!data) return { title: 'Kitabe' };
+    return buildListingMetadata(data, loc);
+  }
+
+  if (segs.length === 1 && isHubDashSegment(loc, segs[0])) {
+    const data = await getListingByFilter(loc, city, [segs[0]]);
     if (!data) return { title: 'Kitabe' };
     return buildListingMetadata(data, loc);
   }
@@ -156,6 +157,10 @@ export default async function CitySegmentsPage({ params }: PageProps) {
 
   if (segs.length > 0 && isHubSegment(loc, segs[0])) {
     return renderListing(loc, city, segs.slice(1));
+  }
+
+  if (segs.length === 1 && isHubDashSegment(loc, segs[0])) {
+    return renderListing(loc, city, [segs[0]]);
   }
 
   if (segs.length > 0) {

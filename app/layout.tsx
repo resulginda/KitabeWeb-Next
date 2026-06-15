@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { AdSenseScript } from '@/components/AdSenseScript';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
+import { KitabePageShell } from '@/components/KitabePageShell';
 import { getPreferredLocale } from '@/lib/preferredLocale';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 
@@ -42,7 +43,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <GoogleAnalytics />
         <AdSenseScript />
-        <div className="page-container">{children}</div>
+        <KitabePageShell>
+          <div className="page-container">{children}</div>
+        </KitabePageShell>
       </body>
     </html>
   );
