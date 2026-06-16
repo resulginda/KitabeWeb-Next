@@ -1,15 +1,27 @@
 'use client';
 
+import { useCallback } from 'react';
 import { usePathname } from 'next/navigation';
 import { AuthProvider } from '@kitabe/contexts/AuthContext';
-import { LanguageProvider } from '@kitabe/contexts/LanguageContext';
+import {
+  LanguageProvider,
+  type Language,
+  type SeoLocaleSwitchResolver,
+} from '@kitabe/contexts/LanguageContext';
 import { IconFontLoader } from '@kitabe/components/IconFontLoader';
 import { LOCALES, type Locale } from '@/lib/places';
+import { mapSeoPathToLocaleQuick } from '@/lib/seoLocaleSwitch';
 import { SiteHeaderNext } from './SiteHeaderNext';
 import { KitabeNavigation } from './KitabeNavigation';
+
 function localeFromPath(pathname: string): Locale {
   const first = pathname.split('/').filter(Boolean)[0];
   return (LOCALES as readonly string[]).includes(first) ? (first as Locale) : 'tr';
+}
+
+function isSeoLocalePath(pathname: string): boolean {
+  const first = pathname.split('/').filter(Boolean)[0];
+  return (LOCALES as readonly string[]).includes(first);
 }
 
 /** KitabeWeb AppShell + SiteHeader — SEO sayfalarında aynı üst menü */
@@ -17,9 +29,32 @@ export function KitabePageShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const locale = localeFromPath(pathname);
 
+  const resolveSeoLocaleSwitch = useCallback<SeoLocaleSwitchResolver>(
+    async (target: Language, path: string) => {
+      if (!isSeoLocalePath(path)) return null;
+      try {
+        const res = await fetch(
+          `/api/locale-path?locale=${encodeURIComponent(target)}&path=${encodeURIComponent(path)}`
+        );
+        if (res.ok) {
+          const data = (await res.json()) as { path?: string };
+          if (data.path) return data.path;
+        }
+      } catch {
+        /* ağ hatası — istemci yedeği */
+      }
+      return mapSeoPathToLocaleQuick(path, target as Locale);
+    },
+    []
+  );
+
   return (
     <AuthProvider>
-      <LanguageProvider defaultLanguage={locale} localeFromUrl={locale}>
+      <LanguageProvider
+        defaultLanguage={locale}
+        localeFromUrl={isSeoLocalePath(pathname) ? locale : undefined}
+        resolveSeoLocaleSwitch={resolveSeoLocaleSwitch}
+      >
         <IconFontLoader />
         <div className="app-shell">
           <SiteHeaderNext locale={locale} pathname={pathname} />
