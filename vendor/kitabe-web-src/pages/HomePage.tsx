@@ -1,29 +1,18 @@
-import { useMemo } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { usePlaces } from '../contexts/PlacesContext';
 import { useFiltre } from '../contexts/FiltreContext';
 import { useAuth } from '../contexts/AuthContext';
 import ExploreCitiesGrid from '../components/ExploreCitiesGrid';
+import { PopularPlacesSection } from '../components/PopularPlacesSection';
 import './HomePage.css';
 
 const HomePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { places, loading } = usePlaces();
+  const { loading } = usePlaces();
   const { filtre, setFiltre } = useFiltre();
   const { kullanici } = useAuth();
-
-  const topCities = useMemo(() => {
-    const counts = new Map<string, number>();
-    places.forEach((p) => {
-      const city = typeof p.city === 'string' ? p.city : p.city?.tr || '';
-      if (city) counts.set(city, (counts.get(city) || 0) + 1);
-    });
-    return Array.from(counts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 6);
-  }, [places]);
 
   if (loading) {
     return (
@@ -83,48 +72,7 @@ const HomePage = () => {
 
       <ExploreCitiesGrid />
 
-      {topCities.length > 0 && (
-        <section className="kb-carousel-section container">
-          <div className="kb-carousel-header">
-            <div>
-              <p className="kb-meta">{t('home.popularCities', { defaultValue: 'Keşif' })}</p>
-              <h2>{t('home.exploreCitiesTitle')}</h2>
-            </div>
-            <Link to="/list" className="btn btn-ghost btn-sm">
-              {t('home.exploreAllCities')} →
-            </Link>
-          </div>
-          <div className="kb-carousel-track">
-            {topCities.map(([city, count]) => (
-              <article
-                key={city}
-                className="kb-city-card"
-                role="button"
-                tabIndex={0}
-                onClick={() => {
-                  setFiltre({ ...filtre, selectedCity: city, selectedDistrict: '' });
-                  navigate('/list');
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    setFiltre({ ...filtre, selectedCity: city, selectedDistrict: '' });
-                    navigate('/list');
-                  }
-                }}
-              >
-                <div className="kb-city-card-img">
-                  <span className="kb-tag" style={{ position: 'absolute', bottom: 12, left: 12 }}>
-                    {count} {t('home.placesCount', { defaultValue: 'yer' })}
-                  </span>
-                </div>
-                <div className="kb-city-card-body">
-                  <h3>{city}</h3>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
-      )}
+      <PopularPlacesSection />
 
       <section className="kb-carousel-section container home-cta-section">
         <div className="kb-panel home-cta-panel">

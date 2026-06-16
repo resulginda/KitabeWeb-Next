@@ -100,7 +100,7 @@ export function AppPromoBanner({ locale }: { locale: Locale }) {
         <p>{t.body}</p>
       </div>
       <a
-        href="https://kitabe.org/home"
+        href="/app"
         className="listing-app-banner-cta"
         rel="noopener noreferrer"
       >

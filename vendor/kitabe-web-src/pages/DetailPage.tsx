@@ -174,39 +174,38 @@ const DetailPage = ({
   const hasValidCoordinates = typeof lat === 'number' && typeof lng === 'number' && 
                               !isNaN(lat) && !isNaN(lng);
 
-  // Paylaşma fonksiyonu
+  // Paylaşma — masaüstünde Web Share API çoğu zaman çalışmaz; panoya kopyala + bildirim
   const handleShare = async () => {
     const shareUrl = place
       ? getPlaceDetailAbsoluteUrl(place, currentLanguage)
       : `${window.location.origin}/detail/${id || ''}`;
 
-    // Web Share API desteği varsa kullan
-    if (navigator.share) {
+    const shareText = `${name} — ${city}${district ? `, ${district}` : ''}`;
+
+    if (typeof navigator.share === 'function') {
       try {
-        await navigator.share({
-          title: name,
-          text: `${name} - ${city}, ${district}`,
-          url: shareUrl,
-        });
+        await navigator.share({ title: name, text: shareText, url: shareUrl });
+        return;
       } catch (error) {
-        // Kullanıcı paylaşmayı iptal etti veya hata oluştu
-        console.log('Paylaşma iptal edildi veya hata:', error);
+        const err = error as DOMException;
+        if (err?.name === 'AbortError') return;
       }
-    } else {
-      // Web Share API desteklenmiyorsa URL'yi panoya kopyala
-      try {
-        await navigator.clipboard.writeText(shareUrl);
-        alert(t('detail.shareCopied') || 'Link panoya kopyalandı!');
-      } catch (error) {
-        // Fallback: textarea ile kopyalama
-        const textarea = document.createElement('textarea');
-        textarea.value = shareUrl;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-        alert(t('detail.shareCopied') || 'Link panoya kopyalandı!');
-      }
+    }
+
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      alert(t('detail.shareCopied') || 'Link panoya kopyalandı!');
+    } catch {
+      const textarea = document.createElement('textarea');
+      textarea.value = shareUrl;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.left = '-9999px';
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      alert(t('detail.shareCopied') || 'Link panoya kopyalandı!');
     }
   };
 

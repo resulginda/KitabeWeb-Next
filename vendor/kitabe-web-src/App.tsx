@@ -59,6 +59,7 @@ import RatingApprovalPage from './pages/RatingApprovalPage';
 import UserProfilePage from './pages/UserProfilePage';
 import LanguageSelectionPage from './pages/LanguageSelectionPage';
 import EditSuggestionPage from './pages/EditSuggestionPage';
+import LandingPage from './pages/LandingPage';
 import './styles/desktop-density.css';
 
 function AppContent() {
@@ -68,6 +69,7 @@ function AppContent() {
       <AdSenseLoader />
       <ScrollToTop />
       <Routes>
+        <Route path="/app" element={<LandingPage />} />
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route element={<MainLayout />}>
           <Route path="/home" element={<HomePage />} />

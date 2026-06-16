@@ -390,9 +390,12 @@
 /* ─── Detail 3-col ─── */
 .kb-detail-layout {
   display: grid;
-  grid-template-columns: 260px 1fr 260px;
+  grid-template-columns: minmax(260px, 300px) minmax(0, 1fr) minmax(300px, 400px);
   gap: 0;
   min-height: calc(100vh - var(--header-h));
+  max-width: 1440px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 .kb-detail-sidebar {
@@ -435,9 +438,10 @@
 }
 
 .kb-detail-main {
-  padding: var(--gap-lg);
+  padding: var(--gap-lg) clamp(var(--gap-md), 2.5vw, var(--gap-xl));
   overflow-y: auto;
-  max-width: 720px;
+  max-width: none;
+  min-width: 0;
 }
 
 .kb-detail-gallery {
