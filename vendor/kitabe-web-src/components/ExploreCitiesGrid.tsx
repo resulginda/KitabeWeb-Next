@@ -38,12 +38,14 @@ const ExploreCitiesGrid = () => {
             <a key={city.slug} href={href} className="explore-city-card">
               <div className="explore-city-image-wrap">
                 <img
-                  src={city.image}
+                  src={city.image.replace(/\.webp$/i, '-480.webp')}
+                  srcSet={`${city.image.replace(/\.webp$/i, '-480.webp')} 480w, ${city.image} 560w`}
+                  sizes="(max-width: 768px) 50vw, 280px"
                   alt={alt}
                   loading={city.slug === 'antalya' ? 'eager' : aboveFold ? 'eager' : 'lazy'}
                   fetchPriority={city.slug === 'antalya' ? 'high' : undefined}
-                  width={640}
-                  height={400}
+                  width={480}
+                  height={300}
                   className="explore-city-image"
                 />
                 <div className="explore-city-overlay" />

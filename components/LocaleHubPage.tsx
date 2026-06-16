@@ -143,7 +143,7 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
                     t={t}
                     large
                     aboveFold={index < 3}
-                    lcp={city.citySlug === 'antalya'}
+                    lcp={index === 0}
                   />
                 ))}
               </div>

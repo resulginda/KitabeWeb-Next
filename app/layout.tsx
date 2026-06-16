@@ -39,7 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           }}
         />
         <link rel="apple-touch-icon" href="/icon-180.png" />
-        <link rel="preload" href="/fonts/material-icons.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/material-icons.woff2" as="font" type="font/woff2" crossOrigin="anonymous" fetchPriority="low" />
       </head>
       <body>
         <GoogleAnalytics />

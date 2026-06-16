@@ -21,12 +21,29 @@ export function AdSlot({ position }: { position: AdPosition }) {
 
   useEffect(() => {
     if (!slotId || pushed.current) return;
-    try {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-      pushed.current = true;
-    } catch {
-      /* script henüz yüklenmemiş olabilir */
-    }
+
+    const pushAd = () => {
+      if (pushed.current) return;
+      try {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+        pushed.current = true;
+      } catch {
+        /* script henüz yüklenmemiş olabilir */
+      }
+    };
+
+    const schedule =
+      typeof window !== 'undefined' && 'requestIdleCallback' in window
+        ? (cb: () => void) => {
+            const id = window.requestIdleCallback(cb, { timeout: 2500 });
+            return () => window.cancelIdleCallback(id);
+          }
+        : (cb: () => void) => {
+            const id = window.setTimeout(cb, 1);
+            return () => window.clearTimeout(id);
+          };
+
+    return schedule(pushAd);
   }, [slotId]);
 
   if (!clientId || !slotId) return null;

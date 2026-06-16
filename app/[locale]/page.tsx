@@ -95,7 +95,8 @@ export default async function LocaleRootPage({
         type="image/webp"
         imageSrcSet={cityCardLcpSrcSet(LOCALE_HUB_LCP_IMAGE)}
         imageSizes="(max-width: 768px) 50vw, 280px"
-        fetchPriority="high"
+        // React → HTML fetchpriority (LCP preload keşfi)
+        {...({ fetchpriority: 'high' } as Record<string, string>)}
       />
       <LocaleHubPage locale={loc} />
     </>
