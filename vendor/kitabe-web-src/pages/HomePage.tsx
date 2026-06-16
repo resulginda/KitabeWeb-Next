@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { usePlaces } from '../contexts/PlacesContext';
 import { useFiltre } from '../contexts/FiltreContext';
 import { useAuth } from '../contexts/AuthContext';
 import ExploreCitiesGrid from '../components/ExploreCitiesGrid';
@@ -10,17 +9,8 @@ import './HomePage.css';
 const HomePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { loading } = usePlaces();
   const { filtre, setFiltre } = useFiltre();
   const { kullanici } = useAuth();
-
-  if (loading) {
-    return (
-      <div className="home-page loading">
-        {t('common.loading')}
-      </div>
-    );
-  }
 
   const handleSearch = () => {
     navigate('/list');

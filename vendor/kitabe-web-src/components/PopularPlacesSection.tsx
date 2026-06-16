@@ -10,7 +10,7 @@ import type { PlaceStats } from '../types/analytics';
 
 export function PopularPlacesSection() {
   const { t } = useTranslation();
-  const { places } = usePlaces();
+  const { places, loading } = usePlaces();
   const { currentLanguage } = useLanguage();
   const [stats, setStats] = useState<PlaceStats[]>([]);
 
@@ -27,6 +27,24 @@ export function PopularPlacesSection() {
       })
       .filter(Boolean) as { place: (typeof places)[0]; stat: PlaceStats }[];
   }, [stats, places]);
+
+  if (loading && items.length === 0) {
+    return (
+      <section className="kb-carousel-section container" aria-busy="true">
+        <div className="kb-carousel-header">
+          <div>
+            <p className="kb-meta">{t('home.popularPlacesEyebrow', { defaultValue: 'İstatistikler' })}</p>
+            <h2>{t('home.popularPlacesTitle', { defaultValue: 'Popüler Yerler' })}</h2>
+          </div>
+        </div>
+        <div className="kb-carousel-track">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="kb-city-card kb-skeleton-city-card" />
+          ))}
+        </div>
+      </section>
+    );
+  }
 
   if (items.length === 0) return null;
 

@@ -540,6 +540,74 @@
   object-fit: cover;
 }
 
+.kb-detail-hero-main {
+  aspect-ratio: 16 / 9;
+  max-height: 420px;
+}
+
+.kb-detail-app-promo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: var(--gap-md);
+  padding: 12px 14px;
+  border-radius: var(--radius-lg);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border-light));
+  background: color-mix(in srgb, var(--accent) 8%, var(--bg-surface));
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.kb-detail-app-promo:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+}
+
+.kb-detail-app-promo-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.kb-detail-app-promo-text strong {
+  font-size: 0.875rem;
+  color: var(--text-primary);
+}
+
+.kb-detail-app-promo-text small {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.kb-detail-app-promo-cta {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.kb-detail-app-promo-mobile {
+  display: none;
+}
+
+.kb-detail-sidebar .kb-detail-app-promo {
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1023px) {
+  .kb-detail-sidebar .kb-detail-app-promo {
+    display: none;
+  }
+
+  .kb-detail-app-promo-mobile {
+    display: flex;
+    margin-bottom: var(--gap-md);
+  }
+}
+
 .kb-detail-section {
   background: var(--bg-surface);
   border: 1px solid var(--border-light);
@@ -657,6 +725,41 @@
 .kb-detail-no-photo .material-icons {
   font-size: 3rem;
   opacity: 0.5;
+}
+
+/* ——— Skeleton loaders ——— */
+.kb-skeleton-place-card,
+.kb-skeleton-city-card {
+  border-radius: var(--radius-lg);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--border-light) 60%, var(--bg-surface)) 25%,
+    var(--bg-surface) 50%,
+    color-mix(in srgb, var(--border-light) 60%, var(--bg-surface)) 75%
+  );
+  background-size: 200% 100%;
+  animation: kb-shimmer 1.2s ease-in-out infinite;
+}
+
+.kb-skeleton-place-card {
+  height: 88px;
+  margin-bottom: 10px;
+}
+
+.kb-skeleton-city-card {
+  min-width: 220px;
+  height: 240px;
+  flex-shrink: 0;
+}
+
+.kb-discover-map-skeleton {
+  background: color-mix(in srgb, var(--border-light) 40%, var(--bg-main));
+  animation: kb-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes kb-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* ─── Page shell (blog, legal, admin, vb.) ─── */

@@ -15,7 +15,6 @@ import { NotificationProvider } from '@kitabe/contexts/NotificationContext';
 import { PhotoSubmissionProvider } from '@kitabe/contexts/PhotoSubmissionContext';
 import { RatingProvider } from '@kitabe/contexts/RatingContext';
 import { VisitedPlacesProvider } from '@kitabe/contexts/VisitedPlacesContext';
-import { whenMaterialIconsReady } from '@kitabe/components/IconFontLoader';
 import type { Place } from '@kitabe/types/place';
 import '@/lib/i18n-client';
 
@@ -84,7 +83,7 @@ export function PlaceDetailClient({
 
   useEffect(() => {
     let cancelled = false;
-    Promise.all([whenMaterialIconsReady(), import('@kitabe/pages/DetailPage')]).then(() => {
+    import('@kitabe/pages/DetailPage').then(() => {
       if (!cancelled) setInteractiveReady(true);
     });
     return () => {

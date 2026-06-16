@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { API_BASE_URL } from '../config/api';
@@ -60,9 +60,9 @@ const DetailPage = ({
   const { addRating, updateRating, deleteRating, getRatingsByPlace, getPlaceRatingSummary } = useRatings();
   const { getApprovedSubmissionsByPlace } = usePhotoSubmissions();
   const { isVisited, addToVisited, removeFromVisited, canMarkAsVisited } = useVisitedPlaces();
-  const [place, setPlace] = useState<Place | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const hasInitialPlace = Boolean(initialPlace && id && initialPlace.id === id);
+  const [place, setPlace] = useState<Place | null>(hasInitialPlace ? initialPlace! : null);
+  const [loading, setLoading] = useState(!hasInitialPlace);
   
   // Rating states
   const [ratingModalVisible, setRatingModalVisible] = useState(false);
@@ -78,17 +78,6 @@ const DetailPage = ({
   
   // Visited state
   const [checkingVisit, setCheckingVisit] = useState(false);
-
-  // Mobil cihaz tespiti
-  useEffect(() => {
-    const checkMobile = () => {
-      const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
-      const isAndroid = /android/i.test(userAgent);
-      const isIOS = /iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream;
-      setIsMobile(isAndroid || isIOS);
-    };
-    checkMobile();
-  }, []);
 
   useEffect(() => {
     const loadPlace = async () => {
@@ -209,36 +198,6 @@ const DetailPage = ({
     }
   };
 
-  // Uygulamada aç: zamanlayıcı kullanma — kullanıcı uygulamaya geçince sayfa arka planda kalır ve
-  // 3 sn sonra Play Store'a atıyordu. Android: Intent + anında fallback; iOS: universal link (https).
-  const handleOpenInApp = () => {
-    const id = place?.id?.trim();
-    if (!id) return;
-
-    const ua = navigator.userAgent || navigator.vendor || (window as any).opera || '';
-    const isAndroid = /android/i.test(ua);
-    const isIOS = /iPad|iPhone|iPod/.test(ua) && !(window as any).MSStream;
-
-    const canonicalBase = 'https://kitabe.org';
-    const universalDetail = `${canonicalBase}/detail/${encodeURIComponent(id)}`;
-    const playStore =
-      'https://play.google.com/store/apps/details?id=com.kitabeapp';
-
-    if (isAndroid) {
-      const fallback = encodeURIComponent(playStore);
-      // kitabe://detail/:id ile aynı hedef; yüklü değilse tarayıcı doğrudan Play Store'a gider
-      window.location.href = `intent://detail/${encodeURIComponent(id)}#Intent;scheme=kitabe;package=com.kitabeapp;S.browser_fallback_url=${fallback};end`;
-      return;
-    }
-
-    if (isIOS) {
-      window.location.href = universalDetail;
-      return;
-    }
-
-    window.location.href = universalDetail;
-  };
-
   // Rating data
   const approvedRatings = useMemo(() => {
     if (!place) return [];
@@ -280,6 +239,12 @@ const DetailPage = ({
     const userPhotoUrls = approvedUserPhotos.map(sub => sub.photoUrl);
     return [...placePhotos, ...googleUrls, ...userPhotoUrls];
   }, [photos, approvedUserPhotos, place]);
+
+  const heroImageUrl = imageUrl || allPhotos[0] || null;
+  const galleryPhotos = useMemo(() => {
+    if (!heroImageUrl) return allPhotos;
+    return allPhotos.filter((url) => url !== heroImageUrl);
+  }, [allPhotos, heroImageUrl]);
   
   const visited = useMemo(() => {
     if (!place) return false;
@@ -472,7 +437,7 @@ const DetailPage = ({
   const metaDescription = description.length > 160 ? description.substring(0, 160) + '...' : description;
   const fullTitle = `${name} - ${city}${district ? `, ${district}` : ''} | Kitabe`;
 
-  if (loading) {
+  if (loading && !skipHelmet) {
     return <div className="detail-page loading">{t('common.loading')}</div>;
   }
 
@@ -520,10 +485,6 @@ const DetailPage = ({
       <div className="detail-page kb-detail-page">
         <div className="kb-detail-layout">
           <aside className="kb-detail-sidebar">
-            <Link to="/list" className="kb-page-back detail-back">
-              <span className="material-icons" aria-hidden>arrow_back</span>
-              {t('common.back', 'Geri')}
-            </Link>
             <h1 className="kb-detail-title">{name}</h1>
             <ul className="kb-kunye-list">
               {(city || district) && (
@@ -599,23 +560,43 @@ const DetailPage = ({
                 <span className="material-icons">{isInRoute(place.id) ? 'alt_route' : 'add_road'}</span>
               </button>
             </div>
+            <a href="/app" className="kb-detail-app-promo">
+              <span className="kb-detail-app-promo-icon" aria-hidden>
+                <img src="/app-icon.png" alt="" width={40} height={40} decoding="async" />
+              </span>
+              <span className="kb-detail-app-promo-text">
+                <strong>{t('detail.downloadAppTitle', { defaultValue: 'Kitabe Mobil Uygulaması' })}</strong>
+                <small>{t('detail.downloadAppSubtitle', { defaultValue: 'Haritada gez, hikâyeleri oku' })}</small>
+              </span>
+              <span className="kb-detail-app-promo-cta">
+                {t('landing.downloadApp', { defaultValue: 'Uygulamayı İndir' })} →
+              </span>
+            </a>
           </aside>
 
           <main className="kb-detail-main">
-            {isMobile && (
-              <div className="open-in-app-banner">
-                <button type="button" className="open-in-app-btn" onClick={handleOpenInApp}>
-                  <span className="app-icon" aria-hidden>
-                    <img src="/app-icon.png" alt="" width={44} height={44} decoding="async" />
-                  </span>
-                  <span className="btn-text">
-                    <strong>{t('detail.openInAppTitle')}</strong>
-                    <small>{t('detail.openInAppSubtitle')}</small>
-                  </span>
-                  <span className="material-icons arrow" aria-hidden>chevron_right</span>
-                </button>
+            {heroImageUrl ? (
+              <div className="kb-detail-hero kb-detail-hero-main">
+                <img
+                  src={heroImageUrl}
+                  alt={name}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
               </div>
-            )}
+            ) : null}
+
+            <a href="/app" className="kb-detail-app-promo kb-detail-app-promo-mobile">
+              <span className="kb-detail-app-promo-icon" aria-hidden>
+                <img src="/app-icon.png" alt="" width={40} height={40} decoding="async" />
+              </span>
+              <span className="kb-detail-app-promo-text">
+                <strong>{t('detail.openInAppTitle')}</strong>
+                <small>{t('detail.openInAppSubtitle')}</small>
+              </span>
+              <span className="material-icons" aria-hidden>chevron_right</span>
+            </a>
 
             <div className="kb-detail-section">
               <h2>
@@ -747,21 +728,6 @@ const DetailPage = ({
           </main>
 
           <aside className="kb-detail-gallery">
-            {imageUrl ? (
-              <div className="kb-detail-hero">
-                <img
-                  src={imageUrl}
-                  alt={name}
-                  onError={(e) => {
-                    (e.target as HTMLImageElement).style.display = 'none';
-                  }}
-                />
-              </div>
-            ) : (
-              <div className="kb-detail-no-photo" aria-hidden>
-                <span className="material-icons">landscape</span>
-              </div>
-            )}
             <div className="kb-detail-section" style={{ padding: 'var(--gap-md)' }}>
               <div className="kb-detail-section-header">
                 <h2 style={{ margin: 0, fontSize: '0.9375rem' }}>
@@ -775,8 +741,8 @@ const DetailPage = ({
                   </label>
                 )}
               </div>
-              {allPhotos.length > 0 ? (
-                <PhotoLightbox photos={allPhotos} altPrefix={name} />
+              {galleryPhotos.length > 0 ? (
+                <PhotoLightbox photos={galleryPhotos} altPrefix={name} />
               ) : (
                 <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '0.875rem' }}>
                   {t('detail.noPhotosYet')}

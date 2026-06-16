@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { LocaleHubPage } from '@/components/LocaleHubPage';import { LOCALES, type Locale } from '@/lib/places';
-import { setLocaleCookie } from '@/lib/preferredLocale';
+import { LocaleHubPage } from '@/components/LocaleHubPage';
+import { LOCALES, type Locale } from '@/lib/places';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 
 const META: Record<Locale, { title: string; description: string }> = {
@@ -83,8 +83,6 @@ export default async function LocaleRootPage({
     notFound();
   }
   const loc = locale as Locale;
-
-  await setLocaleCookie(loc);
 
   return (
     <>

@@ -4,7 +4,7 @@ import { DETAIL_LABELS } from '@/lib/detailLabels';
 import { PhotoGalleryClient } from '@/components/PhotoGalleryClient';
 import { AdSlot } from '@/components/AdSlot';
 
-/** KitabeWeb DetailPage ile aynı görünüm — sunucuda anında render (SEO + LCP) */
+/** SSR — DetailPage ile aynı kb-detail-layout (flash önleme) */
 export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: Locale }) {
   const labels = DETAIL_LABELS[locale];
   const name = pickText(place.name as never, locale);
@@ -17,73 +17,123 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
   const categories = pickArray(place.category, locale);
   const photos = collectGalleryUrls(place);
   const heroUrl = photos[0] ?? null;
-  const initial = name.trim().charAt(0).toUpperCase() || 'K';
+  const galleryPhotos = heroUrl ? photos.slice(1) : photos;
+
+  const appCopy: Record<Locale, { title: string; subtitle: string; cta: string }> = {
+    tr: { title: 'Kitabe Mobil Uygulaması', subtitle: 'Haritada gez, hikâyeleri oku', cta: 'Uygulamayı İndir' },
+    en: { title: 'Kitabe Mobile App', subtitle: 'Explore on the map, read stories', cta: 'Get the App' },
+    ru: { title: 'Мобильное приложение Kitabe', subtitle: 'Карта и истории в кармане', cta: 'Скачать' },
+    ar: { title: 'تطبيق Kitabe', subtitle: 'استكشف على الخريطة', cta: 'حمّل التطبيق' },
+  };
+  const app = appCopy[locale] || appCopy.en;
 
   return (
-    <div className="detail-page" id="place-detail-static">
-      {heroUrl ? (
-        <div className="detail-header">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={heroUrl} alt={name} />
-        </div>
-      ) : (
-        <div className="detail-no-photo-hero">
-          <span className="detail-no-photo-icon" aria-hidden>🏛️</span>
-          <span className="detail-no-photo-initial" aria-hidden>{initial}</span>
-        </div>
-      )}
-
-      <div className={`detail-content ${heroUrl ? '' : 'no-header'}`.trim()}>
-        <h1>{name}</h1>
-        <div className="detail-meta">
-          <span className="location">📍 {city}{district ? `, ${district}` : ''}</span>
-          {period && <span className="period">📅 {period}</span>}
-          {place.isUnesco && <span className="unesco-badge">UNESCO</span>}
-        </div>
-
-        {categories.length > 0 && (
-          <div className="categories">
-            {categories.map((cat) => (
-              <span key={cat} className="category-tag">{cat}</span>
-            ))}
-          </div>
-        )}
-
-        {description && (
-          <div className="section">
-            <h2>{labels.description}</h2>
-            <p>{description}</p>
-          </div>
-        )}
-
-        {story && (
-          <div className="section">
-            <h2>{labels.story}</h2>
-            <p>{story}</p>
-          </div>
-        )}
-
-        {visitTips.length > 0 && (
-          <div className="section">
-            <h2>{labels.visitTips}</h2>
-            <ul>
-              {visitTips.map((tip) => (
-                <li key={tip}>{tip}</li>
+    <div className="detail-page kb-detail-page" id="place-detail-static">
+      <div className="kb-detail-layout">
+        <aside className="kb-detail-sidebar">
+          <h1 className="kb-detail-title">{name}</h1>
+          <ul className="kb-kunye-list">
+            {(city || district) && (
+              <li>
+                <span className="label">{locale === 'tr' ? 'Konum' : locale === 'en' ? 'Location' : locale === 'ru' ? 'Место' : 'الموقع'}</span>
+                <span className="value">
+                  {city}
+                  {district ? `, ${district}` : ''}
+                </span>
+              </li>
+            )}
+            {period && (
+              <li>
+                <span className="label">{locale === 'tr' ? 'Dönem' : locale === 'en' ? 'Period' : locale === 'ru' ? 'Период' : 'الفترة'}</span>
+                <span className="value">{period}</span>
+              </li>
+            )}
+            {place.isUnesco && (
+              <li>
+                <span className="label">UNESCO</span>
+                <span className="value">✓</span>
+              </li>
+            )}
+          </ul>
+          {categories.length > 0 && (
+            <div className="kb-detail-chips">
+              {categories.map((cat) => (
+                <span key={cat} className="kb-detail-chip">
+                  {cat}
+                </span>
               ))}
-            </ul>
+            </div>
+          )}
+          <a href="/app" className="kb-detail-app-promo">
+            <span className="kb-detail-app-promo-icon" aria-hidden>
+              <img src="/app-icon.png" alt="" width={40} height={40} decoding="async" />
+            </span>
+            <span className="kb-detail-app-promo-text">
+              <strong>{app.title}</strong>
+              <small>{app.subtitle}</small>
+            </span>
+            <span className="kb-detail-app-promo-cta">{app.cta} →</span>
+          </a>
+        </aside>
+
+        <main className="kb-detail-main">
+          {heroUrl ? (
+            <div className="kb-detail-hero kb-detail-hero-main">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={heroUrl} alt={name} fetchPriority="high" />
+            </div>
+          ) : null}
+
+          {description && (
+            <div className="kb-detail-section">
+              <h2>
+                <span className="material-icons">description</span>
+                {labels.description}
+              </h2>
+              <p>{description}</p>
+            </div>
+          )}
+
+          {story && (
+            <div className="kb-detail-section">
+              <h2>
+                <span className="material-icons">auto_stories</span>
+                {labels.story}
+              </h2>
+              <p>{story}</p>
+            </div>
+          )}
+
+          {visitTips.length > 0 && (
+            <div className="kb-detail-section">
+              <h2>
+                <span className="material-icons">tips_and_updates</span>
+                {labels.visitTips}
+              </h2>
+              <ul>
+                {visitTips.map((tip) => (
+                  <li key={tip}>{tip}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <AdSlot position="in-content" />
+        </main>
+
+        <aside className="kb-detail-gallery">
+          <div className="kb-detail-section" style={{ padding: 'var(--gap-md)' }}>
+            <h2 style={{ margin: '0 0 var(--gap-sm)', fontSize: '0.9375rem' }}>
+              <span className="material-icons">photo_library</span>
+              {labels.photos}
+            </h2>
+            <PhotoGalleryClient
+              photos={galleryPhotos}
+              altPrefix={name}
+              emptyText={labels.noPhotosYet}
+            />
           </div>
-        )}
-
-        <AdSlot position="in-content" />
-
-        <div className="section">
-          <h2>{labels.photos}</h2>
-          <PhotoGalleryClient
-            photos={photos}
-            altPrefix={name}
-            emptyText={labels.noPhotosYet}
-          />
-        </div>
+        </aside>
       </div>
     </div>
   );

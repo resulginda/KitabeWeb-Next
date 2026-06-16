@@ -250,7 +250,22 @@ const ListPage = () => {
   );
 
   if (loading) {
-    return <div className="list-page loading">{t('common.loading')}</div>;
+    return (
+      <div className="list-page kb-discover-layout">
+        <aside className="kb-discover-list">
+          <div className="kb-discover-list-head">
+            <h2>{t('navigation.list', { defaultValue: 'Keşfet' })}</h2>
+            <p>{t('common.loading')}</p>
+          </div>
+          <div className="kb-list-skeleton" aria-busy="true" aria-label={t('common.loading')}>
+            {Array.from({ length: 10 }).map((_, i) => (
+              <div key={i} className="kb-skeleton-place-card" />
+            ))}
+          </div>
+        </aside>
+        <div className="kb-discover-map kb-discover-map-skeleton" aria-hidden />
+      </div>
+    );
   }
 
   return (

@@ -76,11 +76,38 @@ export const PlacesProvider = ({ children }: { children: ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
   const { currentLanguage } = useLanguage();
 
+  const PLACES_CACHE_KEY = 'kitabe_places_minimal';
+  const PLACES_CACHE_TTL_MS = 5 * 60 * 1000;
+
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    setError(null);
     const lang = currentLanguage || 'tr';
+    const cacheKey = `${PLACES_CACHE_KEY}_${lang}`;
+    let hadCache = false;
+
+    try {
+      const raw = sessionStorage.getItem(cacheKey);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { ts: number; list: Place[] };
+        if (
+          parsed?.ts &&
+          Date.now() - parsed.ts < PLACES_CACHE_TTL_MS &&
+          Array.isArray(parsed.list) &&
+          parsed.list.length > 0
+        ) {
+          setPlaces(parsed.list);
+          setLoading(false);
+          hadCache = true;
+        }
+      }
+    } catch {
+      /* ignore cache errors */
+    }
+
+    if (!hadCache) {
+      setLoading(true);
+    }
+    setError(null);
     fetch(
       `${API_BASE_URL}/api/places?minimal=1&limit=3000&status=published&lang=${lang}`
     )
@@ -93,6 +120,14 @@ export const PlacesProvider = ({ children }: { children: ReactNode }) => {
           );
           setPlaces(list);
           setError(null);
+          try {
+            sessionStorage.setItem(
+              cacheKey,
+              JSON.stringify({ ts: Date.now(), list })
+            );
+          } catch {
+            /* ignore quota errors */
+          }
         } else {
           setError(data.message || 'Yerler yüklenemedi');
           setPlaces([]);
