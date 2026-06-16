@@ -40,8 +40,10 @@ const ExploreCitiesGrid = () => {
                 <img
                   src={city.image}
                   alt={alt}
-                  loading={aboveFold ? 'eager' : 'lazy'}
-                  fetchPriority={index === 1 ? 'high' : undefined}
+                  loading={city.slug === 'antalya' ? 'eager' : aboveFold ? 'eager' : 'lazy'}
+                  fetchPriority={city.slug === 'antalya' ? 'high' : undefined}
+                  width={640}
+                  height={400}
                   className="explore-city-image"
                 />
                 <div className="explore-city-overlay" />

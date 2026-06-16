@@ -495,6 +495,13 @@
   object-fit: cover;
 }
 
+.locale-hub-card-image .locale-hub-card-img-native {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
 .locale-hub-card-image img {
   width: 100%;
   height: 100%;

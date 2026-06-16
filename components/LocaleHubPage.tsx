@@ -124,7 +124,7 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
                 t={t}
                 large
                 aboveFold={index < 3}
-                lcp={index === 1}
+                lcp={city.citySlug === 'antalya'}
               />
             ))}
           </div>
@@ -172,15 +172,25 @@ function CityHubCard({
   return (
     <Link href={href} className={`locale-hub-card${large ? ' locale-hub-card-large' : ''}`}>
       <div className="locale-hub-card-image">
-        {image ? (
+        {image && lcp ? (
+          // LCP: doğrudan webp — PageSpeed fetchpriority=high + lazy yok
+          <img
+            src={image}
+            alt={cityName}
+            className="locale-hub-card-img locale-hub-card-img-native"
+            width={640}
+            height={400}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        ) : image ? (
           <Image
             src={image}
             alt={cityName}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 280px"
             className="locale-hub-card-img"
-            priority={lcp}
-            fetchPriority={lcp ? 'high' : aboveFold ? 'auto' : 'low'}
             loading={aboveFold ? 'eager' : 'lazy'}
           />
         ) : (
