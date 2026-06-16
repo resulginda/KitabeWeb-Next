@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { AdSenseScript } from '@/components/AdSenseScript';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
+import { MetaPixel } from '@/components/MetaPixel';
 import { KitabePageShell } from '@/components/KitabePageShell';
 import { getPreferredLocale } from '@/lib/preferredLocale';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
@@ -49,6 +50,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <GoogleAnalytics />
+        <MetaPixel />
         <AdSenseScript />
         <KitabePageShell>
           <div className="page-container">{children}</div>
