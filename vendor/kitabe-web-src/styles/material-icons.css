@@ -1,12 +1,4 @@
-/* Material Icons — self-hosted woff2 + FOUC önleme (ligature metni görünmesin) */
-@font-face {
-  font-family: 'Material Icons';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(/fonts/material-icons.woff2) format('woff2');
-}
-
+/* Material Icons ligature sınıfları — @font-face: /fonts/kitabe-fonts.css */
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -26,7 +18,6 @@
   text-rendering: optimizeLegibility;
 }
 
-/* Font yüklenene kadar "favorite_border" gibi ligature metnini gizle */
 html:not(.material-icons-ready) .material-icons {
   visibility: hidden;
   width: 1em;

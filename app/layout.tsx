@@ -33,6 +33,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} className={siteFontClassName}>
       <head>
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/material-icons.woff2) format('woff2');}`,
+          }}
+        />
         <link rel="apple-touch-icon" href="/icon-180.png" />
         <link rel="preload" href="/fonts/material-icons.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>

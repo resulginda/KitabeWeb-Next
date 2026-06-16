@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     return [
       { source: '/cities/:path*', headers: [{ key: 'Cache-Control', value: longCache }] },
       { source: '/fonts/:path*', headers: [{ key: 'Cache-Control', value: longCache }] },
+      { source: '/fonts/kitabe-fonts.css', headers: [{ key: 'Cache-Control', value: 'public, max-age=86400' }] },
       { source: '/icon-:size.png', headers: [{ key: 'Cache-Control', value: longCache }] },
       { source: '/logo-:name.webp', headers: [{ key: 'Cache-Control', value: longCache }] },
     ];
