@@ -5,7 +5,7 @@ import { HEADER_NAV_ITEMS, isNavItemActive } from '@kitabe/config/navItems';
 import { HEADER_LINKS } from '@kitabe/config/headerLinks';
 import type { ExploreCityLocale } from '@kitabe/data/featuredExploreCities';
 import { NavIcon } from '@kitabe/components/NavIcons';
-import { HeaderLanguageMenu } from '@kitabe/components/HeaderLanguageMenu';
+import { SeoHeaderLanguageMenu } from '@/components/SeoHeaderLanguageMenu';
 import type { Locale } from '@/lib/places';
 import { HUB_HEADER_COPY } from '@/lib/hubHeaderCopy';
 
@@ -97,7 +97,7 @@ export function SiteHeaderNext({ locale, pathname }: Props) {
         </nav>
 
         <div className="site-header-actions">
-          <HeaderLanguageMenu />
+          <SeoHeaderLanguageMenu locale={locale} pathname={pathname} />
           {kullanici ? (
             <a href="/account" className="site-header-account-pill">
               <span className="site-header-account-avatar" aria-hidden>
