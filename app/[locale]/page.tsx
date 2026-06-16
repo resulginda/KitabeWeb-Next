@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { LocaleHubPage } from '@/components/LocaleHubPage';import { LOCALES, type Locale } from '@/lib/places';
 import { setLocaleCookie } from '@/lib/preferredLocale';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
@@ -29,6 +30,9 @@ const META: Record<Locale, { title: string; description: string }> = {
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
+
+/** sitemap.xml gibi yolların [locale] ile eşleşmesini engelle */
+export const dynamicParams = false;
 
 export async function generateMetadata({
   params,
@@ -75,7 +79,10 @@ export default async function LocaleRootPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const loc = LOCALES.includes(locale as Locale) ? (locale as Locale) : 'tr';
+  if (!LOCALES.includes(locale as Locale)) {
+    notFound();
+  }
+  const loc = locale as Locale;
 
   await setLocaleCookie(loc);
 
