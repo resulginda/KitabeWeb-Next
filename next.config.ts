@@ -4,6 +4,13 @@ import path from 'path';
 const kitabeSrc = path.join(__dirname, 'vendor/kitabe-web-src');
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return {
+      beforeFiles: [
+        { source: '/sitemap.xml', destination: '/api/sitemap-index' },
+      ],
+    };
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'api.kitabe.org' },

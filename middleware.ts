@@ -21,6 +21,10 @@ const BLOCKED_PATTERNS = [
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  if (pathname === '/sitemap.xml') {
+    return NextResponse.rewrite(new URL('/api/sitemap-index', request.url));
+  }
+
   if (BLOCKED_PATTERNS.some((re) => re.test(pathname))) {
     return new NextResponse(null, { status: 404 });
   }
@@ -30,6 +34,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|icon.png|og-default.jpg|robots.txt|sitemap).*)',
+    '/sitemap.xml',
+    '/((?!_next/static|_next/image|favicon.ico|icon.png|og-default.jpg|robots.txt|sitemap/).*)',
   ],
 };

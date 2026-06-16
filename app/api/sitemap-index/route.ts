@@ -2,7 +2,6 @@ import { LOCALES } from '@/lib/places';
 
 const SITE = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org').replace(/\/$/, '');
 
-/** generateSitemaps alt dosyaları üretir; kök indeks ayrı route ile sunulur */
 const SITEMAP_IDS = [...LOCALES, 'listings', 'home'] as const;
 
 export const revalidate = 3600;
