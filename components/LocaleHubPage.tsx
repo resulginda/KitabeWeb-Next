@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { AdSlot } from '@/components/AdSlot';
 import { getCityLabel } from '@/lib/citySlugLabel';
 import { encodePathSegments } from '@/lib/detectLocale';
 import { cityHubImage, FEATURED_EXPLORE_SLUGS } from '@/lib/featuredCities';
@@ -82,65 +83,88 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
   const introParagraphs = localeHubIntroParagraphs(locale, cityHubs.length, totalPlaces);
 
   return (
-    <div className="locale-hub-shell">
-      <header className="locale-hub-header">
-        <nav className="listing-breadcrumb" aria-label="Breadcrumb">
-          <ol>
-            <li>
-              <Link href={encodePathSegments(`/${locale}`)}>Kitabe</Link>
-            </li>
-          </ol>
-        </nav>
-        <h1>
-          {locale === 'tr' && 'Türkiye\'de Gezilecek Yerler'}
-          {locale === 'en' && 'Things to Do in Turkey'}
-          {locale === 'ru' && 'Достопримечательности Турции'}
-          {locale === 'ar' && 'أماكن للزيارة في تركيا'}
-        </h1>
-        <div className="locale-hub-intro">
-          {introParagraphs.map((paragraph) => (
-            <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-          ))}
-        </div>
-        <p className="locale-hub-stats">
-          {cityHubs.length} {locale === 'tr' ? 'şehir' : locale === 'en' ? 'cities' : locale === 'ru' ? 'городов' : 'مدينة'}
-          {' · '}
-          {totalPlaces} {t.places}
-        </p>
-        <a className="locale-hub-web-link" href={`${SPA_BASE}/home`}>
-          {t.webApp} →
-        </a>
-      </header>
+    <div className="listing-page-shell locale-hub-page">
+      <div className="listing-page-layout">
+        <aside className="listing-ad-left">
+          <AdSlot position="left-sidebar" />
+        </aside>
 
-      {featured.length > 0 && (
-        <section className="locale-hub-section" aria-labelledby="featured-cities">
-          <h2 id="featured-cities">{t.featuredTitle}</h2>
-          <div className="locale-hub-grid locale-hub-grid-featured">
-            {featured.map((city, index) => (
-              <CityHubCard
-                key={city.citySlug}
-                locale={locale}
-                city={city}
-                t={t}
-                large
-                aboveFold={index < 3}
-                lcp={city.citySlug === 'antalya'}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+        <main className="listing-main-column locale-hub-main">
+          <header className="locale-hub-header">
+            <nav className="listing-breadcrumb" aria-label="Breadcrumb">
+              <ol>
+                <li>
+                  <Link href={encodePathSegments(`/${locale}`)}>Kitabe</Link>
+                </li>
+              </ol>
+            </nav>
+            <h1>
+              {locale === 'tr' && 'Türkiye\'de Gezilecek Yerler'}
+              {locale === 'en' && 'Things to Do in Turkey'}
+              {locale === 'ru' && 'Достопримечательности Турции'}
+              {locale === 'ar' && 'أماكن للزيارة في تركيا'}
+            </h1>
+            <div className="locale-hub-intro">
+              {introParagraphs.map((paragraph) => (
+                <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+              ))}
+            </div>
+            <p className="locale-hub-stats">
+              {cityHubs.length}{' '}
+              {locale === 'tr'
+                ? 'şehir'
+                : locale === 'en'
+                  ? 'cities'
+                  : locale === 'ru'
+                    ? 'городов'
+                    : 'مدينة'}
+              {' · '}
+              {totalPlaces} {t.places}
+            </p>
+            <a className="locale-hub-web-link" href={`${SPA_BASE}/home`}>
+              {t.webApp} →
+            </a>
+          </header>
 
-      {others.length > 0 && (
-        <section className="locale-hub-section" aria-labelledby="all-cities">
-          <h2 id="all-cities">{t.allTitle}</h2>
-          <div className="locale-hub-grid">
-            {others.map((city) => (
-              <CityHubCard key={city.citySlug} locale={locale} city={city} t={t} />
-            ))}
-          </div>
-        </section>
-      )}
+          {featured.length > 0 && (
+            <section className="locale-hub-section" aria-labelledby="featured-cities">
+              <h2 id="featured-cities">{t.featuredTitle}</h2>
+              <div className="locale-hub-grid locale-hub-grid-featured">
+                {featured.map((city, index) => (
+                  <CityHubCard
+                    key={city.citySlug}
+                    locale={locale}
+                    city={city}
+                    t={t}
+                    large
+                    aboveFold={index < 3}
+                    lcp={city.citySlug === 'antalya'}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
+
+          <AdSlot position="in-content" />
+
+          {others.length > 0 && (
+            <section className="locale-hub-section" aria-labelledby="all-cities">
+              <h2 id="all-cities">{t.allTitle}</h2>
+              <div className="locale-hub-grid">
+                {others.map((city) => (
+                  <CityHubCard key={city.citySlug} locale={locale} city={city} t={t} />
+                ))}
+              </div>
+            </section>
+          )}
+
+          <AdSlot position="below-content" />
+        </main>
+
+        <aside className="listing-ad-right">
+          <AdSlot position="sidebar" />
+        </aside>
+      </div>
     </div>
   );
 }

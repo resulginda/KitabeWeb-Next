@@ -396,7 +396,20 @@
   font-weight: 700;
 }
 
-/* ——— Dil hub (/tr, /en) ——— */
+/* ——— Dil hub (/tr, /en, /ru, /ar) ——— */
+.locale-hub-page .listing-page-layout {
+  max-width: 1400px;
+}
+
+.locale-hub-main {
+  min-width: 0;
+}
+
+.locale-hub-shell,
+.locale-hub-page {
+  width: 100%;
+}
+
 .locale-hub-shell {
   max-width: 1200px;
   margin: 0 auto;
