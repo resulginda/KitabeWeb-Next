@@ -4,6 +4,15 @@ import path from 'path';
 const kitabeSrc = path.join(__dirname, 'vendor/kitabe-web-src');
 
 const nextConfig: NextConfig = {
+  async headers() {
+    const longCache = 'public, max-age=31536000, immutable';
+    return [
+      { source: '/cities/:path*', headers: [{ key: 'Cache-Control', value: longCache }] },
+      { source: '/fonts/:path*', headers: [{ key: 'Cache-Control', value: longCache }] },
+      { source: '/icon-:size.png', headers: [{ key: 'Cache-Control', value: longCache }] },
+      { source: '/logo-:name.webp', headers: [{ key: 'Cache-Control', value: longCache }] },
+    ];
+  },
   async rewrites() {
     return {
       beforeFiles: [
