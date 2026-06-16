@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { getCityLabel } from '@/lib/citySlugLabel';
 import { encodePathSegments } from '@/lib/detectLocale';
 import { cityHubImage, FEATURED_EXPLORE_SLUGS } from '@/lib/featuredCities';
 import { buildListingPath, getTaxonomyIndex } from '@/lib/listings';
@@ -130,20 +131,21 @@ function CityHubCard({
   city: {
     citySlug: string;
     placeCount: number;
-    labels: { city: string };
+    labels?: { city?: string };
   };
   t: (typeof COPY)[Locale];
   large?: boolean;
 }) {
   const href = encodePathSegments(buildListingPath(locale, city.citySlug, []));
   const image = cityHubImage(city.citySlug);
-  const initial = city.labels.city.trim().charAt(0).toUpperCase() || 'K';
+  const cityName = city.labels?.city ?? getCityLabel(city.citySlug, locale);
+  const initial = cityName.trim().charAt(0).toUpperCase() || 'K';
 
   return (
     <Link href={href} className={`locale-hub-card${large ? ' locale-hub-card-large' : ''}`}>
       <div className="locale-hub-card-image">
         {image ? (
-          <img src={image} alt={city.labels.city} loading="lazy" />
+          <img src={image} alt={cityName} loading="lazy" />
         ) : (
           <div className="locale-hub-card-placeholder" aria-hidden>
             <span>{initial}</span>
@@ -151,7 +153,7 @@ function CityHubCard({
         )}
       </div>
       <div className="locale-hub-card-body">
-        <h3>{city.labels.city}</h3>
+        <h3>{cityName}</h3>
         <p>
           {city.placeCount} {t.places} · {t.explore}
         </p>

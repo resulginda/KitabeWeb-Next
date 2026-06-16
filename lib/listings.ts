@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { getCityLabel } from './citySlugLabel';
 import {
   LOCALES,
   pickText,
@@ -65,6 +66,35 @@ export type TaxonomyCombination = {
   };
   lastModified: string;
 };
+
+type RawTaxonomyCombination = Partial<TaxonomyCombination> & {
+  locale: Locale;
+  citySlug: string;
+  hubSlug: string;
+  filter?: string[];
+  placeCount: number;
+  lastModified: string;
+};
+
+function normalizeTaxonomyCombination(raw: RawTaxonomyCombination): TaxonomyCombination {
+  const filter = raw.filter ?? [];
+  return {
+    locale: raw.locale,
+    citySlug: raw.citySlug,
+    hubSlug: raw.hubSlug,
+    filter,
+    filterTypes: raw.filterTypes ?? [],
+    districtSlug: raw.districtSlug ?? null,
+    categorySlug: raw.categorySlug ?? null,
+    placeCount: raw.placeCount,
+    labels: {
+      city: raw.labels?.city ?? getCityLabel(raw.citySlug, raw.locale),
+      district: raw.labels?.district ?? null,
+      category: raw.labels?.category ?? null,
+    },
+    lastModified: raw.lastModified,
+  };
+}
 
 function apiHeaders(): HeadersInit {
   if (!SERVER_KEY) return {};
@@ -144,8 +174,8 @@ export const getTaxonomyIndex = cache(async (): Promise<TaxonomyCombination[]> =
         continue;
       }
       const json = await res.json();
-      const batch = json.data?.combinations ?? [];
-      all.push(...batch);
+      const batch: RawTaxonomyCombination[] = json.data?.combinations ?? [];
+      all.push(...batch.map(normalizeTaxonomyCombination));
     } catch (err) {
       console.warn(`[listings] taxonomy-index fetch failed (${locale}):`, err);
     }
