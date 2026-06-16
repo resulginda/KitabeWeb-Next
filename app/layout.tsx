@@ -39,6 +39,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           }}
         />
         <link rel="apple-touch-icon" href="/icon-180.png" />
+        <link rel="stylesheet" href="/fonts/kitabe-fonts.css" />
       </head>
       <body>
         <GoogleAnalytics />

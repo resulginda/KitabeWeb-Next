@@ -28,6 +28,8 @@ export const HUB_HEADER_COPY: Record<
     bottomNearby: string;
     bottomRoute: string;
     bottomAccount: string;
+    myAccount: string;
+    language: string;
   }
 > = {
   tr: {
@@ -49,6 +51,8 @@ export const HUB_HEADER_COPY: Record<
     bottomNearby: 'Yakın',
     bottomRoute: 'Rota',
     bottomAccount: 'Hesap',
+    myAccount: 'Hesabım',
+    language: 'Dil',
   },
   en: {
     mainNav: 'Main menu',
@@ -69,6 +73,8 @@ export const HUB_HEADER_COPY: Record<
     bottomNearby: 'Nearby',
     bottomRoute: 'Route',
     bottomAccount: 'Account',
+    myAccount: 'My account',
+    language: 'Language',
   },
   ru: {
     mainNav: 'Главное меню',
@@ -89,6 +95,8 @@ export const HUB_HEADER_COPY: Record<
     bottomNearby: 'Рядом',
     bottomRoute: 'Маршрут',
     bottomAccount: 'Аккаунт',
+    myAccount: 'Мой аккаунт',
+    language: 'Язык',
   },
   ar: {
     mainNav: 'القائمة الرئيسية',
@@ -109,5 +117,7 @@ export const HUB_HEADER_COPY: Record<
     bottomNearby: 'بالقرب',
     bottomRoute: 'المسار',
     bottomAccount: 'الحساب',
+    myAccount: 'حسابي',
+    language: 'اللغة',
   },
 };
