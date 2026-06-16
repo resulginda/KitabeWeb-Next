@@ -65,13 +65,13 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
             </div>
           )}
           <a href="/app" className="kb-detail-app-promo">
-            <span className="kb-detail-app-promo-icon" aria-hidden>
-              <img src="/app-icon.png" alt="" width={40} height={40} decoding="async" />
-            </span>
-            <span className="kb-detail-app-promo-text">
-              <strong>{app.title}</strong>
-              <small>{app.subtitle}</small>
-            </span>
+            <div className="kb-detail-app-promo-head">
+              <span className="kb-detail-app-promo-icon" aria-hidden>
+                <img src="/app-icon.png" alt="" width={40} height={40} decoding="async" />
+              </span>
+              <strong className="kb-detail-app-promo-title">{app.title}</strong>
+            </div>
+            <p className="kb-detail-app-promo-desc">{app.subtitle}</p>
             <span className="kb-detail-app-promo-cta">{app.cta} →</span>
           </a>
         </aside>

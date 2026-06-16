@@ -561,13 +561,17 @@ const DetailPage = ({
               </button>
             </div>
             <a href="/app" className="kb-detail-app-promo">
-              <span className="kb-detail-app-promo-icon" aria-hidden>
-                <img src="/app-icon.png" alt="" width={40} height={40} decoding="async" />
-              </span>
-              <span className="kb-detail-app-promo-text">
-                <strong>{t('detail.downloadAppTitle', { defaultValue: 'Kitabe Mobil Uygulaması' })}</strong>
-                <small>{t('detail.downloadAppSubtitle', { defaultValue: 'Haritada gez, hikâyeleri oku' })}</small>
-              </span>
+              <div className="kb-detail-app-promo-head">
+                <span className="kb-detail-app-promo-icon" aria-hidden>
+                  <img src="/app-icon.png" alt="" width={40} height={40} decoding="async" />
+                </span>
+                <strong className="kb-detail-app-promo-title">
+                  {t('detail.downloadAppTitle', { defaultValue: 'Kitabe Mobil Uygulaması' })}
+                </strong>
+              </div>
+              <p className="kb-detail-app-promo-desc">
+                {t('detail.downloadAppSubtitle', { defaultValue: 'Haritada gez, hikâyeleri oku' })}
+              </p>
               <span className="kb-detail-app-promo-cta">
                 {t('landing.downloadApp', { defaultValue: 'Uygulamayı İndir' })} →
               </span>
@@ -591,10 +595,10 @@ const DetailPage = ({
               <span className="kb-detail-app-promo-icon" aria-hidden>
                 <img src="/app-icon.png" alt="" width={40} height={40} decoding="async" />
               </span>
-              <span className="kb-detail-app-promo-text">
+              <div className="kb-detail-app-promo-body">
                 <strong>{t('detail.openInAppTitle')}</strong>
                 <small>{t('detail.openInAppSubtitle')}</small>
-              </span>
+              </div>
               <span className="material-icons" aria-hidden>chevron_right</span>
             </a>
 

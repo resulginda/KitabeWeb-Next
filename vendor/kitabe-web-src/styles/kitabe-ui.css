@@ -547,10 +547,11 @@
 
 .kb-detail-app-promo {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
   margin-top: var(--gap-md);
-  padding: 12px 14px;
+  padding: 14px;
   border-radius: var(--radius-lg);
   border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border-light));
   background: color-mix(in srgb, var(--accent) 8%, var(--bg-surface));
@@ -564,7 +565,57 @@
   box-shadow: var(--shadow-md);
 }
 
-.kb-detail-app-promo-text {
+.kb-detail-app-promo-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kb-detail-app-promo-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.kb-detail-app-promo-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+}
+
+.kb-detail-app-promo-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+
+.kb-detail-app-promo-desc {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  color: var(--text-muted);
+}
+
+.kb-detail-app-promo-cta {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.kb-detail-app-promo-mobile {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+}
+
+.kb-detail-app-promo-mobile .kb-detail-app-promo-desc {
+  display: none;
+}
+
+.kb-detail-app-promo-mobile .kb-detail-app-promo-body {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -572,33 +623,23 @@
   gap: 2px;
 }
 
-.kb-detail-app-promo-text strong {
+.kb-detail-app-promo-mobile .kb-detail-app-promo-body strong {
   font-size: 0.875rem;
   color: var(--text-primary);
 }
 
-.kb-detail-app-promo-text small {
+.kb-detail-app-promo-mobile .kb-detail-app-promo-body small {
   font-size: 0.75rem;
   color: var(--text-muted);
 }
 
-.kb-detail-app-promo-cta {
-  font-size: 0.75rem;
-  font-weight: 600;
+.kb-detail-app-promo-mobile .material-icons {
+  flex-shrink: 0;
   color: var(--accent);
-  white-space: nowrap;
-}
-
-.kb-detail-app-promo-mobile {
-  display: none;
-}
-
-.kb-detail-sidebar .kb-detail-app-promo {
-  flex-wrap: wrap;
 }
 
 @media (max-width: 1023px) {
-  .kb-detail-sidebar .kb-detail-app-promo {
+  .kb-detail-sidebar .kb-detail-app-promo:not(.kb-detail-app-promo-mobile) {
     display: none;
   }
 
