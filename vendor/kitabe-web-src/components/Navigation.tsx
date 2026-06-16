@@ -1,6 +1,8 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import { MOBILE_NAV_ITEMS, isNavItemActive } from '../config/navItems';
+import { NavIcon } from './NavIcons';
 import './Navigation.css';
 
 const Navigation = () => {
@@ -8,33 +10,37 @@ const Navigation = () => {
   const location = useLocation();
   const { kullanici } = useAuth();
 
-  const isActive = (path: string) => location.pathname === path;
-
   return (
-    <nav className="bottom-nav">
-      <Link to="/home" className={`nav-item ${isActive('/home') || isActive('/') ? 'active' : ''}`}>
-        <span className="nav-icon">🏠</span>
-        <span className="nav-label">{t('navigation.home')}</span>
-      </Link>
-      <Link to="/list" className={`nav-item ${isActive('/list') ? 'active' : ''}`}>
-        <span className="nav-icon">📋</span>
-        <span className="nav-label">{t('navigation.list')}</span>
-      </Link>
-      <Link to="/nearby" className={`nav-item ${isActive('/nearby') ? 'active' : ''}`}>
-        <span className="nav-icon">📍</span>
-        <span className="nav-label">{t('navigation.nearby')}</span>
-      </Link>
-      <Link to="/route" className={`nav-item ${isActive('/route') ? 'active' : ''}`}>
-        <span className="nav-icon">🗺️</span>
-        <span className="nav-label">{t('navigation.route')}</span>
-      </Link>
-      <Link to="/account" className={`nav-item ${isActive('/account') ? 'active' : ''}`}>
-        <span className="nav-icon">👤</span>
-        <span className="nav-label">{kullanici ? t('account.myAccount') : t('navigation.loginRegister')}</span>
-      </Link>
+    <nav className="bottom-nav" aria-label={t('navigation.mainNav', { defaultValue: 'Ana menü' })}>
+      {MOBILE_NAV_ITEMS.map((item) => {
+        const active = isNavItemActive(location.pathname, item);
+        const label =
+          item.id === 'account'
+            ? kullanici
+              ? t(item.accountLabelKey || item.labelKey)
+              : t('navigation.account', { defaultValue: 'Hesap' })
+            : t(item.labelKey);
+
+        const needsAuth = (item.id === 'nearby' || item.id === 'route') && !kullanici;
+        const to =
+          item.id === 'account' && !kullanici ? '/login' : needsAuth ? '/login' : item.path;
+
+        return (
+          <Link
+            key={item.id}
+            to={to}
+            state={needsAuth ? { from: item.path } : undefined}
+            className={`nav-item ${active ? 'active' : ''}`}
+          >
+            <span className="nav-icon">
+              <NavIcon id={item.id} size={22} />
+            </span>
+            <span className="nav-label">{label}</span>
+          </Link>
+        );
+      })}
     </nav>
   );
 };
 
 export default Navigation;
-

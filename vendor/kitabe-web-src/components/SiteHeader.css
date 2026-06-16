@@ -1,0 +1,207 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1100;
+  height: var(--header-h);
+  background: var(--primary);
+  color: var(--text-on-primary);
+  border-bottom: 1px solid color-mix(in srgb, var(--text-on-primary) 10%, transparent);
+}
+
+.site-header-inner {
+  height: 100%;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0 clamp(16px, 2.5vw, 40px);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+}
+
+.site-header-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-on-primary);
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.site-header-logo-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+}
+
+.site-header-main {
+  display: none;
+  gap: 4px;
+  margin-left: var(--gap-md);
+}
+
+.site-header-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-on-primary-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.site-header-nav-link:hover {
+  color: var(--text-on-primary);
+  background: color-mix(in srgb, var(--text-on-primary) 10%, transparent);
+}
+
+.site-header-nav-link.is-active {
+  background: var(--bg-surface);
+  color: var(--primary);
+}
+
+.site-header-nav-icon {
+  display: none;
+}
+
+.site-header-secondary {
+  display: none;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+}
+
+.site-header-secondary-link {
+  padding: 6px 12px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text-on-primary-muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  transition: color var(--transition-fast), background var(--transition-fast);
+}
+
+.site-header-secondary-link:hover,
+.site-header-secondary-link.is-active {
+  color: var(--text-on-primary);
+  background: color-mix(in srgb, var(--text-on-primary) 10%, transparent);
+}
+
+.site-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.site-header-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius-full);
+  border: 1px solid color-mix(in srgb, var(--text-on-primary) 25%, transparent);
+  color: var(--text-on-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-header-login {
+  background: var(--bg-surface) !important;
+  color: var(--primary) !important;
+  border: none !important;
+}
+
+.site-header-register {
+  background: var(--accent) !important;
+  color: var(--text-on-primary) !important;
+  border: none !important;
+}
+
+.site-header-account-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+  border-radius: var(--radius-full);
+  background: color-mix(in srgb, var(--text-on-primary) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text-on-primary) 25%, transparent);
+  text-decoration: none;
+  color: var(--text-on-primary);
+  transition: background var(--transition-fast);
+}
+
+.site-header-account-pill:hover {
+  background: color-mix(in srgb, var(--text-on-primary) 20%, transparent);
+}
+
+.site-header-account-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--accent);
+  color: var(--text-on-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.site-header-account-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.site-header-login:hover {
+  background: var(--bg-hover) !important;
+}
+
+.site-header-register:hover {
+  background: var(--accent-hover) !important;
+}
+
+@media (min-width: 1024px) {
+  .site-header-main {
+    display: flex;
+  }
+
+  .site-header-secondary {
+    display: flex;
+  }
+
+  .site-header-actions {
+    margin-left: 0;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .site-header-secondary-link {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+
+  .site-header-nav-link {
+    padding: 8px 10px;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .site-header-logo span {
+    font-size: 1.25rem;
+  }
+}

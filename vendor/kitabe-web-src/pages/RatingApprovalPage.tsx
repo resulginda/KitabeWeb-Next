@@ -7,7 +7,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 import { getLocalizedText } from '../utils/multilang';
 import { API_BASE_URL } from '../config/api';
 import { notifyUserAboutRatingApproval, notifyUserAboutRatingRejection } from '../services/notificationService';
-import './RatingApprovalPage.css';
+import { PageShell } from '../components/PageShell';
 
 const StarRating = ({ rating }: { rating: number }) => {
   return (
@@ -15,9 +15,9 @@ const StarRating = ({ rating }: { rating: number }) => {
       {[1, 2, 3, 4, 5].map((star) => (
         <span
           key={star}
-          className={`star ${star <= rating ? 'filled' : ''}`}
+          className={`material-icons ${star <= rating ? '' : 'empty'}`}
         >
-          ★
+          {star <= rating ? 'star' : 'star_border'}
         </span>
       ))}
     </div>
@@ -119,14 +119,12 @@ const RatingApprovalPage = () => {
       <Helmet>
         <title>{t('account.ratings.title', 'Değerlendirmeler')} | Kitabe</title>
       </Helmet>
-      <div className="rating-approval-page">
-        <div className="rating-approval-header">
-          <h1 className="rating-approval-title">{t('account.ratings.title', 'Değerlendirmeler')}</h1>
-          <p className="rating-approval-subtitle">
-            {pendingRatings.length} {t('account.ratings.pending', 'bekleyen değerlendirme')}
-          </p>
-        </div>
-
+      <PageShell
+        title={t('account.ratings.title', 'Değerlendirmeler')}
+        subtitle={`${pendingRatings.length} ${t('account.ratings.pending', 'bekleyen değerlendirme')}`}
+        backTo="/account"
+        className="rating-approval-page"
+      >
         {pendingRatings.length === 0 ? (
           <div className="rating-approval-empty">
             <span className="material-icons rating-approval-empty-icon">star_outline</span>
@@ -189,7 +187,7 @@ const RatingApprovalPage = () => {
             })}
           </div>
         )}
-      </div>
+      </PageShell>
     </>
   );
 };

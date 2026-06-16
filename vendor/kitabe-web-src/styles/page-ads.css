@@ -1,70 +1,121 @@
-/* SPA sayfa reklam yerleşimi — home, list, nearby, route, favorites, blog vb. */
+/* SPA reklam — icerik tam genislik; yan sutunlar kaldirildi (bos beyaz alan yaratiyordu) */
+
+
 
 .spa-ad-shell {
+
   width: 100%;
+
 }
+
+
+
+.spa-ad-shell--full {
+
+  display: flex;
+
+  flex-direction: column;
+
+  min-height: 0;
+
+}
+
+
 
 .spa-page-layout {
-  display: grid;
-  grid-template-columns: minmax(100px, 160px) minmax(0, 1fr) minmax(100px, 300px);
-  gap: 1rem 1.25rem;
-  max-width: 1400px;
+
+  width: 100%;
+
+  max-width: var(--container-max);
+
   margin: 0 auto;
-  padding: 0 0.75rem;
-  align-items: start;
+
+  padding: 0;
+
 }
+
+
 
 .spa-main-column {
+
   min-width: 0;
+
+  width: 100%;
+
 }
 
-.spa-ad-left,
-.spa-ad-right {
-  position: sticky;
-  top: 1rem;
+
+
+.spa-main-column--full {
+
+  width: 100%;
+
+  max-width: none;
+
+  flex: 1;
+
 }
+
+
 
 .spa-ad-below {
-  max-width: 1200px;
-  margin: 0.5rem auto 1rem;
-  padding: 0 1rem;
+
+  max-width: var(--container-max);
+
+  margin: 0 auto;
+
+  padding: var(--gap-md) var(--gutter) var(--gap-lg);
+
 }
+
+
+
+.spa-ad-shell--full .spa-ad-below {
+
+  max-width: var(--container-max);
+
+}
+
+
 
 .spa-ad-shell .ad-slot {
-  position: relative;
-  min-height: 90px;
-  margin: 0.5rem 0;
+
   overflow: hidden;
+
+  border-radius: var(--radius-md);
+
 }
 
-.spa-ad-shell .ad-slot.ad-left-sidebar,
-.spa-ad-shell .ad-slot.ad-sidebar {
-  min-height: 250px;
-}
+
 
 .spa-ad-shell .ad-slot.ad-in-content {
+
+  min-height: 0;
+
+  margin: var(--gap-md) 0 0;
+
+}
+
+
+
+.spa-ad-shell .ad-slot.ad-below-content {
+
   min-height: 90px;
-  margin: 0 0 1rem;
+
+  margin: 0;
+
 }
 
-@media (max-width: 1100px) {
-  .spa-page-layout {
-    grid-template-columns: minmax(0, 1fr) minmax(100px, 200px);
-  }
 
-  .spa-ad-left {
-    display: none;
-  }
-}
 
 @media (max-width: 900px) {
-  .spa-page-layout {
-    grid-template-columns: 1fr;
-    padding: 0;
+
+  .spa-ad-below {
+
+    padding: var(--gap-sm) var(--gutter) var(--gap-md);
+
   }
 
-  .spa-ad-left,
-  .spa-ad-right {
-    display: none;
-  }
 }
+
+

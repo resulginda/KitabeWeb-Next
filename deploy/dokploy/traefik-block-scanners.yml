@@ -1,0 +1,43 @@
+# Traefik dynamic config — /etc/dokploy/traefik/dynamic/kitabe-security.yml
+# Kurulum: bu dosyayı sunucuya kopyalayın → docker restart dokploy-traefik
+#
+# Not: Traefik "abort" middleware isteği servise göndermeden 404 döndürür.
+
+http:
+  middlewares:
+    kitabe-block-404:
+      abort:
+        statusCode: 404
+
+  routers:
+    kitabe-block-scanners-http:
+      entryPoints:
+        - web
+      rule: >-
+        (Host(`kitabe.org`) || Host(`www.kitabe.org`)) &&
+        (PathPrefix(`/.git`) || PathPrefix(`/.env`) || PathPrefix(`/.htaccess`) ||
+         PathPrefix(`/wp-admin`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`) ||
+         PathPrefix(`/admin/controller`) || PathPrefix(`/sites/default`) ||
+         PathPrefix(`/phpmyadmin`) || PathPrefix(`/pma`) || PathPrefix(`/adminer`) ||
+         PathRegexp(`.*\.(php|asp|aspx|cgi)$`))
+      priority: 2000
+      middlewares:
+        - kitabe-block-404
+      service: noop@internal
+
+    kitabe-block-scanners-https:
+      entryPoints:
+        - websecure
+      rule: >-
+        (Host(`kitabe.org`) || Host(`www.kitabe.org`)) &&
+        (PathPrefix(`/.git`) || PathPrefix(`/.env`) || PathPrefix(`/.htaccess`) ||
+         PathPrefix(`/wp-admin`) || PathPrefix(`/wp-content`) || PathPrefix(`/wp-includes`) ||
+         PathPrefix(`/admin/controller`) || PathPrefix(`/sites/default`) ||
+         PathPrefix(`/phpmyadmin`) || PathPrefix(`/pma`) || PathPrefix(`/adminer`) ||
+         PathRegexp(`.*\.(php|asp|aspx|cgi)$`))
+      priority: 2000
+      middlewares:
+        - kitabe-block-404
+      service: noop@internal
+      tls:
+        certResolver: letsencrypt

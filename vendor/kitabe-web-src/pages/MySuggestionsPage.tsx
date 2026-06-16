@@ -7,7 +7,7 @@ import { usePlaces } from '../contexts/PlacesContext';
 import { apiFetch } from '../utils/apiClient';
 import { getLocalizedText } from '../utils/multilang';
 import { openPlaceDetailById } from '../utils/placeDetailUrl';
-import './MySuggestionsPage.css';
+import { PageShell, PageEmpty, PageLoginRequired } from '../components/PageShell';
 
 interface PlaceSuggestion {
   id: string;
@@ -23,15 +23,15 @@ const getStatusInfo = (t: (key: string) => string, status: string) => {
   const ns = 'mySuggestions.status';
   switch (status) {
     case 'pending_editor':
-      return { label: t(`${ns}.pending_editor_label`), description: t(`${ns}.pending_editor_desc`), color: '#fbbf24', bgColor: '#fef3c7' };
+      return { label: t(`${ns}.pending_editor_label`), description: t(`${ns}.pending_editor_desc`) };
     case 'editor_approved':
-      return { label: t(`${ns}.editor_approved_label`), description: t(`${ns}.editor_approved_desc`), color: '#60a5fa', bgColor: '#dbeafe' };
+      return { label: t(`${ns}.editor_approved_label`), description: t(`${ns}.editor_approved_desc`) };
     case 'admin_approved':
-      return { label: t(`${ns}.admin_approved_label`), description: t(`${ns}.admin_approved_desc`), color: '#34d399', bgColor: '#d1fae5' };
+      return { label: t(`${ns}.admin_approved_label`), description: t(`${ns}.admin_approved_desc`) };
     case 'rejected':
-      return { label: t(`${ns}.rejected_label`), description: t(`${ns}.rejected_desc`), color: '#ef4444', bgColor: '#fee2e2' };
+      return { label: t(`${ns}.rejected_label`), description: t(`${ns}.rejected_desc`) };
     default:
-      return { label: t(`${ns}.unknown_label`), description: t(`${ns}.unknown_desc`), color: '#6b7280', bgColor: '#f3f4f6' };
+      return { label: t(`${ns}.unknown_label`), description: t(`${ns}.unknown_desc`) };
   }
 };
 
@@ -130,30 +130,35 @@ const MySuggestionsPage = () => {
 
   if (!kullanici) {
     return (
-      <div className="my-suggestions-page">
-        <div className="login-required">
-          <p>{t('suggestion.loginRequired') || 'Giriş yapmanız gerekiyor'}</p>
-          <button onClick={() => navigate('/login')}>{t('common.login')}</button>
-        </div>
-      </div>
+      <PageLoginRequired message={t('suggestion.loginRequired') || 'Giriş yapmanız gerekiyor'} />
     );
   }
 
   if (loading) {
-    return <div className="my-suggestions-page loading">{t('common.loading')}</div>;
+    return (
+      <PageShell title={t('account.mySuggestions') || 'Gönderdiğim Öneriler'} backTo="/account" className="kb-page-wide">
+        <div className="kb-settings-loading">
+          <div className="spinner" />
+        </div>
+      </PageShell>
+    );
   }
 
   return (
-    <div className="my-suggestions-page">
-      <header className="suggestions-header">
-        <h1>{t('account.mySuggestions') || 'Gönderdiğim Öneriler'}</h1>
-      </header>
-
-      <div className="suggestions-list">
-        {suggestions.length === 0 ? (
-          <p className="no-suggestions">{t('suggestion.noSuggestions') || 'Henüz öneri göndermediniz'}</p>
-        ) : (
-          suggestions.map((suggestion) => {
+    <PageShell
+      title={t('account.mySuggestions') || 'Gönderdiğim Öneriler'}
+      subtitle={suggestions.length > 0 ? String(suggestions.length) : undefined}
+      backTo="/account"
+      className="kb-page-wide"
+    >
+      {suggestions.length === 0 ? (
+        <PageEmpty
+          icon="lightbulb_outline"
+          title={t('suggestion.noSuggestions') || 'Henüz öneri göndermediniz'}
+        />
+      ) : (
+        <div className="kb-suggest-list">
+          {suggestions.map((suggestion) => {
             const statusInfo = getStatusInfo(t, suggestion.status);
             const name = suggestion.changes?.name
               ? typeof suggestion.changes.name === 'string'
@@ -165,62 +170,60 @@ const MySuggestionsPage = () => {
               : t('suggestion.unnamedPlace') || 'İsimsiz';
             const pid = suggestion.placeId || suggestion.targetPlaceId;
             return (
-              <div key={suggestion.id} className="suggestion-card">
-                <div className="suggestion-card-header">
+              <div key={suggestion.id} className="kb-suggest-card">
+                <div className="kb-suggest-card-header">
                   <h3>{name}</h3>
-                  <span className="status-badge" style={{ backgroundColor: statusInfo.color }}>
+                  <span className="kb-suggest-status" data-status={suggestion.status}>
                     {statusInfo.label}
                   </span>
                 </div>
-                <p
-                  style={{
-                    margin: '0.3rem 0 0.6rem',
-                    padding: '0.55rem 0.7rem',
-                    borderRadius: 10,
-                    background: statusInfo.bgColor,
-                    color: '#374151',
-                    fontSize: '0.92rem',
-                  }}
-                >
+                <p className="kb-suggest-status-desc" data-status={suggestion.status}>
                   {statusInfo.description}
                 </p>
-                <p className="suggestion-date">{formatDate(suggestion.createdAt)}</p>
-                {pid && (
-                  <button
-                    type="button"
-                    className="link-to-detail"
-                    onClick={() => void openPlaceDetailById(pid, currentLanguage, getPlaceById)}
-                  >
-                    {t('suggestion.viewPlace') || 'Yeri görüntüle'}
-                  </button>
+                {formatDate(suggestion.createdAt) && (
+                  <p className="kb-suggest-date">{formatDate(suggestion.createdAt)}</p>
                 )}
-                {suggestion.status === 'pending_editor' && (
-                  <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
-                    {suggestion.type === 'EDIT' && pid && (
-                      <button
-                        type="button"
-                        className="link-to-detail"
-                        onClick={() => navigate(`/edit-suggestion/${pid}`)}
-                      >
-                        {t('mySuggestions.edit', 'Düzenle')}
-                      </button>
-                    )}
+                <div className="kb-suggest-actions">
+                  {pid && (
                     <button
                       type="button"
-                      className="link-to-detail"
-                      onClick={() => handleDelete(suggestion)}
-                      disabled={deletingId === suggestion.id}
+                      className="kb-suggest-link"
+                      onClick={() => void openPlaceDetailById(pid, currentLanguage, getPlaceById)}
                     >
-                      {deletingId === suggestion.id ? t('common.loading', 'Yükleniyor...') : t('mySuggestions.delete', 'Sil')}
+                      <span className="material-icons" style={{ fontSize: 16 }}>place</span>
+                      {t('suggestion.viewPlace') || 'Yeri görüntüle'}
                     </button>
-                  </div>
-                )}
+                  )}
+                  {suggestion.status === 'pending_editor' && (
+                    <>
+                      {suggestion.type === 'EDIT' && pid && (
+                        <button
+                          type="button"
+                          className="kb-suggest-link"
+                          onClick={() => navigate(`/edit-suggestion/${pid}`)}
+                        >
+                          <span className="material-icons" style={{ fontSize: 16 }}>edit</span>
+                          {t('mySuggestions.edit', 'Düzenle')}
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        className="kb-suggest-link kb-suggest-link--danger"
+                        onClick={() => handleDelete(suggestion)}
+                        disabled={deletingId === suggestion.id}
+                      >
+                        <span className="material-icons" style={{ fontSize: 16 }}>delete_outline</span>
+                        {deletingId === suggestion.id ? t('common.loading', 'Yükleniyor...') : t('mySuggestions.delete', 'Sil')}
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             );
-          })
-        )}
-      </div>
-    </div>
+          })}
+        </div>
+      )}
+    </PageShell>
   );
 };
 

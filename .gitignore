@@ -14,5 +14,6 @@ out
 # misc
 .DS_Store
 *.pem
+tsconfig.tsbuildinfo
 
 # vendor kaynak kopyası repoda tutulur — ignore etme

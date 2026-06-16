@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
+import { PageShell, PageSection } from '../components/PageShell';
 import './TermsPage.css';
 
 const TermsPage = () => {
@@ -13,24 +14,24 @@ const TermsPage = () => {
         <meta property="og:title" content={t('terms.title') || 'Kullanım Şartları - Kitabe'} />
         <meta property="og:description" content={t('terms.metaDescription') || 'Kitabe kullanım şartları.'} />
       </Helmet>
-      <div className="terms-page">
+      <PageShell
+        title={t('terms.title') || 'Kullanım Şartları'}
+        backTo="/home"
+        className="terms-page"
+      >
         <div className="terms-container">
-          <h1>{t('terms.title') || 'Kullanım Şartları'}</h1>
-          
           <div className="terms-content">
             <p className="last-updated">
               {t('terms.lastUpdated') || 'Son Güncelleme:'} 2026
             </p>
 
-            <section>
-              <h2>1. {t('terms.general') || 'Genel Hükümler'}</h2>
+            <PageSection title={`1. ${t('terms.general') || 'Genel Hükümler'}`}>
               <p>
                 {t('terms.generalContent') || 'Bu Kullanım Şartları, Kitabe uygulamasının kullanımına ilişkin şartları ve koşulları belirlemektedir. Uygulamayı kullanarak bu şartları kabul etmiş sayılırsınız. Bu uygulama, bireysel geliştirici Resul GINDA tarafından geliştirilmiş ve yayınlanmıştır.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>2. {t('terms.applicationUse') || 'Uygulama Kullanımı'}</h2>
+            <PageSection title={`2. ${t('terms.applicationUse') || 'Uygulama Kullanımı'}`}>
               <h3>2.1</h3>
               <p>
                 {t('terms.useContent1') || 'Kitabe uygulaması, kullanıcıların kültürel miras yerlerini keşfetmesi, favorilere eklemesi ve rota oluşturması için tasarlanmıştır.'}
@@ -43,10 +44,9 @@ const TermsPage = () => {
               <p>
                 {t('terms.useContent3') || 'Uygulamayı kötüye kullanmak, zararlı içerik paylaşmak veya başkalarının haklarını ihlal etmek yasaktır.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>3. {t('terms.userAccounts') || 'Kullanıcı Hesapları'}</h2>
+            <PageSection title={`3. ${t('terms.userAccounts') || 'Kullanıcı Hesapları'}`}>
               <h3>3.1</h3>
               <p>
                 {t('terms.accountContent1') || 'Hesap oluştururken doğru ve güncel bilgiler vermeniz gerekmektedir.'}
@@ -59,10 +59,9 @@ const TermsPage = () => {
               <p>
                 {t('terms.accountContent3') || 'Hesabınızın yetkisiz kullanımından şüphelenirseniz derhal bizimle iletişime geçiniz.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>4. {t('terms.content') || 'İçerik ve Öneriler'}</h2>
+            <PageSection title={`4. ${t('terms.content') || 'İçerik ve Öneriler'}`}>
               <h3>4.1</h3>
               <p>
                 {t('terms.content1') || 'Kullanıcılar tarafından önerilen yerler editör ve admin onayından geçmektedir.'}
@@ -75,10 +74,9 @@ const TermsPage = () => {
               <p>
                 {t('terms.content3') || 'Telif hakkı ihlali yapmak yasaktır.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>5. {t('terms.intellectualProperty') || 'Fikri Mülkiyet'}</h2>
+            <PageSection title={`5. ${t('terms.intellectualProperty') || 'Fikri Mülkiyet'}`}>
               <h3>5.1</h3>
               <p>
                 {t('terms.ipContent1') || 'Uygulama içeriği, tasarımı ve yazılımı telif hakkı ile korunmaktadır.'}
@@ -87,10 +85,9 @@ const TermsPage = () => {
               <p>
                 {t('terms.ipContent2') || 'Uygulama içeriğini izinsiz kopyalamak, dağıtmak veya kullanmak yasaktır.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>6. {t('terms.serviceChanges') || 'Hizmet Değişiklikleri'}</h2>
+            <PageSection title={`6. ${t('terms.serviceChanges') || 'Hizmet Değişiklikleri'}`}>
               <h3>6.1</h3>
               <p>
                 {t('terms.serviceContent1') || 'Uygulama hizmetlerini önceden haber vermeksizin değiştirme, askıya alma veya sonlandırma hakkımız saklıdır.'}
@@ -99,10 +96,9 @@ const TermsPage = () => {
               <p>
                 {t('terms.serviceContent2') || 'Uygulama güncellemeleri otomatik olarak yapılabilir.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>7. {t('terms.limitations') || 'Sınırlamalar'}</h2>
+            <PageSection title={`7. ${t('terms.limitations') || 'Sınırlamalar'}`}>
               <h3>7.1</h3>
               <p>
                 {t('terms.limitationsContent1') || 'Uygulama "olduğu gibi" sunulmaktadır. Herhangi bir garanti verilmemektedir.'}
@@ -111,26 +107,23 @@ const TermsPage = () => {
               <p>
                 {t('terms.limitationsContent2') || 'Uygulama kullanımından kaynaklanan herhangi bir zarardan sorumlu değiliz.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>8. {t('terms.termination') || 'Fesih'}</h2>
+            <PageSection title={`8. ${t('terms.termination') || 'Fesih'}`}>
               <h3>8.1</h3>
               <p>
                 {t('terms.terminationContent') || 'Bu şartları ihlal etmeniz durumunda hesabınızı askıya alma veya sonlandırma hakkımız saklıdır.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>9. {t('terms.changes') || 'Değişiklikler'}</h2>
+            <PageSection title={`9. ${t('terms.changes') || 'Değişiklikler'}`}>
               <h3>9.1</h3>
               <p>
                 {t('terms.changesContent') || 'Bu Kullanım Şartları zaman zaman güncellenebilir. Güncellemeler uygulama içinde duyurulacaktır.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>10. {t('terms.legalDisputes') || 'Yasal Uyuşmazlıklar'}</h2>
+            <PageSection title={`10. ${t('terms.legalDisputes') || 'Yasal Uyuşmazlıklar'}`}>
               <h3>10.1</h3>
               <p>
                 {t('terms.legalContent1') || 'Bu şartlar Türkiye Cumhuriyeti yasalarına tabidir.'}
@@ -139,23 +132,21 @@ const TermsPage = () => {
               <p>
                 {t('terms.legalContent2') || 'Uyuşmazlıkların çözümünde Türkiye Cumhuriyeti mahkemeleri yetkilidir.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>11. {t('terms.contact') || 'İletişim'}</h2>
+            <PageSection title={`11. ${t('terms.contact') || 'İletişim'}`}>
               <p>
                 {t('terms.contactContent') || 'Sorularınız, önerileriniz veya şikayetleriniz için bizimle iletişime geçebilirsiniz:'}
               </p>
               <p>
                 <strong>{t('terms.email') || 'E-posta:'}</strong> info@kitabe.org
               </p>
-            </section>
+            </PageSection>
           </div>
         </div>
-      </div>
+      </PageShell>
     </>
   );
 };
 
 export default TermsPage;
-

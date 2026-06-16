@@ -1,14 +1,14 @@
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getBlogPost, getBlogDateLocale, type BlogLang } from '../data/blogPosts';
+import { PageShell } from '../components/PageShell';
 import './BlogDetailPage.css';
 
 const BlogDetailPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { currentLanguage } = useLanguage();
   const lang = (currentLanguage || 'tr') as BlogLang;
 
@@ -16,12 +16,13 @@ const BlogDetailPage = () => {
 
   if (!post) {
     return (
-      <div className="blog-detail-page">
-        <div className="blog-detail-container">
-          <h1>{t('blog.notFound')}</h1>
-          <Link to="/blog">{t('blog.backToBlog')}</Link>
-        </div>
-      </div>
+      <PageShell
+        title={t('blog.notFound')}
+        backTo="/blog"
+        className="blog-detail-page"
+      >
+        <div className="blog-detail-container" />
+      </PageShell>
     );
   }
 
@@ -36,12 +37,12 @@ const BlogDetailPage = () => {
         <meta property="og:title" content={post.title} />
         <meta property="og:description" content={description} />
       </Helmet>
-      <div className="blog-detail-page">
+      <PageShell
+        title={post.title}
+        backTo="/blog"
+        className="blog-detail-page"
+      >
         <div className="blog-detail-container">
-          <button className="back-btn" onClick={() => navigate(-1)}>
-            ← {t('common.back')}
-          </button>
-
           <article className="blog-article">
             <div className="blog-article-header">
               <span className="blog-category">
@@ -53,22 +54,14 @@ const BlogDetailPage = () => {
               </span>
             </div>
 
-            <h1>{post.title}</h1>
-
             <div className="blog-article-content">
               {post.content.split('\n\n').map((paragraph, idx) => (
                 <p key={idx}>{paragraph}</p>
               ))}
             </div>
           </article>
-
-          <div className="blog-navigation">
-            <Link to="/blog" className="back-to-blog">
-              {t('blog.backToBlog')}
-            </Link>
-          </div>
         </div>
-      </div>
+      </PageShell>
     </>
   );
 };

@@ -57,7 +57,7 @@
     "emailPlaceholder": "Email",
     "passwordPlaceholder": "Password",
     "forgotPassword": "Forgot Password",
-    "noAccount": "Don't have an account? Register",
+    "noAccount": "Don't have an account?",
     "loggingIn": "Logging in...",
     "resetEmailPlaceholder": "example@mail.com",
     "resetPasswordTitle": "Reset Password",
@@ -119,7 +119,14 @@
     "oldPassword": "Old Password",
     "newPassword": "New Password",
     "confirmPassword": "New Password (Repeat)",
-    "enterPassword": "Enter your password"
+    "enterPassword": "Enter your password",
+    "contactForms": "Contact Forms",
+    "adminDashboard": "Admin Dashboard",
+    "sectionPersonal": "My Account",
+    "sectionEditor": "Editor",
+    "sectionAdmin": "Administration",
+    "sectionSupport": "Support",
+    "guestHint": "Sign in to use favorites, route, and nearby features."
   },
   "language": {
     "turkish": "Türkçe",
@@ -134,10 +141,20 @@
     "list": "List",
     "nearby": "Nearby",
     "route": "Route",
+    "account": "Account",
     "loginRegister": "Login / Register",
     "placeDetail": "Place Detail",
     "placeList": "Place List",
-    "tripRoute": "Trip Route"
+    "tripRoute": "Trip Route",
+    "mainNav": "Main menu"
+  },
+  "header": {
+    "secondaryNav": "Site menu",
+    "cities": "Cities",
+    "blog": "Blog",
+    "about": "About",
+    "contact": "Contact",
+    "suggest": "Suggest a Place"
   },
   "home": {
     "heroTitle": "Cultural Heritage of Turkey",
@@ -146,6 +163,10 @@
     "viewAll": "View All",
     "exploreOnMap": "Explore on Map",
     "mapSubtitle": "Discover cultural heritage across Turkey",
+    "exploreCitiesTitle": "Popular Cities",
+    "exploreCitiesSubtitle": "Explore cultural heritage in Turkey's most visited cities",
+    "exploreAllCities": "All Cities",
+    "exploreCityCta": "Places to visit →",
     "subCategories": "{{name}} Subcategories",
     "searchPlaceholder": "Search (name, city, category...)",
     "city": "City",

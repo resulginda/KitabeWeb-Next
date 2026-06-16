@@ -1,4 +1,5 @@
 import { cache } from 'react';
+import { encodePathSegments } from './detectLocale';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.kitabe.org';
 /** Sunucu tarafı fetch — backend rate-limit bypass (REVALIDATE_SECRET ile aynı) */
@@ -166,13 +167,33 @@ export const resolvePlaceForDetail = cache(async (
   const targetPath = `${city}/${slug}`;
 
   const index = await getPlaceIndex();
+
+  // Tam path herhangi bir dilde eşleşirse
   const entry = index.find((row) =>
     LOCALES.some((l) => row.slug[l] === targetPath)
   );
-  if (!entry) return null;
+  if (entry) return getPlaceById(entry.id);
 
-  return getPlaceById(entry.id);
+  // Yer slug'ı doğru, şehir slug'ı yanlış (örn. /ar/amasya/... → ar/أماسيا/...)
+  const placeOnly = index.find((row) => {
+    const path = row.slug[locale];
+    if (!path) return false;
+    const parts = path.split('/');
+    return parts.length >= 2 && parts.slice(1).join('/') === slug;
+  });
+  if (placeOnly) return getPlaceById(placeOnly.id);
+
+  return null;
 });
+
+/** Kanonik detay path'i — redirect için */
+export function canonicalPlacePath(place: SeoPlace, locale: Locale): string | null {
+  const full = place.slug?.[locale];
+  if (!full) return null;
+  const [city, ...rest] = full.split('/');
+  if (!city || rest.length === 0) return null;
+  return encodePathSegments(`/${locale}/${city}/${rest.join('/')}`);
+}
 
 export function collectGalleryUrls(place: SeoPlace): string[] {
   const urls: string[] = [];

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { useAuth } from '../contexts/AuthContext';
 import { apiFetch } from '../utils/apiClient';
-import './NotificationSettingsPage.css';
+import { PageShell, PageSection } from '../components/PageShell';
 
 interface NotificationSettings {
   photoApprovals: boolean;
@@ -37,19 +37,19 @@ interface SettingRowProps {
 
 const SettingRow = ({ label, value, onValueChange, icon, disabled = false }: SettingRowProps) => {
   return (
-    <div className={`notification-setting-row ${disabled ? 'disabled' : ''}`}>
-      <div className="notification-setting-left">
-        <span className="material-icons notification-setting-icon">{icon}</span>
-        <span className={`notification-setting-label ${disabled ? 'disabled' : ''}`}>{label}</span>
+    <div className={`kb-toggle-row ${disabled ? 'is-disabled' : ''}`}>
+      <div className="kb-toggle-left">
+        <span className="material-icons kb-toggle-icon">{icon}</span>
+        <span className="kb-toggle-label">{label}</span>
       </div>
-      <label className="notification-switch">
+      <label className="kb-toggle-switch">
         <input
           type="checkbox"
           checked={value}
           onChange={(e) => onValueChange(e.target.checked)}
           disabled={disabled}
         />
-        <span className="notification-slider"></span>
+        <span className="kb-toggle-slider" />
       </label>
     </div>
   );
@@ -181,17 +181,37 @@ const NotificationSettingsPage = () => {
   const isEditor = kullanici?.rol === 'editor';
   const isModerator = isAdmin || isEditor;
 
+  const saveAction = (
+    <button
+      className="kb-btn-save"
+      type="button"
+      onClick={saveSettings}
+      disabled={saving}
+    >
+      {saving ? (
+        <div className="spinner-small" />
+      ) : (
+        t('common.save', 'Kaydet')
+      )}
+    </button>
+  );
+
   if (loading) {
     return (
       <>
         <Helmet>
           <title>{t('notifications.settings.title', 'Bildirim Ayarları')} | Kitabe</title>
         </Helmet>
-        <div className="notification-settings-page">
-          <div className="notification-settings-loading">
-            <div className="spinner"></div>
-          </div>
+        <PageShell
+          title={t('notifications.settings.title', 'Bildirim Ayarları')}
+        backTo="/account"
+        className="kb-page-wide"
+        actions={saveAction}
+      >
+        <div className="kb-settings-loading">
+          <div className="spinner" />
         </div>
+      </PageShell>
       </>
     );
   }
@@ -201,170 +221,119 @@ const NotificationSettingsPage = () => {
       <Helmet>
         <title>{t('notifications.settings.title', 'Bildirim Ayarları')} | Kitabe</title>
       </Helmet>
-      <div className="notification-settings-page">
-        <div className="notification-settings-header">
-          <button className="notification-settings-back-btn" onClick={() => navigate(-1)}>
-            <span className="material-icons">arrow_back</span>
-          </button>
-          <h1 className="notification-settings-title">
-            {t('notifications.settings.title', 'Bildirim Ayarları')}
-          </h1>
-          <button
-            className="notification-settings-save-btn"
-            onClick={saveSettings}
-            disabled={saving}
-          >
-            {saving ? (
-              <div className="spinner-small"></div>
-            ) : (
-              t('common.save', 'Kaydet')
-            )}
-          </button>
-        </div>
+      <PageShell
+        title={t('notifications.settings.title', 'Bildirim Ayarları')}
+        backTo="/account"
+        className="kb-page-wide"
+        actions={saveAction}
+      >
+        <PageSection title={t('notifications.settings.contentApprovals', 'İçerik Onayları')}>
+          <SettingRow
+            label={t('notifications.settings.photoApprovals', 'Fotoğraf Onayları')}
+            value={settings.photoApprovals}
+            onValueChange={(value) => updateSetting('photoApprovals', value)}
+            icon="photo_camera"
+          />
+          <SettingRow
+            label={t('notifications.settings.photoRejections', 'Fotoğraf Redleri')}
+            value={settings.photoRejections}
+            onValueChange={(value) => updateSetting('photoRejections', value)}
+            icon="photo_camera"
+          />
+          <SettingRow
+            label={t('notifications.settings.ratingApprovals', 'Yorum Onayları')}
+            value={settings.ratingApprovals}
+            onValueChange={(value) => updateSetting('ratingApprovals', value)}
+            icon="comment"
+          />
+          <SettingRow
+            label={t('notifications.settings.ratingRejections', 'Yorum Redleri')}
+            value={settings.ratingRejections}
+            onValueChange={(value) => updateSetting('ratingRejections', value)}
+            icon="comment"
+          />
+          <SettingRow
+            label={t('notifications.settings.suggestionUpdates', 'Öneri Güncellemeleri')}
+            value={settings.suggestionUpdates}
+            onValueChange={(value) => updateSetting('suggestionUpdates', value)}
+            icon="place"
+          />
+        </PageSection>
 
-        <div className="notification-settings-content">
-          {/* İçerik Onayları */}
-          <div className="notification-settings-section">
-            <h2 className="notification-settings-section-title">
-              {t('notifications.settings.contentApprovals', 'İçerik Onayları')}
-            </h2>
-            
+        <PageSection title={t('notifications.settings.newContent', 'Yeni İçerik')}>
+          <SettingRow
+            label={t('notifications.settings.newPlaces', 'Yeni Yerler')}
+            value={settings.newPlaces}
+            onValueChange={(value) => updateSetting('newPlaces', value)}
+            icon="place"
+          />
+          <SettingRow
+            label={t('notifications.settings.nearbyPlaces', 'Yakınımdaki Yeni Yerler')}
+            value={settings.nearbyPlaces}
+            onValueChange={(value) => updateSetting('nearbyPlaces', value)}
+            icon="location_on"
+          />
+          <SettingRow
+            label={t('notifications.settings.favoritePlaceUpdates', 'Favori Yere Fotoğraf Eklendi')}
+            value={settings.favoritePlaceUpdates}
+            onValueChange={(value) => updateSetting('favoritePlaceUpdates', value)}
+            icon="favorite"
+          />
+        </PageSection>
+
+        {isModerator && (
+          <PageSection title={t('notifications.settings.moderatorNotifications', 'Moderasyon Bildirimleri')}>
             <SettingRow
-              label={t('notifications.settings.photoApprovals', 'Fotoğraf Onayları')}
-              value={settings.photoApprovals}
-              onValueChange={(value) => updateSetting('photoApprovals', value)}
-              icon="photo_camera"
-            />
-            
-            <SettingRow
-              label={t('notifications.settings.photoRejections', 'Fotoğraf Redleri')}
-              value={settings.photoRejections}
-              onValueChange={(value) => updateSetting('photoRejections', value)}
-              icon="photo_camera"
-            />
-            
-            <SettingRow
-              label={t('notifications.settings.ratingApprovals', 'Yorum Onayları')}
-              value={settings.ratingApprovals}
-              onValueChange={(value) => updateSetting('ratingApprovals', value)}
-              icon="comment"
-            />
-            
-            <SettingRow
-              label={t('notifications.settings.ratingRejections', 'Yorum Redleri')}
-              value={settings.ratingRejections}
-              onValueChange={(value) => updateSetting('ratingRejections', value)}
-              icon="comment"
-            />
-            
-            <SettingRow
-              label={t('notifications.settings.suggestionUpdates', 'Öneri Güncellemeleri')}
-              value={settings.suggestionUpdates}
-              onValueChange={(value) => updateSetting('suggestionUpdates', value)}
+              label={t('notifications.settings.newSuggestions', 'Yeni Öneriler')}
+              value={settings.moderator?.newSuggestions ?? true}
+              onValueChange={(value) => updateModeratorSetting('newSuggestions', value)}
               icon="place"
             />
-          </div>
-
-          {/* Yeni İçerik */}
-          <div className="notification-settings-section">
-            <h2 className="notification-settings-section-title">
-              {t('notifications.settings.newContent', 'Yeni İçerik')}
-            </h2>
-            
             <SettingRow
-              label={t('notifications.settings.newPlaces', 'Yeni Yerler')}
-              value={settings.newPlaces}
-              onValueChange={(value) => updateSetting('newPlaces', value)}
-              icon="place"
+              label={t('notifications.settings.newRatings', 'Yeni Yorumlar')}
+              value={settings.moderator?.newRatings ?? true}
+              onValueChange={(value) => updateModeratorSetting('newRatings', value)}
+              icon="comment"
             />
-            
             <SettingRow
-              label={t('notifications.settings.nearbyPlaces', 'Yakınımdaki Yeni Yerler')}
-              value={settings.nearbyPlaces}
-              onValueChange={(value) => updateSetting('nearbyPlaces', value)}
-              icon="location_on"
+              label={t('notifications.settings.newPhotos', 'Yeni Fotoğraflar')}
+              value={settings.moderator?.newPhotos ?? true}
+              onValueChange={(value) => updateModeratorSetting('newPhotos', value)}
+              icon="photo_camera"
             />
-            
             <SettingRow
-              label={t('notifications.settings.favoritePlaceUpdates', 'Favori Yere Fotoğraf Eklendi')}
-              value={settings.favoritePlaceUpdates}
-              onValueChange={(value) => updateSetting('favoritePlaceUpdates', value)}
-              icon="favorite"
+              label={t('notifications.settings.newContactForms', 'Yeni İletişim Formları')}
+              value={settings.moderator?.newContactForms ?? true}
+              onValueChange={(value) => updateModeratorSetting('newContactForms', value)}
+              icon="mail"
             />
-          </div>
+          </PageSection>
+        )}
 
-          {/* Moderasyon Bildirimleri */}
-          {isModerator && (
-            <div className="notification-settings-section">
-              <h2 className="notification-settings-section-title">
-                {t('notifications.settings.moderatorNotifications', 'Moderasyon Bildirimleri')}
-              </h2>
-              
-              <SettingRow
-                label={t('notifications.settings.newSuggestions', 'Yeni Öneriler')}
-                value={settings.moderator?.newSuggestions ?? true}
-                onValueChange={(value) => updateModeratorSetting('newSuggestions', value)}
-                icon="place"
-              />
-              
-              <SettingRow
-                label={t('notifications.settings.newRatings', 'Yeni Yorumlar')}
-                value={settings.moderator?.newRatings ?? true}
-                onValueChange={(value) => updateModeratorSetting('newRatings', value)}
-                icon="comment"
-              />
-              
-              <SettingRow
-                label={t('notifications.settings.newPhotos', 'Yeni Fotoğraflar')}
-                value={settings.moderator?.newPhotos ?? true}
-                onValueChange={(value) => updateModeratorSetting('newPhotos', value)}
-                icon="photo_camera"
-              />
-              
-              <SettingRow
-                label={t('notifications.settings.newContactForms', 'Yeni İletişim Formları')}
-                value={settings.moderator?.newContactForms ?? true}
-                onValueChange={(value) => updateModeratorSetting('newContactForms', value)}
-                icon="mail"
-              />
-            </div>
-          )}
-
-          {/* Admin Özel Bildirimleri */}
-          {isAdmin && (
-            <div className="notification-settings-section">
-              <h2 className="notification-settings-section-title">
-                {t('notifications.settings.adminNotifications', 'Admin Bildirimleri')}
-              </h2>
-              
-              <SettingRow
-                label={t('notifications.settings.editorApprovals', 'Editör Onayları')}
-                value={settings.admin?.editorApprovals ?? true}
-                onValueChange={(value) => updateAdminSetting('editorApprovals', value)}
-                icon="check_circle"
-              />
-            </div>
-          )}
-
-          {/* Güvenlik Bildirimleri */}
-          <div className="notification-settings-section">
-            <h2 className="notification-settings-section-title">
-              {t('notifications.settings.security', 'Güvenlik')}
-            </h2>
-            
+        {isAdmin && (
+          <PageSection title={t('notifications.settings.adminNotifications', 'Admin Bildirimleri')}>
             <SettingRow
-              label={t('notifications.settings.securityAlerts', 'Güvenlik Uyarıları')}
-              value={true}
-              onValueChange={() => {}}
-              icon="security"
-              disabled={true}
+              label={t('notifications.settings.editorApprovals', 'Editör Onayları')}
+              value={settings.admin?.editorApprovals ?? true}
+              onValueChange={(value) => updateAdminSetting('editorApprovals', value)}
+              icon="check_circle"
             />
-            <p className="notification-settings-disabled-note">
-              {t('notifications.settings.securityAlertsNote', 'Güvenlik bildirimleri kapatılamaz')}
-            </p>
-          </div>
-        </div>
-      </div>
+          </PageSection>
+        )}
+
+        <PageSection title={t('notifications.settings.security', 'Güvenlik')}>
+          <SettingRow
+            label={t('notifications.settings.securityAlerts', 'Güvenlik Uyarıları')}
+            value={true}
+            onValueChange={() => {}}
+            icon="security"
+            disabled={true}
+          />
+          <p className="kb-settings-note">
+            {t('notifications.settings.securityAlertsNote', 'Güvenlik bildirimleri kapatılamaz')}
+          </p>
+        </PageSection>
+      </PageShell>
     </>
   );
 };

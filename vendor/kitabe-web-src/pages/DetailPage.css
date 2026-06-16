@@ -6,6 +6,18 @@
   padding-bottom: 5rem;
 }
 
+.detail-top-bar {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: var(--gap-md) var(--gutter) 0;
+}
+
+.detail-back {
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+}
+
 .back-btn {
   position: fixed;
   top: 1.5rem;
@@ -41,7 +53,7 @@
   min-height: 450px;
   max-height: 700px;
   overflow: hidden;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
 }
 
 @media (min-width: 1024px) {

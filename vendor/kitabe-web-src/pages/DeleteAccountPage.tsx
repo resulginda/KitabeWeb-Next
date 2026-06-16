@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
+import { PageShell, PageSection } from '../components/PageShell';
 import './DeleteAccountPage.css';
 
 const DeleteAccountPage = () => {
@@ -64,88 +65,98 @@ const DeleteAccountPage = () => {
 
   if (!kullanici) {
     return (
-      <div className="delete-account-page">
+      <>
         <Helmet>
           <title>{t('account.deleteAccount') || 'Hesap Silme'} - KitabeApp</title>
           <meta name="description" content={t('account.deleteAccountDescription') || 'Hesabınızı silmek için giriş yapmanız gerekiyor.'} />
         </Helmet>
-        <div className="delete-account-container">
-          <h1>{t('account.deleteAccount') || 'Hesap Silme'}</h1>
-          <p>{t('account.mustLogin') || 'Hesap silmek için giriş yapmanız gerekiyor.'}</p>
-          <button onClick={() => navigate('/login')} className="login-btn">
-            {t('auth.login') || 'Giriş Yap'}
-          </button>
-        </div>
-      </div>
+        <PageShell
+          title={t('account.deleteAccount') || 'Hesap Silme'}
+          backTo="/account-settings"
+          className="delete-account-page"
+        >
+          <div className="delete-account-container">
+            <p>{t('account.mustLogin') || 'Hesap silmek için giriş yapmanız gerekiyor.'}</p>
+            <Link to="/login" className="login-btn">
+              {t('auth.login') || 'Giriş Yap'}
+            </Link>
+          </div>
+        </PageShell>
+      </>
     );
   }
 
   return (
-    <div className="delete-account-page">
+    <>
       <Helmet>
         <title>{t('account.deleteAccount') || 'Hesap Silme'} - KitabeApp</title>
         <meta name="description" content={t('account.deleteAccountDescription') || 'Hesabınızı ve tüm verilerinizi kalıcı olarak silin.'} />
       </Helmet>
-      <div className="delete-account-container">
-        <h1>{t('account.deleteAccount') || 'Hesabımı Sil'}</h1>
-        <div className="delete-account-warning">
-          <p className="warning-text">
-            {t('account.deleteAccountWarning') || 'Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.'}
-          </p>
-          <p className="confirm-text">
-            {t('account.deleteAccountConfirm') || 'Bu işlem geri alınamaz. Hesabınız ve tüm verileriniz kalıcı olarak silinecektir.'}
-          </p>
-          <ul className="delete-list">
-            <li>{t('account.deleteData1') || 'Tüm kişisel bilgileriniz silinecek'}</li>
-            <li>{t('account.deleteData2') || 'Favorileriniz silinecek'}</li>
-            <li>{t('account.deleteData3') || 'Yer önerileriniz silinecek'}</li>
-            <li>{t('account.deleteData4') || 'Tüm verileriniz kalıcı olarak silinecek'}</li>
-          </ul>
+      <PageShell
+        title={t('account.deleteAccount') || 'Hesabımı Sil'}
+        backTo="/account-settings"
+        className="delete-account-page"
+      >
+        <div className="delete-account-container">
+          <PageSection danger className="delete-account-warning">
+            <p className="warning-text">
+              {t('account.deleteAccountWarning') || 'Hesabınızı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.'}
+            </p>
+            <p className="confirm-text">
+              {t('account.deleteAccountConfirm') || 'Bu işlem geri alınamaz. Hesabınız ve tüm verileriniz kalıcı olarak silinecektir.'}
+            </p>
+            <ul className="delete-list">
+              <li>{t('account.deleteData1') || 'Tüm kişisel bilgileriniz silinecek'}</li>
+              <li>{t('account.deleteData2') || 'Favorileriniz silinecek'}</li>
+              <li>{t('account.deleteData3') || 'Yer önerileriniz silinecek'}</li>
+              <li>{t('account.deleteData4') || 'Tüm verileriniz kalıcı olarak silinecek'}</li>
+            </ul>
+          </PageSection>
+
+          <PageSection className="delete-account-form">
+            <label>
+              {t('account.enterPasswordToDelete') || 'Devam etmek için şifrenizi girin:'}
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder={t('account.enterPassword') || 'Şifreniz'}
+                disabled={deleting}
+              />
+            </label>
+            <label>
+              {t('account.typeConfirm') || `Onaylamak için "${requiredConfirmText}" yazın:`}
+              <input
+                type="text"
+                value={confirmText}
+                onChange={(e) => setConfirmText(e.target.value)}
+                placeholder={requiredConfirmText}
+                disabled={deleting}
+              />
+            </label>
+
+            {error && <div className="error-message">{error}</div>}
+
+            <div className="delete-account-actions">
+              <button
+                className="cancel-btn"
+                onClick={() => navigate('/account-settings')}
+                disabled={deleting}
+              >
+                {t('common.cancel') || 'İptal'}
+              </button>
+              <button
+                className="delete-btn"
+                onClick={handleDeleteAccount}
+                disabled={deleting || confirmText !== requiredConfirmText || !password}
+              >
+                {deleting ? (t('account.deleting') || 'Siliniyor...') : (t('account.deleteAccount') || 'Hesabımı Sil')}
+              </button>
+            </div>
+          </PageSection>
         </div>
-
-        <div className="delete-account-form">
-          <label>
-            {t('account.enterPasswordToDelete') || 'Devam etmek için şifrenizi girin:'}
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder={t('account.enterPassword') || 'Şifreniz'}
-              disabled={deleting}
-            />
-          </label>
-          <label>
-            {t('account.typeConfirm') || `Onaylamak için "${requiredConfirmText}" yazın:`}
-            <input
-              type="text"
-              value={confirmText}
-              onChange={(e) => setConfirmText(e.target.value)}
-              placeholder={requiredConfirmText}
-              disabled={deleting}
-            />
-          </label>
-
-          {error && <div className="error-message">{error}</div>}
-
-          <div className="delete-account-actions">
-            <button
-              className="cancel-btn"
-              onClick={() => navigate('/account-settings')}
-              disabled={deleting}
-            >
-              {t('common.cancel') || 'İptal'}
-            </button>
-            <button
-              className="delete-btn"
-              onClick={handleDeleteAccount}
-              disabled={deleting || confirmText !== requiredConfirmText || !password}
-            >
-              {deleting ? (t('account.deleting') || 'Siliniyor...') : (t('account.deleteAccount') || 'Hesabımı Sil')}
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+      </PageShell>
+    </>
   );
 };
 

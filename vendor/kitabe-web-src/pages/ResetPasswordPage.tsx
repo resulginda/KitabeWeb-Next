@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import { PageShell } from '../components/PageShell';
 import './LoginPage.css';
 
 const ResetPasswordPage = () => {
@@ -51,20 +52,26 @@ const ResetPasswordPage = () => {
 
   if (success) {
     return (
-      <div className="login-page">
+      <PageShell
+        title="Şifre Güncellendi"
+        backTo="/login"
+        className="login-page"
+      >
         <div className="login-container">
-          <h1>Şifre Güncellendi</h1>
           <p>Yeni şifrenizle giriş yapabilirsiniz. Giriş sayfasına yönlendiriliyorsunuz...</p>
           <Link to="/login">Giriş sayfasına git</Link>
         </div>
-      </div>
+      </PageShell>
     );
   }
 
   return (
-    <div className="login-page">
+    <PageShell
+      title={t('login.resetPasswordTitle') || 'Yeni Şifre Belirle'}
+      backTo="/login"
+      className="login-page"
+    >
       <div className="login-container">
-        <h1>{t('login.resetPasswordTitle') || 'Yeni Şifre Belirle'}</h1>
         {!token ? (
           <p className="error-message">{error}</p>
         ) : (
@@ -95,7 +102,7 @@ const ResetPasswordPage = () => {
           <Link to="/login">{t('common.login')}</Link>
         </p>
       </div>
-    </div>
+    </PageShell>
   );
 };
 

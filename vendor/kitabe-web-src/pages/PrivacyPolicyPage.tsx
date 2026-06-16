@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
+import { PageShell, PageSection } from '../components/PageShell';
 import './PrivacyPolicyPage.css';
 
 const PrivacyPolicyPage = () => {
@@ -13,17 +14,18 @@ const PrivacyPolicyPage = () => {
         <meta property="og:title" content={t('privacy.title') || 'Gizlilik Politikası - Kitabe'} />
         <meta property="og:description" content={t('privacy.metaDescription') || 'Kitabe gizlilik politikası.'} />
       </Helmet>
-      <div className="privacy-page">
+      <PageShell
+        title={t('privacy.title') || 'Gizlilik Politikası'}
+        backTo="/home"
+        className="privacy-page"
+      >
         <div className="privacy-container">
-          <h1>{t('privacy.title') || 'Gizlilik Politikası'}</h1>
-          
           <div className="privacy-content">
             <p className="last-updated">
               {t('privacy.lastUpdated') || 'Son Güncelleme:'} 2026
             </p>
 
-            <section>
-              <h2>1. {t('privacy.dataController') || 'Veri Sorumlusu'}</h2>
+            <PageSection title={`1. ${t('privacy.dataController') || 'Veri Sorumlusu'}`}>
               <p>
                 {t('privacy.dataControllerContent') || '6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) uyarınca, kişisel verileriniz aşağıdaki veri sorumlusu tarafından işlenmektedir:'}
               </p>
@@ -32,10 +34,9 @@ const PrivacyPolicyPage = () => {
                 <strong>{t('privacy.address') || 'Adres:'}</strong> Talas/Kayseri, Türkiye<br />
                 <strong>{t('privacy.email') || 'E-posta:'}</strong> info@kitabe.org
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>2. {t('privacy.processedData') || 'İşlenen Kişisel Veriler'}</h2>
+            <PageSection title={`2. ${t('privacy.processedData') || 'İşlenen Kişisel Veriler'}`}>
               <p>
                 {t('privacy.processedDataContent') || 'Uygulamamızı kullanırken aşağıdaki kişisel verileriniz işlenmektedir:'}
               </p>
@@ -46,10 +47,9 @@ const PrivacyPolicyPage = () => {
                 <li>{t('privacy.data4') || 'Konum Bilgileri: İzin verdiğiniz takdirde konum bilgileriniz'}</li>
                 <li>{t('privacy.data5') || 'Teknik Bilgiler: Cihaz bilgileri, IP adresi, çerez bilgileri'}</li>
               </ul>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>3. {t('privacy.processingPurposes') || 'İşleme Amaçları'}</h2>
+            <PageSection title={`3. ${t('privacy.processingPurposes') || 'İşleme Amaçları'}`}>
               <p>
                 {t('privacy.processingPurposesContent') || 'Kişisel verileriniz aşağıdaki amaçlarla işlenmektedir:'}
               </p>
@@ -61,31 +61,27 @@ const PrivacyPolicyPage = () => {
                 <li>{t('privacy.purpose5') || 'İstatistiksel analizler'}</li>
                 <li>{t('privacy.purpose6') || 'Yasal yükümlülüklerin yerine getirilmesi'}</li>
               </ul>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>4. {t('privacy.dataTransfer') || 'Veri Aktarımı'}</h2>
+            <PageSection title={`4. ${t('privacy.dataTransfer') || 'Veri Aktarımı'}`}>
               <p>
                 {t('privacy.dataTransferContent') || 'Kişisel verileriniz, yukarıda belirtilen amaçlar doğrultusunda, yasal zorunluluklar çerçevesinde ve güvenlik önlemleri alınarak işlenmektedir. Hizmet sunumu ve analiz amacıyla aşağıda adı geçen üçüncü taraf hizmet sağlayıcılarıyla veri paylaşımı yapılmaktadır.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>5. {t('privacy.thirdPartyTitle') || 'Üçüncü Taraf Veri Paylaşımı'}</h2>
+            <PageSection title={`5. ${t('privacy.thirdPartyTitle') || 'Üçüncü Taraf Veri Paylaşımı'}`}>
               <p>
                 {t('privacy.thirdPartyContent') || 'Uygulamamızda aşağıdaki üçüncü taraf hizmetleri kullanılmaktadır; bu hizmetler kendi politikalarına göre veri işleyebilir: (1) Google Firebase: kimlik doğrulama, veritabanı ve depolama hizmetleri için kullanılır; (2) Google AdMob: reklam gösterimi için kullanılır; cihaz kimliği ve kullanım verileri işlenebilir. Bu hizmetlerin gizlilik politikalarına kendi sitelerinden ulaşabilirsiniz.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>6. {t('privacy.dataRetention') || 'Veri Saklama Süresi'}</h2>
+            <PageSection title={`6. ${t('privacy.dataRetention') || 'Veri Saklama Süresi'}`}>
               <p>
                 {t('privacy.dataRetentionContent') || 'Kişisel verileriniz, KVKK ve ilgili mevzuat hükümlerine uygun olarak, işleme amacının gerektirdiği süre boyunca saklanmaktadır.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>7. {t('privacy.userRights') || 'Kullanıcı Hakları'}</h2>
+            <PageSection title={`7. ${t('privacy.userRights') || 'Kullanıcı Hakları'}`}>
               <p>
                 {t('privacy.userRightsContent') || 'KVKK\'nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:'}
               </p>
@@ -97,17 +93,15 @@ const PrivacyPolicyPage = () => {
                 <li>{t('privacy.right5') || 'Eksik veya yanlış işlenmişse düzeltilmesini isteme'}</li>
                 <li>{t('privacy.right6') || 'KVKK\'da öngörülen şartlar çerçevesinde silinmesini veya yok edilmesini isteme'}</li>
               </ul>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>8. {t('privacy.accountDeletionTitle') || 'Hesap Silme Hakkı'}</h2>
+            <PageSection title={`8. ${t('privacy.accountDeletionTitle') || 'Hesap Silme Hakkı'}`}>
               <p>
                 {t('privacy.accountDeletionContent') || 'Hesabınızı ve kişisel verilerinizi silmek istediğinizde: Uygulama içinden Hesap Ayarları sayfasındaki "Hesabımı Sil" butonunu kullanarak hesabınızı kalıcı olarak silebilirsiniz. Alternatif olarak info@kitabe.org adresine e-posta göndererek hesap ve veri silme talebinizi iletebilirsiniz; talebiniz en kısa sürede işleme alınacaktır.'}
               </p>
-            </section>
+            </PageSection>
 
-            <section>
-              <h2>9. {t('privacy.contact') || 'İletişim'}</h2>
+            <PageSection title={`9. ${t('privacy.contact') || 'İletişim'}`}>
               <p>
                 {t('privacy.contactContent') || 'KVKK kapsamındaki haklarınızı kullanmak veya gizlilik ile ilgili sorularınız için aşağıdaki iletişim bilgileri üzerinden bizimle iletişime geçebilirsiniz:'}
               </p>
@@ -115,13 +109,12 @@ const PrivacyPolicyPage = () => {
                 <strong>{t('privacy.email') || 'E-posta:'}</strong>{' '}
                 <a href="mailto:info@kitabe.org">info@kitabe.org</a>
               </p>
-            </section>
+            </PageSection>
           </div>
         </div>
-      </div>
+      </PageShell>
     </>
   );
 };
 
 export default PrivacyPolicyPage;
-

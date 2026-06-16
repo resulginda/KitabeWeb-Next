@@ -8,6 +8,7 @@ import { usePlaces } from '../contexts/PlacesContext';
 import { getLocalizedText } from '../utils/multilang';
 import { openPlaceDetailById } from '../utils/placeDetailUrl';
 import { colors } from '../theme/colors';
+import { PageShell, PageEmpty } from '../components/PageShell';
 import './NotificationPage.css';
 
 const NotificationPage = () => {
@@ -125,17 +126,34 @@ const NotificationPage = () => {
     }
   };
 
+  const pageActions = (
+    <div className="kb-notif-actions">
+      {unreadCount > 0 && (
+        <button className="kb-notif-mark-all" type="button" onClick={markAllAsRead}>
+          {t('notifications.markAllRead', 'Tümünü okundu işaretle')}
+        </button>
+      )}
+      <button
+        type="button"
+        onClick={() => navigate('/notification-settings')}
+        aria-label={t('notifications.settings.title', 'Bildirim Ayarları')}
+      >
+        <span className="material-icons">settings</span>
+      </button>
+    </div>
+  );
+
   if (loading) {
     return (
       <>
         <Helmet>
           <title>{t('notifications.title', 'Bildirimler')} | Kitabe</title>
         </Helmet>
-        <div className="notification-page">
+        <PageShell title={t('notifications.title', 'Bildirimler')} backTo="/account" actions={pageActions}>
           <div className="notification-loading">
             <div className="spinner"></div>
           </div>
-        </div>
+        </PageShell>
       </>
     );
   }
@@ -145,32 +163,20 @@ const NotificationPage = () => {
       <Helmet>
         <title>{t('notifications.title', 'Bildirimler')} | Kitabe</title>
       </Helmet>
-      <div className="notification-page">
-        <div className="notification-header">
-          <button className="notification-back-btn" onClick={() => navigate(-1)}>
-            <span className="material-icons">arrow_back</span>
-          </button>
-          <h1 className="notification-title">{t('notifications.title', 'Bildirimler')}</h1>
-          <div className="notification-header-right">
-            {unreadCount > 0 && (
-              <button className="notification-mark-all-btn" onClick={markAllAsRead}>
-                {t('notifications.markAllRead', 'Tümünü okundu işaretle')}
-              </button>
-            )}
-            <button className="notification-settings-btn" onClick={() => navigate('/notification-settings')}>
-              <span className="material-icons">settings</span>
-            </button>
-          </div>
-        </div>
-
+      <PageShell
+        title={t('notifications.title', 'Bildirimler')}
+        subtitle={unreadCount > 0 ? `${unreadCount} ${t('notifications.unread', 'okunmamış')}` : undefined}
+        backTo="/account"
+        actions={pageActions}
+      >
         {notifications.length === 0 ? (
-          <div className="notification-empty">
-            <span className="material-icons notification-empty-icon">notifications_none</span>
-            <p className="notification-empty-text">{t('notifications.empty', 'Henüz bildiriminiz yok')}</p>
-            <p className="notification-empty-subtext">{t('notifications.emptySubtext', 'Yeni bildirimler burada görünecek')}</p>
-          </div>
+          <PageEmpty
+            icon="notifications_none"
+            title={t('notifications.empty', 'Henüz bildiriminiz yok')}
+            subtitle={t('notifications.emptySubtext', 'Yeni bildirimler burada görünecek')}
+          />
         ) : (
-          <div className="notification-list">
+          <div className="kb-notif-list">
             {notifications.map((notification) => {
               const iconName = getNotificationIcon(notification.type);
               const iconColor = getNotificationColor(notification.type);
@@ -180,28 +186,28 @@ const NotificationPage = () => {
               return (
                 <div
                   key={notification.id}
-                  className={`notification-item ${!notification.read ? 'notification-item-unread' : ''}`}
+                  className={`kb-notif-item ${!notification.read ? 'is-unread' : ''}`}
                   onClick={() => handleNotificationPress(notification)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') void handleNotificationPress(notification);
+                  }}
                 >
-                  <div className="notification-icon-container" style={{ backgroundColor: iconColor + '20' }}>
-                    <span className="material-icons" style={{ color: iconColor }}>
-                      {iconName}
-                    </span>
+                  <div className="kb-notif-icon" style={{ backgroundColor: `${iconColor}18`, color: iconColor }}>
+                    <span className="material-icons">{iconName}</span>
                   </div>
-                  <div className="notification-content">
-                    <div className="notification-item-header">
-                      <h3 className="notification-item-title">{title}</h3>
-                      {!notification.read && <span className="notification-unread-dot"></span>}
-                    </div>
-                    <p className="notification-item-message">{message}</p>
-                    <span className="notification-item-time">{formatDate(notification.createdAt)}</span>
+                  <div className="kb-notif-body">
+                    <h3>{title}</h3>
+                    <p>{message}</p>
+                    <span className="kb-notif-time">{formatDate(notification.createdAt)}</span>
                   </div>
                 </div>
               );
             })}
           </div>
         )}
-      </div>
+      </PageShell>
     </>
   );
 };

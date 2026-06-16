@@ -1,7 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Navigate, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { API_BASE_URL } from '../config/api';
+import { PageShell } from '../components/PageShell';
 import './AdminPanelPage.css';
 
 const DRAFT_KEY = 'kitabe_admin_push_draft_v1';
@@ -31,6 +33,7 @@ function defaultScheduleDatetimeLocal() {
 }
 
 const AdminPushBroadcastPage = () => {
+  const { t } = useTranslation();
   const { kullanici, getToken } = useAuth();
   const [targetMode, setTargetMode] = useState<TargetMode>('all');
   const [roleUser, setRoleUser] = useState(false);
@@ -446,21 +449,13 @@ const AdminPushBroadcastPage = () => {
   };
 
   return (
-    <div className="admin-panel-page">
-      <div className="panel-header">
-        <h1>Push bildirim gönder</h1>
-        <p style={{ textAlign: 'center', color: 'var(--text-secondary)', maxWidth: 720, margin: '0 auto 1rem' }}>
-          Mobil uygulamaya (Expo) bildirim. Taslak tarayıcıda kaydedilir. Zamanlama: seçtiğin yerel tarih/saat
-          UTC olarak saklanır; sunucu her dakika “vadesi gelen” işleri gönderir (en fazla ~1 dk sapma olabilir).
-        </p>
-        <div style={{ textAlign: 'center' }}>
-          <Link to="/admin-panel" style={{ color: 'var(--primary)' }}>
-            ← Admin paneline dön
-          </Link>
-        </div>
-      </div>
-
-      <div style={{ maxWidth: 640, margin: '2rem auto', padding: '0 1.25rem' }}>
+    <PageShell
+      title={t('account.sendBroadcast', 'Bildirim gönder')}
+      subtitle="Mobil uygulamaya (Expo) bildirim. Taslak tarayıcıda kaydedilir. Zamanlama: seçtiğin yerel tarih/saat UTC olarak saklanır; sunucu her dakika “vadesi gelen” işleri gönderir (en fazla ~1 dk sapma olabilir)."
+      backTo="/admin-hub"
+      className="admin-panel-page kb-page-wide"
+    >
+      <div style={{ maxWidth: 640, margin: '0 auto' }}>
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontWeight: 700, marginBottom: 8 }}>Hedef türü</div>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
@@ -942,7 +937,7 @@ const AdminPushBroadcastPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </PageShell>
   );
 };
 

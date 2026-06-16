@@ -1,12 +1,12 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { PageShell } from '../components/PageShell';
 import './LegalPage.css';
 
 type LegalDocumentType = 'kvkk' | 'consent' | 'terms' | 'disclaimer';
 
 const LegalPage = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const documentType: LegalDocumentType = (searchParams.get('type') as LegalDocumentType) || 'kvkk';
 
@@ -41,11 +41,11 @@ const LegalPage = () => {
   };
 
   return (
-    <div className="legal-page">
-      <div className="legal-header">
-        <button className="back-btn" onClick={() => navigate(-1)}>← {t('common.back')}</button>
-        <h1>{getTitle()}</h1>
-      </div>
+    <PageShell
+      title={getTitle()}
+      backTo="/home"
+      className="legal-page"
+    >
       <div className="legal-content">
         <div className="legal-text">
           {getContent().split('\n').map((line, idx) => (
@@ -53,9 +53,8 @@ const LegalPage = () => {
           ))}
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 
 export default LegalPage;
-

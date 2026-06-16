@@ -6,6 +6,7 @@ import { getStoredToken } from '../utils/authToken';
 import { useAuth } from '../contexts/AuthContext';
 import { readEnv } from '../utils/env';
 import { readViteEnv } from '../utils/env.vite';
+import { PageShell, PageSection } from '../components/PageShell';
 import './ContactPage.css';
 
 const GOOGLE_ADS_ID = 'AW-856201742';
@@ -102,17 +103,18 @@ const ContactPage = () => {
         <meta property="og:title" content={t('contact.title') || 'İletişim - Kitabe'} />
         <meta property="og:description" content={t('contact.metaDescription') || 'Kitabe ile iletişime geçin.'} />
       </Helmet>
-      <div className="contact-page">
+      <PageShell
+        title={t('contact.title') || 'İletişim'}
+        backTo="/home"
+        className="contact-page"
+      >
         <div className="contact-container">
-          <h1>{t('contact.title') || 'İletişim'}</h1>
-          
           <div className="contact-content">
-            <section className="contact-info">
-              <h2>{t('contact.getInTouch') || 'Bize Ulaşın'}</h2>
+            <PageSection title={t('contact.getInTouch') || 'Bize Ulaşın'} className="contact-info">
               <p>
                 {t('contact.description') || 'Sorularınız, önerileriniz, geri bildirimleriniz veya destek talepleriniz için bizimle iletişime geçebilirsiniz. Size en kısa sürede dönüş yapacağız.'}
               </p>
-              
+
               <div className="contact-details">
                 <div className="contact-item">
                   <strong>{t('contact.email') || 'E-posta:'}</strong>
@@ -127,10 +129,9 @@ const ContactPage = () => {
                   <span>{t('contact.responseTimeValue') || '24-48 saat içinde'}</span>
                 </div>
               </div>
-            </section>
+            </PageSection>
 
-            <section className="contact-form-section">
-              <h2>{t('contact.sendMessage') || 'Mesaj Gönder'}</h2>
+            <PageSection title={t('contact.sendMessage') || 'Mesaj Gönder'} className="contact-form-section">
               {submitted ? (
                 <div className="success-message">
                   {t('contact.successMessage') || 'Mesajınız başarıyla gönderildi! En kısa sürede size dönüş yapacağız.'}
@@ -158,7 +159,7 @@ const ContactPage = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-group">
                     <label htmlFor="email">{t('contact.email') || 'E-posta'}</label>
                     <input
@@ -169,7 +170,7 @@ const ContactPage = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-group">
                     <label htmlFor="subject">{t('contact.subject') || 'Konu'}</label>
                     <select
@@ -185,7 +186,7 @@ const ContactPage = () => {
                       <option value="diğer">{t('contact.subjectOptions.other')}</option>
                     </select>
                   </div>
-                  
+
                   <div className="form-group">
                     <label htmlFor="message">{t('contact.message') || 'Mesaj'}</label>
                     <textarea
@@ -196,19 +197,18 @@ const ContactPage = () => {
                       required
                     />
                   </div>
-                  
+
                   <button type="submit" className="submit-btn" disabled={submitting}>
                     {submitting ? '…' : t('contact.send') || 'Gönder'}
                   </button>
                 </form>
               )}
-            </section>
+            </PageSection>
           </div>
         </div>
-      </div>
+      </PageShell>
     </>
   );
 };
 
 export default ContactPage;
-

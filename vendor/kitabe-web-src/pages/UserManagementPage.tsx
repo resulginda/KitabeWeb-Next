@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import './UserManagementPage.css';
+import { PageShell } from '../components/PageShell';
 
 const UserManagementPage = () => {
   const { t } = useTranslation();
@@ -18,11 +18,11 @@ const UserManagementPage = () => {
 
   if (!kullanici || kullanici.rol !== 'admin') {
     return (
-      <div className="user-management-page">
+      <PageShell title={t('account.userManagement')} backTo="/admin-hub" className="user-management-page kb-page-wide">
         <div className="access-denied">
           <p>{t('adminPanel.accessDenied') || 'Bu sayfaya erişim yetkiniz yok'}</p>
         </div>
-      </div>
+      </PageShell>
     );
   }
 
@@ -79,11 +79,7 @@ const UserManagementPage = () => {
   };
 
   return (
-    <div className="user-management-page">
-      <header className="management-header">
-        <h1>{t('account.userManagement') || 'Kullanıcı Yönetimi'}</h1>
-      </header>
-
+    <PageShell title={t('account.userManagement')} backTo="/admin-hub" className="user-management-page kb-page-wide">
       <div className="users-list">
         {users.map((user) => (
           <div key={user.id} className="user-item">
@@ -116,75 +112,87 @@ const UserManagementPage = () => {
       </div>
 
       {roleModal.visible && (
-        <div className="modal-overlay" onClick={() => setRoleModal({ visible: false, user: null })}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="kb-settings-modal-overlay" onClick={() => setRoleModal({ visible: false, user: null })}>
+          <div className="kb-settings-modal" onClick={(e) => e.stopPropagation()}>
             <h2>{t('userManagement.selectRole') || 'Rol Seç'}</h2>
-            <div className="role-options">
+            <div className="kb-settings-role-options">
               <button
+                type="button"
                 onClick={() => handleChangeRole(roleModal.user.id, 'user')}
-                className={roleModal.user.rol === 'user' ? 'active' : ''}
+                className={roleModal.user.rol === 'user' ? 'is-active' : ''}
               >
                 {t('userManagement.role.user') || 'Kullanıcı'}
               </button>
               <button
+                type="button"
                 onClick={() => handleChangeRole(roleModal.user.id, 'editor')}
-                className={roleModal.user.rol === 'editor' ? 'active' : ''}
+                className={roleModal.user.rol === 'editor' ? 'is-active' : ''}
               >
                 {t('userManagement.role.editor') || 'Editör'}
               </button>
             </div>
-            <button onClick={() => setRoleModal({ visible: false, user: null })}>
-              {t('common.cancel')}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {editModal.visible && (
-        <div className="modal-overlay" onClick={() => setEditModal({ visible: false, user: null, isim: '', soyad: '', email: '', newPassword: '' })}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>{t('userManagement.editUser') || 'Kullanıcıyı Düzenle'}</h2>
-            <div className="edit-form">
-              <input
-                type="text"
-                placeholder={t('account.firstName')}
-                value={editModal.isim}
-                onChange={(e) => setEditModal({ ...editModal, isim: e.target.value })}
-              />
-              <input
-                type="text"
-                placeholder={t('account.lastName')}
-                value={editModal.soyad}
-                onChange={(e) => setEditModal({ ...editModal, soyad: e.target.value })}
-              />
-              <input
-                type="email"
-                placeholder={t('account.email')}
-                value={editModal.email}
-                onChange={(e) => setEditModal({ ...editModal, email: e.target.value })}
-              />
-              <input
-                type="password"
-                placeholder={t('userManagement.newPassword') || 'Yeni Şifre (isteğe bağlı)'}
-                value={editModal.newPassword}
-                onChange={(e) => setEditModal({ ...editModal, newPassword: e.target.value })}
-              />
-              {editModal.newPassword && editModal.newPassword.trim() !== '' && (
-                <p className="password-hint">
-                  {t('userManagement.passwordResetHint') || 'Not: Şifre değiştirmek için kullanıcıya email gönderilecektir.'}
-                </p>
-              )}
-            </div>
-            <div className="modal-actions">
-              <button onClick={handleSaveEdit}>{t('common.save')}</button>
-              <button onClick={() => setEditModal({ visible: false, user: null, isim: '', soyad: '', email: '', newPassword: '' })}>
+            <div className="kb-settings-modal-actions">
+              <button type="button" className="btn-secondary" onClick={() => setRoleModal({ visible: false, user: null })}>
                 {t('common.cancel')}
               </button>
             </div>
           </div>
         </div>
       )}
-    </div>
+
+      {editModal.visible && (
+        <div className="kb-settings-modal-overlay" onClick={() => setEditModal({ visible: false, user: null, isim: '', soyad: '', email: '', newPassword: '' })}>
+          <div className="kb-settings-modal" onClick={(e) => e.stopPropagation()}>
+            <h2>{t('userManagement.editUser') || 'Kullanıcıyı Düzenle'}</h2>
+            <div className="kb-settings-stack">
+              <div className="kb-form-field">
+                <input
+                  type="text"
+                  placeholder={t('account.firstName')}
+                  value={editModal.isim}
+                  onChange={(e) => setEditModal({ ...editModal, isim: e.target.value })}
+                />
+              </div>
+              <div className="kb-form-field">
+                <input
+                  type="text"
+                  placeholder={t('account.lastName')}
+                  value={editModal.soyad}
+                  onChange={(e) => setEditModal({ ...editModal, soyad: e.target.value })}
+                />
+              </div>
+              <div className="kb-form-field">
+                <input
+                  type="email"
+                  placeholder={t('account.email')}
+                  value={editModal.email}
+                  onChange={(e) => setEditModal({ ...editModal, email: e.target.value })}
+                />
+              </div>
+              <div className="kb-form-field">
+                <input
+                  type="password"
+                  placeholder={t('userManagement.newPassword') || 'Yeni Şifre (isteğe bağlı)'}
+                  value={editModal.newPassword}
+                  onChange={(e) => setEditModal({ ...editModal, newPassword: e.target.value })}
+                />
+              </div>
+              {editModal.newPassword && editModal.newPassword.trim() !== '' && (
+                <p className="kb-form-field-hint">
+                  {t('userManagement.passwordResetHint') || 'Not: Şifre değiştirmek için kullanıcıya email gönderilecektir.'}
+                </p>
+              )}
+            </div>
+            <div className="kb-settings-modal-actions">
+              <button type="button" className="kb-btn-save" onClick={handleSaveEdit}>{t('common.save')}</button>
+              <button type="button" className="btn-secondary" onClick={() => setEditModal({ visible: false, user: null, isim: '', soyad: '', email: '', newPassword: '' })}>
+                {t('common.cancel')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </PageShell>
   );
 };
 

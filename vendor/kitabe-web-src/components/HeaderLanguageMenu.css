@@ -1,0 +1,85 @@
+.header-lang {
+  position: relative;
+}
+
+.header-lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--radius-full);
+  border: 1px solid color-mix(in srgb, var(--text-on-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--text-on-primary) 12%, transparent);
+  color: var(--text-on-primary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.header-lang-trigger:hover {
+  background: color-mix(in srgb, var(--text-on-primary) 22%, transparent);
+}
+
+.header-lang-flag {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.header-lang-code {
+  letter-spacing: 0.04em;
+}
+
+.header-lang-chevron {
+  font-size: 0.65rem;
+  opacity: 0.85;
+}
+
+.header-lang-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 180px;
+  margin: 0;
+  padding: 6px;
+  list-style: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  z-index: 1200;
+}
+
+.header-lang-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.header-lang-item:hover {
+  background: var(--bg-hover);
+}
+
+.header-lang-item.is-active {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  font-weight: 600;
+}
+
+.header-lang-name {
+  flex: 1;
+}
+
+.header-lang-check {
+  color: var(--accent);
+  font-weight: 700;
+}

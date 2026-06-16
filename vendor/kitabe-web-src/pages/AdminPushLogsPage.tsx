@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { API_BASE_URL } from '../config/api';
-import './AdminPanelPage.css';
+import { PageShell, PageEmpty } from '../components/PageShell';
 
 type PushLogRow = {
   id: string;
@@ -36,6 +37,7 @@ type PushLogDetail = PushLogRow & {
 };
 
 export default function AdminPushLogsPage() {
+  const { t } = useTranslation();
   const { kullanici, getToken } = useAuth();
   const [logs, setLogs] = useState<PushLogRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -102,45 +104,50 @@ export default function AdminPushLogsPage() {
   if (kullanici?.rol !== 'admin') return <Navigate to="/account" replace />;
 
   return (
-    <div className="admin-panel-page">
-      <div className="panel-header">
-        <h1>Push Günlüğü</h1>
+    <PageShell title={t('account.pushLogs', 'Push Günlüğü')} backTo="/admin-hub" className="kb-page-wide">
+      <div className="kb-admin-toolbar">
+        <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          {logs.length} kayıt
+        </span>
+        <button type="button" onClick={load}>
+          <span className="material-icons" style={{ fontSize: 18 }}>refresh</span>
+          Yenile
+        </button>
       </div>
-      <div style={{ maxWidth: 980, margin: '1.5rem auto', padding: '0 1rem' }}>
-        <button onClick={load}>Yenile</button>
-        {loading ? <p>Yükleniyor...</p> : null}
-        {error ? <p style={{ color: '#b91c1c' }}>{error}</p> : null}
-        {!loading && !error && logs.length === 0 ? <p>Henüz kayıt yok.</p> : null}
+      {loading ? (
+        <div className="kb-settings-loading">
+          <div className="spinner" />
+        </div>
+      ) : null}
+      {error ? <p style={{ color: '#b91c1c', marginBottom: 'var(--gap-md)' }}>{error}</p> : null}
+      {!loading && !error && logs.length === 0 ? (
+        <PageEmpty icon="notifications_none" title="Henüz kayıt yok." />
+      ) : null}
+      <div className="kb-log-list">
         {logs.map((log) => (
           <button
             key={log.id}
+            type="button"
+            className="kb-log-card"
             onClick={() => openDetail(log.id)}
-            style={{
-              width: '100%',
-              textAlign: 'left',
-              background: '#fff',
-              border: '1px solid #e8e0d6',
-              borderRadius: 12,
-              padding: 14,
-              marginTop: 10,
-              cursor: 'pointer',
-            }}
           >
-            <div style={{ color: '#666', fontSize: 13 }}>
+            <div className="kb-log-card-date">
               {log.created_at ? new Date(log.created_at).toLocaleString('tr-TR') : '—'}
             </div>
-            <div style={{ marginTop: 4, color: '#8b5e34' }}>
+            <div className="kb-log-card-meta">
               {log.target_label ?? '—'} · {log.recipient_count ?? 0} alıcı · Expo hata: {log.error_count ?? 0}
             </div>
-            {log.title ? <div style={{ marginTop: 8 }}>Başlık: {log.title}</div> : null}
-            <div style={{ marginTop: 6, whiteSpace: 'pre-wrap' }}>{log.body ?? ''}</div>
+            {log.title ? <div className="kb-log-card-title">Başlık: {log.title}</div> : null}
+            <div className="kb-log-card-body">{log.body ?? ''}</div>
             {(log.deep_link_type || log.place_id) ? (
-              <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>
+              <div className="kb-log-card-meta">
                 Link: {log.deep_link_type ?? '—'}{log.place_id ? ` · yer: ${log.place_id}` : ''}
               </div>
             ) : null}
-            {log.scheduled_job_id ? <div style={{ marginTop: 8, fontSize: 13, color: '#666' }}>Zamanlı iş: {log.scheduled_job_id.slice(0, 12)}...</div> : null}
-            <div style={{ marginTop: 10, color: '#8b5e34', fontSize: 13 }}>Detay için tıkla →</div>
+            {log.scheduled_job_id ? (
+              <div className="kb-log-card-meta">Zamanlı iş: {log.scheduled_job_id.slice(0, 12)}...</div>
+            ) : null}
+            <div className="kb-log-card-footer">Detay için tıkla →</div>
           </button>
         ))}
       </div>
@@ -148,44 +155,26 @@ export default function AdminPushLogsPage() {
       {(selectedLog || detailLoading || detailError) && (
         <div
           role="dialog"
+          className="kb-settings-modal-overlay"
           onClick={() => {
             setSelectedLog(null);
             setDetailError(null);
           }}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.45)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 9999,
-            padding: 20,
-          }}
         >
           <div
+            className="kb-settings-modal"
+            style={{ maxWidth: 900, maxHeight: '85vh', overflowY: 'auto' }}
             onClick={(e) => e.stopPropagation()}
-            style={{
-              background: '#fff',
-              borderRadius: 14,
-              width: '100%',
-              maxWidth: 900,
-              maxHeight: '85vh',
-              overflow: 'auto',
-              padding: 16,
-            }}
           >
-            <h3 style={{ marginTop: 0 }}>Push Log Detayı</h3>
+            <h2>Push Log Detayı</h2>
             {detailLoading ? <p>Detay yükleniyor...</p> : null}
             {detailError ? <p style={{ color: '#b91c1c' }}>{detailError}</p> : null}
             {selectedLog && (
               <>
-                <p style={{ color: '#666' }}>
+                <p style={{ color: 'var(--text-secondary)', margin: '0 0 var(--gap-sm)' }}>
                   {selectedLog.created_at ? new Date(selectedLog.created_at).toLocaleString('tr-TR') : '—'}
                 </p>
-                <p>
-                  <strong>Hedef:</strong> {selectedLog.target_label || '—'}
-                </p>
+                <p><strong>Hedef:</strong> {selectedLog.target_label || '—'}</p>
                 <p>
                   <strong>Gönderim özeti:</strong> log alıcı {selectedLog.recipient_count ?? 0} · Expo hata{' '}
                   {selectedLog.error_count ?? 0}
@@ -197,48 +186,32 @@ export default function AdminPushLogsPage() {
                   </p>
                 ) : null}
                 {selectedLog.title ? (
-                  <p>
-                    <strong>Başlık:</strong> {selectedLog.title}
-                  </p>
+                  <p><strong>Başlık:</strong> {selectedLog.title}</p>
                 ) : null}
                 <p style={{ whiteSpace: 'pre-wrap' }}>
                   <strong>Metin:</strong> {selectedLog.body || ''}
                 </p>
-                <p style={{ fontSize: 12, color: '#666' }}>{selectedLog.recipientNote}</p>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>{selectedLog.recipientNote}</p>
 
                 <button
                   type="button"
+                  className="kb-suggest-link"
                   onClick={() => setRecipientListOpen((v) => !v)}
-                  style={{
-                    marginTop: 8,
-                    border: '1px solid #e5dccf',
-                    borderRadius: 10,
-                    padding: '8px 10px',
-                    background: '#fffaf6',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                  }}
+                  style={{ marginTop: 'var(--gap-sm)' }}
                 >
-                  {recipientListOpen ? '▼' : '▶'} Kime gitti listesi ({selectedLog.recipients?.length ?? 0}) ·{' '}
+                  <span className="material-icons" style={{ fontSize: 16 }}>
+                    {recipientListOpen ? 'expand_more' : 'chevron_right'}
+                  </span>
+                  Kime gitti listesi ({selectedLog.recipients?.length ?? 0}) ·{' '}
                   {selectedLog.recipientSource === 'snapshot' ? 'Kesin Snapshot' : 'Anlık Çözümleme'}
                 </button>
                 {recipientListOpen &&
                   (!selectedLog.recipients || selectedLog.recipients.length === 0 ? (
                     <p>Hedefte kayıtlı kullanıcı/token bulunamadı.</p>
                   ) : (
-                    <div style={{ border: '1px solid #eee', borderRadius: 10, marginTop: 8 }}>
+                    <div className="kb-log-detail-grid">
                       {selectedLog.recipients.map((r, idx) => (
-                        <div
-                          key={`${r.userId || 'anon'}-${idx}`}
-                          style={{
-                            display: 'grid',
-                            gridTemplateColumns: '1.2fr 1fr 80px 90px',
-                            gap: 8,
-                            padding: '8px 10px',
-                            borderBottom: '1px solid #f0f0f0',
-                            fontSize: 13,
-                          }}
-                        >
+                        <div key={`${r.userId || 'anon'}-${idx}`} className="kb-log-detail-row">
                           <div>{r.email || `${r.isim || ''} ${r.soyad || ''}`.trim() || r.userId || 'Anonim token'}</div>
                           <div>{r.userId || '-'}</div>
                           <div>{r.rol || '-'}</div>
@@ -249,8 +222,10 @@ export default function AdminPushLogsPage() {
                   ))}
               </>
             )}
-            <div style={{ marginTop: 12, textAlign: 'right' }}>
+            <div className="kb-settings-modal-actions">
               <button
+                type="button"
+                className="kb-btn-save"
                 onClick={() => {
                   setSelectedLog(null);
                   setDetailError(null);
@@ -262,7 +237,7 @@ export default function AdminPushLogsPage() {
           </div>
         </div>
       )}
-    </div>
+    </PageShell>
   );
 }
 

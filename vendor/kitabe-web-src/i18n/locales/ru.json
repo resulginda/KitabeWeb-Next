@@ -57,7 +57,7 @@
     "emailPlaceholder": "Электронная почта",
     "passwordPlaceholder": "Пароль",
     "forgotPassword": "Забыли пароль?",
-    "noAccount": "Нет аккаунта? Зарегистрироваться",
+    "noAccount": "Нет аккаунта?",
     "loggingIn": "Вход...",
     "resetEmailPlaceholder": "example@mail.com",
     "resetPasswordTitle": "Сброс пароля",
@@ -134,10 +134,20 @@
     "list": "Список",
     "nearby": "Рядом",
     "route": "Маршрут",
+    "account": "Аккаунт",
     "loginRegister": "Вход / Регистрация",
     "placeDetail": "Детали места",
     "placeList": "Список мест",
-    "tripRoute": "Маршрут поездки"
+    "tripRoute": "Маршрут поездки",
+    "mainNav": "Главное меню"
+  },
+  "header": {
+    "secondaryNav": "Меню сайта",
+    "cities": "Города",
+    "blog": "Блог",
+    "about": "О нас",
+    "contact": "Контакты",
+    "suggest": "Предложить место"
   },
   "home": {
     "heroTitle": "Культурное наследие Турции",
@@ -146,6 +156,10 @@
     "viewAll": "Смотреть все",
     "exploreOnMap": "Исследовать на карте",
     "mapSubtitle": "Откройте культурное наследие по всей Турции",
+    "exploreCitiesTitle": "Популярные города",
+    "exploreCitiesSubtitle": "Откройте культурное наследие самых посещаемых городов Турции",
+    "exploreAllCities": "Все города",
+    "exploreCityCta": "Достопримечательности →",
     "subCategories": "Подкатегории {{name}}",
     "searchPlaceholder": "Поиск (название, город, категория...)",
     "city": "Город",

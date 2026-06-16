@@ -12,6 +12,7 @@
     "start": "node .next/standalone/server.js",
     "start:next": "next start -p ${PORT:-3000}",
     "lint": "next lint",
+    "audit-slugs": "node scripts/audit-slugs.mjs",
     "postinstall": "node scripts/sync-vendor.mjs || true"
   },
   "dependencies": {

@@ -4,6 +4,7 @@ import { useRoute } from '../contexts/RouteContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getPlaceImageUri } from '../utils/imageUtils';
 import { getLocalizedText } from '../utils/multilang';
+import { PageShell, PageEmpty } from '../components/PageShell';
 import './TripRoutePage.css';
 
 const TripRoutePage = () => {
@@ -69,23 +70,24 @@ const TripRoutePage = () => {
     return R * c;
   };
 
-  return (
-    <div className="trip-route-page">
-      <header className="route-header">
-        <h1>{t('route.title') || 'Rotanız'}</h1>
-        {routePlaces.length > 0 && (
-          <div className="route-stats">
-            <span>{t('route.points') || 'Nokta'}: {routePlaces.length}</span>
-            <span>{t('route.totalDistance') || 'Toplam Mesafe'}: {calculateTotalDistance().toFixed(1)} km</span>
-          </div>
-        )}
-      </header>
+  const routeSubtitle =
+    routePlaces.length > 0
+      ? `${t('route.points') || 'Nokta'}: ${routePlaces.length} • ${t('route.totalDistance') || 'Toplam Mesafe'}: ${calculateTotalDistance().toFixed(1)} km`
+      : undefined;
 
+  return (
+    <PageShell
+      title={t('route.title') || 'Rotanız'}
+      subtitle={routeSubtitle}
+      backTo="/home"
+      className="trip-route-page"
+    >
       {routePlaces.length === 0 ? (
-        <div className="empty-route">
-          <p>{t('route.emptyRoute') || 'Rotanız boş. Yerler ekleyerek rota oluşturun.'}</p>
-          <p className="empty-route-sub">{t('route.noPlacesMessage') || 'Ana sayfa/liste/harita sayfasından nokta ekledikçe buralarda çıkacak.'}</p>
-        </div>
+        <PageEmpty
+          icon="route"
+          title={t('route.emptyRoute') || 'Rotanız boş. Yerler ekleyerek rota oluşturun.'}
+          subtitle={t('route.noPlacesMessage') || 'Ana sayfa/liste/harita sayfasından nokta ekledikçe buralarda çıkacak.'}
+        />
       ) : (
         <>
           <div className="route-list">
@@ -131,9 +133,8 @@ const TripRoutePage = () => {
           </div>
         </>
       )}
-    </div>
+    </PageShell>
   );
 };
 
 export default TripRoutePage;
-

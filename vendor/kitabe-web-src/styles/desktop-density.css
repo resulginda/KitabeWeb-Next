@@ -8,8 +8,12 @@
   }
 
   /* ——— App shell ——— */
-  .page-container {
-    padding-left: 4.25rem;
+  .app-shell-content {
+    padding-bottom: 0;
+  }
+
+  .home-page {
+    padding-bottom: 1rem;
   }
 
   .page-header {
@@ -26,24 +30,7 @@
     max-width: 520px;
   }
 
-  /* ——— Nav (alt bar) ——— */
-  .bottom-nav {
-    padding: 0.35rem 0;
-  }
-
-  .nav-item {
-    min-width: 62px;
-    padding: 0.2rem 0.55rem;
-  }
-
-  .nav-icon {
-    font-size: 1.15rem;
-    margin-bottom: 0.1rem;
-  }
-
-  .nav-label {
-    font-size: 0.68rem;
-  }
+  /* ——— Nav (mobil alt bar masaüstünde gizli) ——— */
 
   /* ——— Footer ——— */
   .site-footer {
@@ -897,13 +884,13 @@
   }
 
   .page-container {
-    padding-left: 4.5rem;
+    padding-bottom: 0;
   }
 
-  .home-page .featured-section {
-    max-width: 1480px;
-    margin-left: auto;
-    margin-right: auto;
+  .home-page {
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
   }
 
   .home-page .hero-section {

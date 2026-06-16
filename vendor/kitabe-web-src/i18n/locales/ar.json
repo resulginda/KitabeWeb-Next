@@ -57,7 +57,7 @@
     "emailPlaceholder": "البريد الإلكتروني",
     "passwordPlaceholder": "كلمة المرور",
     "forgotPassword": "نسيت كلمة المرور؟",
-    "noAccount": "ليس لديك حساب؟ سجل",
+    "noAccount": "ليس لديك حساب؟",
     "loggingIn": "جارٍ تسجيل الدخول...",
     "resetEmailPlaceholder": "example@mail.com",
     "resetPasswordTitle": "إعادة تعيين كلمة المرور",
@@ -134,10 +134,20 @@
     "list": "القائمة",
     "nearby": "القريبة",
     "route": "المسار",
+    "account": "الحساب",
     "loginRegister": "تسجيل الدخول / التسجيل",
     "placeDetail": "تفاصيل المكان",
     "placeList": "قائمة الأماكن",
-    "tripRoute": "مسار الرحلة"
+    "tripRoute": "مسار الرحلة",
+    "mainNav": "القائمة الرئيسية"
+  },
+  "header": {
+    "secondaryNav": "قائمة الموقع",
+    "cities": "المدن",
+    "blog": "المدونة",
+    "about": "من نحن",
+    "contact": "اتصل بنا",
+    "suggest": "اقترح مكانًا"
   },
   "home": {
     "heroTitle": "التراث الثقافي لتركيا",
@@ -146,6 +156,10 @@
     "viewAll": "عرض الكل",
     "exploreOnMap": "استكشف على الخريطة",
     "mapSubtitle": "اكتشف التراث الثقافي في جميع أنحاء تركيا",
+    "exploreCitiesTitle": "المدن الشائعة",
+    "exploreCitiesSubtitle": "اكتشف التراث الثقافي في أكثر مدن تركيا زيارة",
+    "exploreAllCities": "جميع المدن",
+    "exploreCityCta": "أماكن للزيارة →",
     "subCategories": "الفئات الفرعية {{name}}",
     "searchPlaceholder": "بحث (الاسم، المدينة، الفئة...)",
     "city": "المدينة",

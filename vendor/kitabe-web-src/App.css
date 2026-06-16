@@ -49,8 +49,7 @@ html {
 
 /* Selection */
 ::selection {
-  background: rgba(79, 70, 229, 0.2);
-  /* Primary color with opacity */
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
   color: inherit;
 }
 

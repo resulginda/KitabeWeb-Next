@@ -1,21 +1,17 @@
-/* Mobile bottom navigation — hidden on desktop (sidebar replaces it) */
+/* Mobil alt navigasyon */
 
 .bottom-nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: var(--bg-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border-glass);
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-light);
   display: flex;
   justify-content: space-around;
-  padding: 0.5rem 0;
-  /* Reduced from 0.75rem */
+  padding: 0.4rem 0;
   z-index: 1000;
-  box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.05);
-  transition: all var(--transition-normal);
+  box-shadow: 0 -4px 20px rgba(35, 35, 35, 0.06);
 }
 
 .nav-item {
@@ -24,45 +20,18 @@
   align-items: center;
   text-decoration: none;
   color: var(--text-muted);
-  padding: 0.25rem 0.75rem;
-  /* Reduced from 0.5rem 1rem */
-  transition: all var(--transition-normal);
-  min-width: 70px;
-  border-radius: var(--radius-lg);
-  position: relative;
-  overflow: hidden;
-}
-
-.nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 3px;
-  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-  border-radius: 0 0 3px 3px;
-  transition: width var(--transition-normal);
-}
-
-.nav-item.active::before {
-  width: 50%;
+  padding: 0.25rem 0.65rem;
+  transition: color var(--transition-fast);
+  min-width: 64px;
+  border-radius: var(--radius-md);
 }
 
 .nav-item.active {
-  color: var(--primary);
+  color: var(--accent);
 }
 
 .nav-item:hover {
-  color: var(--primary-hover);
-  background: rgba(79, 70, 229, 0.05);
-  /* very light primary */
-  transform: translateY(-2px);
-}
-
-.nav-item.active:hover {
-  background: transparent;
+  color: var(--primary);
 }
 
 .nav-icon {
@@ -72,42 +41,19 @@
   width: 24px;
   height: 24px;
   margin-bottom: 0.15rem;
-  transition: transform var(--transition-normal);
-  color: inherit;
-}
-
-.nav-item:hover .nav-icon {
-  transform: scale(1.1);
-}
-
-.nav-item.active .nav-icon {
-  transform: scale(1.15) translateY(-2px);
 }
 
 .nav-label {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 500;
-  font-family: var(--font-sans);
-  transition: font-weight var(--transition-fast);
 }
 
 .nav-item.active .nav-label {
-  font-weight: 700;
+  font-weight: 600;
 }
 
 @media (min-width: 1024px) {
   .bottom-nav {
     display: none;
-  }
-}
-
-@media (max-width: 768px) {
-  .nav-label {
-    font-size: 0.65rem;
-  }
-
-  .nav-item {
-    min-width: 60px;
-    padding: 0.5rem 0.5rem;
   }
 }

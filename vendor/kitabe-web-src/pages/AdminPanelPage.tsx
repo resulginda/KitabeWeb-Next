@@ -21,6 +21,7 @@ import {
   parsePlaceMainCategorySlugs,
   parsePlaceSubCategories,
 } from '../utils/adminCategoryUtils';
+import { PageShell } from '../components/PageShell';
 import { useCategories } from '../contexts/CategoriesContext';
 import type { Place } from '../types/place';
 import './AdminPanelPage.css';
@@ -786,9 +787,12 @@ const AdminPanelPage = () => {
   };
 
   return (
-    <div className="admin-panel-page">
+    <PageShell
+      title={t('account.adminPanel') || 'Admin Paneli'}
+      backTo="/admin-hub"
+      className="admin-panel-page kb-page-full"
+    >
       <header className="panel-header">
-        <h1>{t('account.adminPanel') || 'Admin Paneli'}</h1>
         <div className="header-controls">
           <div className="search-bar">
             <input
@@ -1577,7 +1581,7 @@ const AdminPanelPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </PageShell>
   );
 };
 

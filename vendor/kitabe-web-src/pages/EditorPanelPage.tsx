@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
 import { apiFetch } from '../utils/apiClient';
 import { getLocalizedText } from '../utils/multilang';
-import './EditorPanelPage.css';
+import { PageShell } from '../components/PageShell';
 
 interface PlaceSuggestion {
   id: string;
@@ -153,23 +153,29 @@ const EditorPanelPage = () => {
 
   if (!kullanici || (kullanici.rol !== 'editor' && kullanici.rol !== 'admin')) {
     return (
-      <div className="editor-panel-page">
+      <PageShell title={t('account.editorPanel')} className="editor-panel-page kb-page-wide">
         <div className="access-denied">
           <p>{t('editorPanel.accessDenied') || 'Bu sayfaya erişim yetkiniz yok'}</p>
         </div>
-      </div>
+      </PageShell>
     );
   }
 
   if (loading) {
-    return <div className="editor-panel-page loading">{t('common.loading')}</div>;
+    return (
+      <PageShell title={t('account.editorPanel')} className="editor-panel-page kb-page-wide">
+        {t('common.loading')}
+      </PageShell>
+    );
   }
 
   return (
-    <div className="editor-panel-page">
-      <header className="panel-header">
-        <h1>{t('account.editorPanel') || 'Editör Paneli'}</h1>
-        <div className="tabs">
+    <PageShell
+      title={t('account.editorPanel')}
+      backTo={kullanici?.rol === 'admin' ? '/admin-hub' : '/account'}
+      className="editor-panel-page kb-page-wide"
+    >
+      <div className="kb-admin-tabs">
           <button
             className={tab === 'pending' ? 'active' : ''}
             onClick={() => setTab('pending')}
@@ -189,7 +195,6 @@ const EditorPanelPage = () => {
             {t('editorPanel.tabs.approved') || 'Onaylananlar'}
           </button>
         </div>
-      </header>
 
       <div className="suggestions-list">
         {suggestions.length === 0 ? (
@@ -321,7 +326,7 @@ const EditorPanelPage = () => {
           </div>
         </div>
       )}
-    </div>
+    </PageShell>
   );
 };
 

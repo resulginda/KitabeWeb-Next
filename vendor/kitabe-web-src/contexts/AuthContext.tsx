@@ -144,7 +144,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           soyad: u.soyad ?? '',
           email: u.email ?? '',
           rol: u.rol ?? 'user',
-          kayitTarihi: u.kayitTarihi ?? Date.now(),
+          kayitTarihi: u.kayitTarihi ? new Date(u.kayitTarihi).getTime() : Date.now(),
           hasPassword: u.hasPassword ?? true,
         });
         return { success: true };

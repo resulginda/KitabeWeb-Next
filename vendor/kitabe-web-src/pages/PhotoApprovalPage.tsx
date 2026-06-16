@@ -7,7 +7,7 @@ import type { PhotoSubmission } from '../types/photoSubmission';
 import { API_BASE_URL } from '../config/api';
 import { notifyUserAboutPhotoApproval, notifyUserAboutPhotoRejection } from '../services/notificationService';
 import { getLocalizedText } from '../utils/multilang';
-import './PhotoApprovalPage.css';
+import { PageShell } from '../components/PageShell';
 
 const getInitials = (name: string | undefined | null): string => {
   if (!name) return '?';
@@ -107,11 +107,11 @@ const PhotoApprovalPage = () => {
         <Helmet>
           <title>{t('photoApproval.header', 'Fotoğraf İstekleri')} | Kitabe</title>
         </Helmet>
-        <div className="photo-approval-page">
+        <PageShell title={t('account.photoApproval.title', 'Fotoğraf İstekleri')} backTo="/account" className="photo-approval-page">
           <div className="photo-approval-loading">
             <div className="spinner"></div>
           </div>
-        </div>
+        </PageShell>
       </>
     );
   }
@@ -121,11 +121,12 @@ const PhotoApprovalPage = () => {
       <Helmet>
         <title>{t('photoApproval.header', 'Fotoğraf İstekleri')} | Kitabe</title>
       </Helmet>
-      <div className="photo-approval-page">
-        <h1 className="photo-approval-header">
-          {t('photoApproval.header', 'Fotoğraf İstekleri')} ({pendingSubmissions.length})
-        </h1>
-
+      <PageShell
+        title={t('account.photoApproval.title', 'Fotoğraf İstekleri')}
+        subtitle={String(pendingSubmissions.length)}
+        backTo="/account"
+        className="photo-approval-page"
+      >
         {pendingSubmissions.length === 0 ? (
           <div className="photo-approval-empty">
             <span className="material-icons photo-approval-empty-icon">photo_library</span>
@@ -188,7 +189,7 @@ const PhotoApprovalPage = () => {
             })}
           </div>
         )}
-      </div>
+      </PageShell>
     </>
   );
 };

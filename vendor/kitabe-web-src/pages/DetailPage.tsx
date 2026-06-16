@@ -1,5 +1,5 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { API_BASE_URL } from '../config/api';
@@ -494,7 +494,12 @@ const DetailPage = ({
         <meta property="og:url" content={shareUrl} />
         <meta property="og:title" content={fullTitle} />
         <meta property="og:description" content={metaDescription} />
-        {imageUrl && <meta property="og:image" content={imageUrl} />}
+        {imageUrl ? (
+          <meta property="og:image" content={imageUrl.startsWith('http') ? imageUrl : `https://kitabe.org${imageUrl}`} />
+        ) : (
+          <meta property="og:image" content="https://kitabe.org/og-default.jpg" />
+        )}
+        <meta property="og:locale" content={currentLanguage === 'tr' ? 'tr_TR' : currentLanguage === 'en' ? 'en_US' : currentLanguage} />
         <meta property="og:site_name" content="Kitabe" />
         
         {/* Twitter Card */}
@@ -502,256 +507,285 @@ const DetailPage = ({
         <meta name="twitter:url" content={shareUrl} />
         <meta name="twitter:title" content={fullTitle} />
         <meta name="twitter:description" content={metaDescription} />
-        {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+        {imageUrl ? (
+          <meta name="twitter:image" content={imageUrl.startsWith('http') ? imageUrl : `https://kitabe.org${imageUrl}`} />
+        ) : (
+          <meta name="twitter:image" content="https://kitabe.org/og-default.jpg" />
+        )}
         
         {/* Additional SEO */}
         <meta name="keywords" content={`${name}, ${city}, ${district}, ${categories.join(', ')}, kültürel miras, tarihi yer, turizm, Kitabe`} />
         {place.isUnesco && <meta name="keywords" content={`UNESCO, ${name}, ${city}`} />}
       </Helmet>
       )}
-      <div className="detail-page">
-      {imageUrl && (
-        <div className="detail-header">
-          <img src={imageUrl} alt={name} onError={(e) => {
-            (e.target as HTMLImageElement).style.display = 'none';
-          }} />
-          <div className="header-actions">
-            <button
-              className={`favorite-btn-large ${isFavorite(place.id) ? 'active' : ''}`}
-              onClick={() => toggleFavorite(place)}
-              title={isFavorite(place.id) ? t('detail.removeFromFavorites') : t('detail.addToFavorites')}
-            >
-              {isFavorite(place.id) ? '❤️' : '🤍'}
-            </button>
-            {kullanici && (
-              <button
-                className={`visited-btn-large ${visited ? 'active' : ''}`}
-                onClick={handleVisitedToggle}
-                disabled={checkingVisit}
-                title={visited ? t('detail.unmarkVisited') : t('detail.markVisited')}
-              >
-                {visited ? '✓' : '○'}
-              </button>
-            )}
-            <button
-              className="share-btn-large"
-              onClick={handleShare}
-              title={t('detail.share') || 'Paylaş'}
-            >
-              📤
-            </button>
-          </div>
-        </div>
-      )}
-
-      <div className={`detail-content ${imageUrl ? '' : 'no-header'}`.trim()}>
-        {/* Mobil cihazlarda "Uygulamada aç" butonu */}
-        {isMobile && (
-          <div className="open-in-app-banner">
-            <button type="button" className="open-in-app-btn" onClick={handleOpenInApp}>
-              <span className="app-icon" aria-hidden>
-                <img src="/app-icon.png" alt="" width={44} height={44} decoding="async" />
-              </span>
-              <span className="btn-text">
-                <strong>{t('detail.openInAppTitle')}</strong>
-                <small>{t('detail.openInAppSubtitle')}</small>
-              </span>
-              <span className="arrow" aria-hidden>
-                →
-              </span>
-            </button>
-          </div>
-        )}
-        
-        <h1>{name}</h1>
-        <div className="detail-meta">
-          <span className="location">📍 {city}, {district}</span>
-          {period && <span className="period">📅 {period}</span>}
-          {place.isUnesco && <span className="unesco-badge">UNESCO</span>}
-        </div>
-
-        {categories.length > 0 && (
-          <div className="categories">
-            {categories.map((cat: string, idx: number) => (
-              <span key={idx} className="category-tag">{cat}</span>
-            ))}
-          </div>
-        )}
-
-        <div className="section">
-          <h2>{t('place.description')}</h2>
-          <p>{description}</p>
-        </div>
-
-        {story && (
-          <div className="section">
-            <h2>{t('place.story')}</h2>
-            <p>{story}</p>
-          </div>
-        )}
-
-        {visitTips.length > 0 && (
-          <div className="section">
-            <h2>{t('place.visitTips')}</h2>
-            <ul>
-              {visitTips.map((tip, idx) => (
-                <li key={idx}>{tip}</li>
-              ))}
+      <div className="detail-page kb-detail-page">
+        <div className="kb-detail-layout">
+          <aside className="kb-detail-sidebar">
+            <Link to="/list" className="kb-page-back detail-back">
+              <span className="material-icons" aria-hidden>arrow_back</span>
+              {t('common.back', 'Geri')}
+            </Link>
+            <h1 className="kb-detail-title">{name}</h1>
+            <ul className="kb-kunye-list">
+              {(city || district) && (
+                <li>
+                  <span className="label">{t('place.location')}</span>
+                  <span className="value">{city}{district ? `, ${district}` : ''}</span>
+                </li>
+              )}
+              {period && (
+                <li>
+                  <span className="label">{t('place.period', 'Dönem')}</span>
+                  <span className="value">{period}</span>
+                </li>
+              )}
+              {place.isUnesco && (
+                <li>
+                  <span className="label">UNESCO</span>
+                  <span className="value">✓</span>
+                </li>
+              )}
+              {hasValidCoordinates && (
+                <li>
+                  <span className="label">{t('detail.coordinatesLabel', 'Koordinat')}</span>
+                  <span className="value">{place.latitude.toFixed(4)}, {place.longitude.toFixed(4)}</span>
+                </li>
+              )}
             </ul>
-          </div>
-        )}
-
-        <div className="section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2>{t('detail.photos')}</h2>
-            {kullanici && (
-              <label className="add-photo-btn">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handlePhotoSelect}
-                  style={{ display: 'none' }}
-                />
-                <span className="material-icons">add_a_photo</span>
-                {t('detail.addPhoto')}
-              </label>
-            )}
-          </div>
-          {allPhotos.length > 0 ? (
-            <PhotoLightbox photos={allPhotos} altPrefix={name} />
-          ) : (
-            <p style={{ color: '#718096', fontStyle: 'italic' }}>{t('detail.noPhotosYet')}</p>
-          )}
-        </div>
-        
-        {/* Rating Section */}
-        <div className="section">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-            <h2>{t('detail.ratings')}</h2>
-            {ratingSummary && (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#2d3748' }}>
-                  {ratingSummary.averageRating.toFixed(1)}
-                </span>
-                <StarRating rating={ratingSummary.averageRating} readonly size={20} showEmptyStars={false} />
-                <span style={{ fontSize: '0.9rem', color: '#718096' }}>
-                  {t('detail.ratingsCount', { count: ratingSummary.totalRatings })}
-                </span>
+            {categories.length > 0 && (
+              <div className="kb-detail-chips">
+                {categories.map((cat: string, idx: number) => (
+                  <span key={idx} className="kb-detail-chip">{cat}</span>
+                ))}
               </div>
             )}
-          </div>
-          
-          {kullanici ? (
-            <button
-              className="rating-btn"
-              onClick={() => setRatingModalVisible(true)}
-            >
-              <span className="material-icons">star</span>
-              {currentUserRating ? t('detail.editYourRating') : t('detail.rateAndComment')}
-            </button>
-          ) : (
-            <button
-              className="rating-btn"
-              onClick={() => navigate('/login')}
-            >
-              <span className="material-icons">star_border</span>
-              {t('detail.rateLoginRequired')}
-            </button>
-          )}
-          
-          {approvedRatings.length > 0 && (
-            <div className="ratings-list" style={{ marginTop: '1.5rem' }}>
-              {approvedRatings.slice(0, 5).map((rating) => (
-                <div key={rating.id} className="rating-item">
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                    <span style={{ fontWeight: 'bold', color: '#2d3748' }}>
-                      {formatUserName(rating.userName)}
-                    </span>
-                    <StarRating rating={rating.rating} readonly size={14} showEmptyStars={false} />
-                    <span style={{ fontSize: '0.85rem', color: '#718096' }}>
-                      {rating.createdAt?.toDate
-                        ? new Date(rating.createdAt.toDate()).toLocaleDateString(
-                            DATE_LOCALES[currentLanguage] || 'en-US'
-                          )
-                        : ''}
-                    </span>
+            <div className="kb-detail-sidebar-actions">
+              <button
+                type="button"
+                className={`kb-detail-action-btn is-accent ${isFavorite(place.id) ? 'is-active' : ''}`}
+                onClick={() => toggleFavorite(place)}
+                title={isFavorite(place.id) ? t('detail.removeFromFavorites') : t('detail.addToFavorites')}
+              >
+                <span className="material-icons">{isFavorite(place.id) ? 'favorite' : 'favorite_border'}</span>
+              </button>
+              {kullanici && (
+                <button
+                  type="button"
+                  className={`kb-detail-action-btn ${visited ? 'is-active' : ''}`}
+                  onClick={handleVisitedToggle}
+                  disabled={checkingVisit}
+                  title={visited ? t('detail.unmarkVisited') : t('detail.markVisited')}
+                >
+                  <span className="material-icons">{visited ? 'check_circle' : 'radio_button_unchecked'}</span>
+                </button>
+              )}
+              <button
+                type="button"
+                className="kb-detail-action-btn"
+                onClick={handleShare}
+                title={t('detail.share') || 'Paylaş'}
+              >
+                <span className="material-icons">share</span>
+              </button>
+              <button
+                type="button"
+                className={`kb-detail-action-btn ${isInRoute(place.id) ? 'is-active' : ''}`}
+                onClick={() => {
+                  if (isInRoute(place.id)) removeFromRoute(place.id);
+                  else addToRoute(place);
+                }}
+                disabled={!hasValidCoordinates}
+                title={isInRoute(place.id) ? t('detail.inRoute') : t('detail.addToRoute')}
+              >
+                <span className="material-icons">{isInRoute(place.id) ? 'alt_route' : 'add_road'}</span>
+              </button>
+            </div>
+          </aside>
+
+          <main className="kb-detail-main">
+            {isMobile && (
+              <div className="open-in-app-banner">
+                <button type="button" className="open-in-app-btn" onClick={handleOpenInApp}>
+                  <span className="app-icon" aria-hidden>
+                    <img src="/app-icon.png" alt="" width={44} height={44} decoding="async" />
+                  </span>
+                  <span className="btn-text">
+                    <strong>{t('detail.openInAppTitle')}</strong>
+                    <small>{t('detail.openInAppSubtitle')}</small>
+                  </span>
+                  <span className="material-icons arrow" aria-hidden>chevron_right</span>
+                </button>
+              </div>
+            )}
+
+            <div className="kb-detail-section">
+              <h2>
+                <span className="material-icons">description</span>
+                {t('place.description')}
+              </h2>
+              <p>{description}</p>
+            </div>
+
+            {story && (
+              <div className="kb-detail-section">
+                <h2>
+                  <span className="material-icons">auto_stories</span>
+                  {t('place.story')}
+                </h2>
+                <p>{story}</p>
+              </div>
+            )}
+
+            {visitTips.length > 0 && (
+              <div className="kb-detail-section">
+                <h2>
+                  <span className="material-icons">tips_and_updates</span>
+                  {t('place.visitTips')}
+                </h2>
+                <ul>
+                  {visitTips.map((tip, idx) => (
+                    <li key={idx}>{tip}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <div className="kb-detail-section">
+              <div className="kb-detail-section-header">
+                <h2 style={{ margin: 0 }}>
+                  <span className="material-icons">star</span>
+                  {t('detail.ratings')}
+                </h2>
+                {ratingSummary && (
+                  <div className="kb-detail-rating-summary">
+                    <strong>{ratingSummary.averageRating.toFixed(1)}</strong>
+                    <StarRating rating={ratingSummary.averageRating} readonly size={16} showEmptyStars={false} />
+                    <span>{t('detail.ratingsCount', { count: ratingSummary.totalRatings })}</span>
                   </div>
-                  {rating.comment && (
-                    <p style={{ color: '#4a5568', lineHeight: '1.6', margin: 0 }}>{rating.comment}</p>
-                  )}
+                )}
+              </div>
+              {kullanici ? (
+                <button className="rating-btn" onClick={() => setRatingModalVisible(true)}>
+                  <span className="material-icons">rate_review</span>
+                  {currentUserRating ? t('detail.editYourRating') : t('detail.rateAndComment')}
+                </button>
+              ) : (
+                <button className="rating-btn" onClick={() => navigate('/login')}>
+                  <span className="material-icons">star_border</span>
+                  {t('detail.rateLoginRequired')}
+                </button>
+              )}
+              {approvedRatings.length > 0 && (
+                <div className="ratings-list" style={{ marginTop: '1rem' }}>
+                  {approvedRatings.slice(0, 5).map((rating) => (
+                    <div key={rating.id} className="rating-item">
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                        <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
+                          {formatUserName(rating.userName)}
+                        </span>
+                        <StarRating rating={rating.rating} readonly size={14} showEmptyStars={false} />
+                        <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                          {rating.createdAt?.toDate
+                            ? new Date(rating.createdAt.toDate()).toLocaleDateString(
+                                DATE_LOCALES[currentLanguage] || 'en-US'
+                              )
+                            : ''}
+                        </span>
+                      </div>
+                      {rating.comment && (
+                        <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>{rating.comment}</p>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
-              {approvedRatings.length > 5 && (
-                <p style={{ fontSize: '0.9rem', color: '#718096', fontStyle: 'italic', marginTop: '0.5rem' }}>
-                  {t('detail.moreRatings', { count: approvedRatings.length - 5 })}
+              )}
+            </div>
+
+            <div className="kb-detail-section">
+              <h2>
+                <span className="material-icons">map</span>
+                {t('place.location')}
+              </h2>
+              {hasValidCoordinates ? (
+                <>
+                  <div className="kb-detail-map-wrap">
+                    <MapView
+                      places={[place]}
+                      center={{ lat: place.latitude, lng: place.longitude }}
+                      zoom={15}
+                    />
+                  </div>
+                  <div className="kb-detail-action-row">
+                    <a
+                      href={externalMapOpenUrl(
+                        place.latitude,
+                        place.longitude,
+                        getLocalizedText(place.name, currentLanguage) || undefined
+                      )}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="map-link"
+                    >
+                      <span className="material-icons" style={{ fontSize: 18 }}>open_in_new</span>
+                      {t('detail.openInMaps') || 'Haritada Aç'}
+                    </a>
+                    {kullanici && (
+                      <button
+                        type="button"
+                        className="suggest-edit-btn"
+                        onClick={() => navigate(`/suggestion?placeId=${place.id}`)}
+                      >
+                        <span className="material-icons" style={{ fontSize: 18 }}>edit</span>
+                        {t('detail.editSuggestion') || 'Düzenleme Öner'}
+                      </button>
+                    )}
+                  </div>
+                </>
+              ) : (
+                <p style={{ color: 'var(--danger)' }}>{t('detail.noLocationInfo')}</p>
+              )}
+            </div>
+          </main>
+
+          <aside className="kb-detail-gallery">
+            {imageUrl ? (
+              <div className="kb-detail-hero">
+                <img
+                  src={imageUrl}
+                  alt={name}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).style.display = 'none';
+                  }}
+                />
+              </div>
+            ) : (
+              <div className="kb-detail-no-photo" aria-hidden>
+                <span className="material-icons">landscape</span>
+              </div>
+            )}
+            <div className="kb-detail-section" style={{ padding: 'var(--gap-md)' }}>
+              <div className="kb-detail-section-header">
+                <h2 style={{ margin: 0, fontSize: '0.9375rem' }}>
+                  <span className="material-icons">photo_library</span>
+                  {t('detail.photos')}
+                </h2>
+                {kullanici && (
+                  <label className="add-photo-btn">
+                    <input type="file" accept="image/*" onChange={handlePhotoSelect} style={{ display: 'none' }} />
+                    <span className="material-icons">add_a_photo</span>
+                  </label>
+                )}
+              </div>
+              {allPhotos.length > 0 ? (
+                <PhotoLightbox photos={allPhotos} altPrefix={name} />
+              ) : (
+                <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '0.875rem' }}>
+                  {t('detail.noPhotosYet')}
                 </p>
               )}
             </div>
-          )}
+          </aside>
         </div>
-
-        <div className="section">
-          <h2>{t('place.location')}</h2>
-          {hasValidCoordinates ? (
-            <>
-              <div className="map-container" style={{ height: '300px', marginBottom: '20px' }}>
-                <MapView
-                  places={[place]}
-                  center={{ lat: place.latitude, lng: place.longitude }}
-                  zoom={15}
-                />
-              </div>
-              <p>
-                {t('detail.coordinates', {
-                  lat: place.latitude.toFixed(6),
-                  lng: place.longitude.toFixed(6),
-                })}
-              </p>
-            </>
-          ) : (
-            <p style={{ color: '#ef4444', padding: '1rem' }}>
-              {t('detail.noLocationInfo')}
-            </p>
-          )}
-          <div className="action-buttons">
-            {hasValidCoordinates && (
-              <a
-                href={externalMapOpenUrl(
-                  place.latitude,
-                  place.longitude,
-                  getLocalizedText(place.name, currentLanguage) || undefined
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="map-link"
-              >
-                🗺️ {t('detail.openInMaps') || 'Haritada Aç'}
-              </a>
-            )}
-            <button
-              className={`route-btn ${isInRoute(place.id) ? 'in-route' : ''}`}
-              onClick={() => {
-                if (isInRoute(place.id)) {
-                  removeFromRoute(place.id);
-                } else {
-                  addToRoute(place);
-                }
-              }}
-              disabled={!hasValidCoordinates}
-            >
-              {isInRoute(place.id) ? `✓ ${t('detail.inRoute') || 'Rotada'}` : `+ ${t('detail.addToRoute') || 'Rotaya Ekle'}`}
-            </button>
-            {kullanici && (
-              <button
-                className="suggest-edit-btn"
-                onClick={() => navigate(`/suggestion?placeId=${place.id}`)}
-              >
-                ✏️ {t('detail.editSuggestion') || 'Düzenleme Öner'}
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
       
       {/* Rating Modal */}
       {ratingModalVisible && (

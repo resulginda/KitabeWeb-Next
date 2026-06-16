@@ -16,9 +16,12 @@ import { AdSenseLoader } from './components/AdSenseLoader';
 import { MainLayout } from './components/MainLayout';
 import './i18n';
 import './App.css';
+import './styles/kitabe-ui.css';
+import './styles/pages-shared.css';
 import './styles/page-ads.css';
+import './styles/member-pages.css';
+import { AuthRequired } from './components/AuthRequired';
 
-import LandingPage from './pages/LandingPage';
 import HomePage from './pages/HomePage';
 import DetailPage from './pages/DetailPage';
 import ListPage from './pages/ListPage';
@@ -63,13 +66,13 @@ function AppContent() {
       <AdSenseLoader />
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<Navigate to="/home" replace />} />
         <Route element={<MainLayout />}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/list" element={<ListPage />} />
-          <Route path="/nearby" element={<NearbyPage />} />
+          <Route path="/nearby" element={<AuthRequired><NearbyPage /></AuthRequired>} />
           <Route path="/detail/:id" element={<DetailPage />} />
-          <Route path="/route" element={<TripRoutePage />} />
+          <Route path="/route" element={<AuthRequired><TripRoutePage /></AuthRequired>} />
           <Route path="/account" element={<AccountPage />} />
           <Route path="/favorites" element={<FavoritesPage />} />
           <Route path="/suggestion" element={<SuggestionPage />} />

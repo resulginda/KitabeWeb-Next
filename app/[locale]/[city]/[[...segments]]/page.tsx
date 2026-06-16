@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { AdSlot } from '@/components/AdSlot';
 import {
@@ -17,9 +17,11 @@ import { PlaceDetailLayout } from '@/components/PlaceDetailLayout';
 import {
   getPlaceIndex,
   resolvePlaceForDetail,
+  canonicalPlacePath,
   LOCALES,
   type Locale,
 } from '@/lib/places';
+import { encodePathSegments } from '@/lib/detectLocale';
 
 export const revalidate = 3600;
 export const dynamicParams = true;
@@ -106,6 +108,12 @@ async function renderDetail(locale: Locale, city: string, placeSlugParts: string
   const slug = placeSlugParts.join('/');
   const place = await resolvePlaceForDetail(locale, city, slug);
   if (!place) notFound();
+
+  const canonical = canonicalPlacePath(place, locale);
+  const requested = encodePathSegments(`/${locale}/${city}/${slug}`);
+  if (canonical && canonical !== requested) {
+    permanentRedirect(canonical);
+  }
 
   const jsonLd = buildPlaceJsonLd(place, locale);
 

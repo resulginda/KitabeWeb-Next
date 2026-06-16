@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getAllBlogPosts, getBlogDateLocale, type BlogLang } from '../data/blogPosts';
+import { PageShell } from '../components/PageShell';
 import './BlogPage.css';
 
 const BlogPage = () => {
@@ -20,11 +21,13 @@ const BlogPage = () => {
         <meta property="og:title" content={t('blog.title')} />
         <meta property="og:description" content={t('blog.metaDescription')} />
       </Helmet>
-      <div className="blog-page">
+      <PageShell
+        title={t('blog.title')}
+        subtitle={t('blog.subtitle')}
+        backTo="/home"
+        className="blog-page"
+      >
         <div className="blog-container">
-          <h1>{t('blog.title')}</h1>
-          <p className="blog-subtitle">{t('blog.subtitle')}</p>
-
           <div className="blog-posts">
             {blogPosts.map((post) => (
               <article key={post.id} className="blog-post-card">
@@ -48,7 +51,7 @@ const BlogPage = () => {
             ))}
           </div>
         </div>
-      </div>
+      </PageShell>
     </>
   );
 };

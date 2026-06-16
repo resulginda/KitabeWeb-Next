@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { API_BASE_URL } from '../config/api';
-import './AdminPanelPage.css';
+import { PageShell, PageEmpty } from '../components/PageShell';
 
 type ContactFormRow = {
   id: string;
@@ -56,32 +56,43 @@ export default function AdminContactFormsPage() {
   if (!kullanici || !canAccess) return <Navigate to="/account" replace />;
 
   return (
-    <div className="admin-panel-page">
-      <div className="panel-header">
-        <h1>{t('adminPanel.contactForms', 'İletişim Formları')}</h1>
-        <p>{rows.length}</p>
+    <PageShell title={t('adminPanel.contactForms', 'İletişim Formları')} subtitle={String(rows.length)} backTo="/admin-hub" className="kb-page-wide">
+      <div className="kb-admin-toolbar">
+        <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          {rows.length} mesaj
+        </span>
+        <button type="button" onClick={() => fetchRows()}>
+          <span className="material-icons" style={{ fontSize: 18 }}>refresh</span>
+          Yenile
+        </button>
       </div>
-      <div style={{ maxWidth: 980, margin: '1.5rem auto', padding: '0 1rem' }}>
-        <button onClick={() => fetchRows()} style={{ marginBottom: 12 }}>Yenile</button>
-        {loading ? <p>{t('common.loading')}</p> : null}
-        {!loading && rows.length === 0 ? <p>{t('adminPanel.noContactForms', 'Henüz iletişim formu gönderilmemiş.')}</p> : null}
-        {rows.map((item) => {
-          const createdAt = item.createdAt ? new Date(item.createdAt) : null;
-          const formattedDate = createdAt ? createdAt.toLocaleString('tr-TR') : '-';
-          return (
-            <div key={item.id} style={{ border: '1px solid #e8e0d6', background: item.read ? '#f0f0f0' : '#fff8f1', borderRadius: 12, padding: 12, marginBottom: 10 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
-                <strong>{item.isim} {item.soyisim}</strong>
-                {!item.read ? <span style={{ color: '#b91c1c', fontSize: 12 }}>Yeni</span> : null}
-              </div>
-              <div style={{ fontSize: 14, marginTop: 6 }}>{item.mail}</div>
-              <div style={{ fontSize: 13, color: '#666', marginTop: 4 }}>
-                {(konuLabels as Record<string, string>)[item.konu] || item.konu} • {formattedDate}
-              </div>
-              <div style={{ marginTop: 10, whiteSpace: 'pre-wrap' }}>{item.mesaj}</div>
-              {!item.read && (
+      {loading ? (
+        <div className="kb-settings-loading">
+          <div className="spinner" />
+        </div>
+      ) : null}
+      {!loading && rows.length === 0 ? (
+        <PageEmpty icon="mail_outline" title={t('adminPanel.noContactForms', 'Henüz iletişim formu gönderilmemiş.')} />
+      ) : null}
+      {rows.map((item) => {
+        const createdAt = item.createdAt ? new Date(item.createdAt) : null;
+        const formattedDate = createdAt ? createdAt.toLocaleString('tr-TR') : '-';
+        return (
+          <div key={item.id} className={`kb-admin-card ${!item.read ? 'is-unread' : ''}`}>
+            <div className="kb-admin-card-header">
+              <strong>{item.isim} {item.soyisim}</strong>
+              {!item.read ? <span className="kb-admin-badge kb-admin-badge--new">Yeni</span> : null}
+            </div>
+            <div className="kb-admin-card-meta">{item.mail}</div>
+            <div className="kb-admin-card-meta">
+              {(konuLabels as Record<string, string>)[item.konu] || item.konu} • {formattedDate}
+            </div>
+            <div className="kb-admin-card-body">{item.mesaj}</div>
+            {!item.read && (
+              <div className="kb-admin-card-actions">
                 <button
-                  style={{ marginTop: 10 }}
+                  type="button"
+                  className="kb-suggest-link"
                   onClick={async () => {
                     try {
                       const token = await getToken();
@@ -96,14 +107,15 @@ export default function AdminContactFormsPage() {
                     }
                   }}
                 >
+                  <span className="material-icons" style={{ fontSize: 16 }}>done</span>
                   Okundu işaretle
                 </button>
-              )}
-            </div>
-          );
-        })}
-      </div>
-    </div>
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </PageShell>
   );
 }
 

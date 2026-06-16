@@ -9,8 +9,9 @@ import { getStoredToken } from '../utils/authToken';
 import { TURKIYE_ILLER, TURKIYE_ILCELER } from '../data/turkiyeIllerIlceler';
 import { useCategories } from '../contexts/CategoriesContext';
 import { getLocalizedText, getLocalizedArray } from '../utils/multilang';
+import { getCategoryLabel } from '../utils/categoryLabel';
 import MapView from '../components/MapView';
-import './SuggestionPage.css';
+import { PageShell, PageSection, PageLoginRequired } from '../components/PageShell';
 
 const SuggestionPage = () => {
   const { t } = useTranslation();
@@ -36,12 +37,10 @@ const SuggestionPage = () => {
   const [photos, setPhotos] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
 
-  // Sayfa açıldığında en üste scroll et
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [placeId]);
 
-  // PlaceId varsa mevcut yer bilgilerini yükle (PostgreSQL API)
   useEffect(() => {
     if (placeId) {
       const loadPlace = async () => {
@@ -154,143 +153,146 @@ const SuggestionPage = () => {
     }
   };
 
+  const addVisitTip = () => {
+    if (visitTipInput.trim()) {
+      setVisitTips(prev => [...prev, visitTipInput.trim()]);
+      setVisitTipInput('');
+    }
+  };
+
   if (!kullanici) {
     return (
-      <div className="suggestion-page">
-        <div className="login-required">
-          <p>{t('suggestion.loginRequired') || 'Bu özelliği kullanmak için giriş yapmanız gerekiyor'}</p>
-          <button onClick={() => navigate('/login')}>{t('common.login')}</button>
-        </div>
-      </div>
+      <PageLoginRequired
+        message={t('suggestion.loginRequired') || 'Bu özelliği kullanmak için giriş yapmanız gerekiyor'}
+      />
     );
   }
 
   return (
-    <div className="suggestion-page">
-      <header className="suggestion-header">
-        <h1>{placeId ? t('suggestion.editSuggestion') || 'Düzenleme Öner' : t('suggestion.newPlace') || 'Yeni Yer Öner'}</h1>
-      </header>
-
-      <form onSubmit={handleSubmit} className="suggestion-form">
-        <div className="form-group">
-          <label>{t('suggestion.placeName') || 'Yer Adı'}</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-
-        <div className="form-row">
-          <div className="form-group">
-            <label>{t('suggestion.city') || 'Şehir'}</label>
-            <select value={city} onChange={(e) => setCity(e.target.value)} required>
-              <option value="">{t('suggestion.selectCity') || 'Şehir Seç'}</option>
-              {TURKIYE_ILLER.map(il => (
-                <option key={il} value={il}>{il}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label>{t('suggestion.district') || 'İlçe'}</label>
-            <select
-              value={district}
-              onChange={(e) => setDistrict(e.target.value)}
-              disabled={!city}
+    <PageShell
+      title={placeId ? t('suggestion.editSuggestion') || 'Düzenleme Öner' : t('suggestion.newPlace') || 'Yeni Yer Öner'}
+      backTo="/account"
+      className="kb-page-wide"
+    >
+      <form onSubmit={handleSubmit} className="kb-suggest-form">
+        <PageSection title={t('suggestion.placeName') || 'Yer Bilgileri'}>
+          <div className="kb-form-field">
+            <label>{t('suggestion.placeName') || 'Yer Adı'}</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               required
-            >
-              <option value="">{t('suggestion.selectDistrict') || 'İlçe Seç'}</option>
-              {city && TURKIYE_ILCELER[city]?.map(ilce => (
-                <option key={ilce} value={ilce}>{ilce}</option>
-              ))}
-            </select>
+            />
           </div>
-        </div>
 
-        <div className="form-group">
-          <label>{t('suggestion.description') || 'Açıklama'}</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows={4}
-            required
-          />
-        </div>
+          <div className="kb-form-row">
+            <div className="kb-form-field">
+              <label>{t('suggestion.city') || 'Şehir'}</label>
+              <select value={city} onChange={(e) => setCity(e.target.value)} required>
+                <option value="">{t('suggestion.selectCity') || 'Şehir Seç'}</option>
+                {TURKIYE_ILLER.map(il => (
+                  <option key={il} value={il}>{il}</option>
+                ))}
+              </select>
+            </div>
 
-        <div className="form-group">
-          <label>{t('suggestion.story') || 'Hikaye'}</label>
-          <textarea
-            value={story}
-            onChange={(e) => setStory(e.target.value)}
-            rows={6}
-          />
-        </div>
+            <div className="kb-form-field">
+              <label>{t('suggestion.district') || 'İlçe'}</label>
+              <select
+                value={district}
+                onChange={(e) => setDistrict(e.target.value)}
+                disabled={!city}
+                required
+              >
+                <option value="">{t('suggestion.selectDistrict') || 'İlçe Seç'}</option>
+                {city && TURKIYE_ILCELER[city]?.map(ilce => (
+                  <option key={ilce} value={ilce}>{ilce}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </PageSection>
 
-        <div className="form-group">
-          <label>{t('suggestion.categories') || 'Kategoriler'}</label>
-          <div className="category-chips">
+        <PageSection title={t('suggestion.description') || 'Açıklama'}>
+          <div className="kb-form-field">
+            <label>{t('suggestion.description') || 'Açıklama'}</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              rows={4}
+              required
+            />
+          </div>
+
+          <div className="kb-form-field">
+            <label>{t('suggestion.story') || 'Hikaye'}</label>
+            <textarea
+              value={story}
+              onChange={(e) => setStory(e.target.value)}
+              rows={6}
+            />
+          </div>
+        </PageSection>
+
+        <PageSection title={t('suggestion.categories') || 'Kategoriler'}>
+          <div className="fav-chips">
             {categories.map(cat => (
               <button
                 key={cat.value}
                 type="button"
-                className={`category-chip ${category.includes(cat.value) ? 'active' : ''}`}
-                style={{ borderColor: cat.color }}
+                className={`fav-chip ${category.includes(cat.value) ? 'is-active' : ''}`}
+                style={
+                  category.includes(cat.value)
+                    ? { borderColor: cat.color, background: cat.color }
+                    : { borderColor: cat.color }
+                }
                 onClick={() => toggleCategory(cat.value)}
               >
-                {t(`categories.${cat.value}`) || cat.value}
+                {getCategoryLabel(cat, currentLanguage)}
               </button>
             ))}
           </div>
-        </div>
+        </PageSection>
 
-        <div className="form-group">
-          <label>{t('suggestion.visitTips') || 'Ziyaret İpuçları'}</label>
-          <div className="visit-tips-input">
+        <PageSection title={t('suggestion.visitTips') || 'Ziyaret İpuçları'}>
+          <div className="kb-tip-input">
             <input
               type="text"
               value={visitTipInput}
               onChange={(e) => setVisitTipInput(e.target.value)}
-              onKeyPress={(e) => {
+              onKeyDown={(e) => {
                 if (e.key === 'Enter' && visitTipInput.trim()) {
                   e.preventDefault();
-                  setVisitTips(prev => [...prev, visitTipInput.trim()]);
-                  setVisitTipInput('');
+                  addVisitTip();
                 }
               }}
-              placeholder={t('suggestion.addTip') || 'İpucu ekle ve Enter\'a bas'}
+              placeholder={t('suggestion.addTip') || "İpucu ekle ve Enter'a bas"}
             />
-            <button
-              type="button"
-              onClick={() => {
-                if (visitTipInput.trim()) {
-                  setVisitTips(prev => [...prev, visitTipInput.trim()]);
-                  setVisitTipInput('');
-                }
-              }}
-            >
-              +
+            <button type="button" onClick={addVisitTip} aria-label="İpucu ekle">
+              <span className="material-icons">add</span>
             </button>
           </div>
-          <div className="visit-tips-list">
-            {visitTips.map((tip, idx) => (
-              <div key={idx} className="visit-tip-item">
-                <span>{tip}</span>
-                <button
-                  type="button"
-                  onClick={() => setVisitTips(prev => prev.filter((_, i) => i !== idx))}
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
-          </div>
-        </div>
+          {visitTips.length > 0 && (
+            <div className="kb-tip-list">
+              {visitTips.map((tip, idx) => (
+                <div key={idx} className="kb-tip-item">
+                  <span>{tip}</span>
+                  <button
+                    type="button"
+                    onClick={() => setVisitTips(prev => prev.filter((_, i) => i !== idx))}
+                    aria-label="Kaldır"
+                  >
+                    <span className="material-icons" style={{ fontSize: 16 }}>close</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </PageSection>
 
-        <div className="form-group">
-          <label>{t('suggestion.location') || 'Konum'}</label>
-          <div className="coordinates-input">
+        <PageSection title={t('suggestion.location') || 'Konum'}>
+          <div className="kb-coords-row">
             <input
               type="number"
               step="any"
@@ -307,7 +309,7 @@ const SuggestionPage = () => {
             />
           </div>
           {latitude && longitude && !isNaN(latitude) && !isNaN(longitude) && (
-            <div className="map-preview">
+            <div className="kb-map-preview">
               <MapView
                 places={[{
                   id: 'preview',
@@ -324,49 +326,54 @@ const SuggestionPage = () => {
               />
             </div>
           )}
-        </div>
+        </PageSection>
 
-        <div className="form-group">
-          <label>{t('suggestion.photos') || 'Fotoğraflar'} ({photos.length}/5)</label>
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handlePhotoSelect}
-            disabled={photos.length >= 5}
-          />
-          {photos.length === 0 && (
-            <p style={{ color: '#666', fontSize: '0.9rem', marginTop: '0.5rem' }}>
-              {t('suggestion.noFileSelected') || 'Dosya seçilmedi'}
-            </p>
-          )}
-          <div className="photos-preview">
-            {photos.map((photo, idx) => (
-              <div key={idx} className="photo-preview">
-                <img src={URL.createObjectURL(photo)} alt={`Photo ${idx + 1}`} />
-                <button
-                  type="button"
-                  onClick={() => setPhotos(prev => prev.filter((_, i) => i !== idx))}
-                >
-                  ✕
-                </button>
-              </div>
-            ))}
+        <PageSection title={`${t('suggestion.photos') || 'Fotoğraflar'} (${photos.length}/5)`}>
+          <div className="kb-photo-upload">
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handlePhotoSelect}
+              disabled={photos.length >= 5}
+            />
+            {photos.length === 0 && (
+              <p className="kb-photo-upload-hint">
+                {t('suggestion.noFileSelected') || 'Dosya seçilmedi'}
+              </p>
+            )}
           </div>
-        </div>
+          {photos.length > 0 && (
+            <div className="kb-photo-grid">
+              {photos.map((photo, idx) => (
+                <div key={idx} className="kb-photo-thumb">
+                  <img src={URL.createObjectURL(photo)} alt={`Photo ${idx + 1}`} />
+                  <button
+                    type="button"
+                    onClick={() => setPhotos(prev => prev.filter((_, i) => i !== idx))}
+                    aria-label="Fotoğrafı kaldır"
+                  >
+                    <span className="material-icons" style={{ fontSize: 14 }}>close</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </PageSection>
 
-        <div className="form-actions">
-          <button type="button" onClick={() => navigate(-1)}>
+        <div className="kb-form-actions">
+          <button type="button" className="btn-secondary" onClick={() => navigate(-1)}>
             {t('common.cancel')}
           </button>
-          <button type="submit" disabled={uploading}>
-            {uploading ? (t('suggestion.submitting') || t('suggestion.uploading') || 'Yükleniyor...') : (t('suggestion.submit') || 'Öneriyi Gönder')}
+          <button type="submit" className="kb-btn-save" disabled={uploading}>
+            {uploading
+              ? (t('suggestion.submitting') || t('suggestion.uploading') || 'Yükleniyor...')
+              : (t('suggestion.submit') || 'Öneriyi Gönder')}
           </button>
         </div>
       </form>
-    </div>
+    </PageShell>
   );
 };
 
 export default SuggestionPage;
-

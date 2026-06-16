@@ -15,7 +15,7 @@ import {
 } from '../services/stats';
 import { getLocalizedText } from '../utils/multilang';
 import type { CityStats, PlaceStats } from '../types/analytics';
-import './StatsPage.css';
+import { PageShell } from '../components/PageShell';
 
 const StatsPage = () => {
   const { t } = useTranslation();
@@ -120,15 +120,19 @@ const StatsPage = () => {
   }
 
   if (loading) {
-    return <div className="stats-page loading">{t('common.loading')}</div>;
+    return (
+      <PageShell title={t('account.statistics')} backTo="/admin-hub" className="stats-page kb-page-wide">
+        {t('common.loading')}
+      </PageShell>
+    );
   }
 
   const StatCard = ({ icon, title, value, color }: { icon: string; title: string; value: number | string; color: string }) => (
-    <div className="stat-card" style={{ borderLeftColor: color }}>
-      <span className="stat-icon">{icon}</span>
-      <div className="stat-content">
-        <div className="stat-title">{title}</div>
-        <div className="stat-value" style={{ color }}>{value.toLocaleString('tr-TR')}</div>
+    <div className="kb-stat-card" style={{ '--stat-color': color } as React.CSSProperties}>
+      <span className="material-icons kb-stat-icon">{icon}</span>
+      <div className="kb-stat-content">
+        <div className="kb-stat-title">{title}</div>
+        <div className="kb-stat-value">{typeof value === 'number' ? value.toLocaleString('tr-TR') : value}</div>
       </div>
     </div>
   );
@@ -187,18 +191,15 @@ const StatsPage = () => {
   );
 
   return (
-    <div className="stats-page">
-      <button className="back-btn" onClick={() => navigate(-1)}>← {t('common.back')}</button>
-      <h1>{t('account.statistics')}</h1>
-
+    <PageShell title={t('account.statistics')} backTo="/admin-hub" className="stats-page kb-page-wide">
       <div className="section">
         <h2 className="section-title">Toplam İstatistikler</h2>
-        <div className="stats-grid">
-          <StatCard icon="👁️" title="Toplam Açılma" value={totalStats.totalPlaceOpens} color="#4CAF50" />
-          <StatCard icon="🗺️" title="Toplam Rota" value={totalStats.totalRouteOpens} color="#2196F3" />
-          <StatCard icon="❤️" title="Toplam Favori" value={totalStats.totalFavorites} color="#FF7043" />
-          <StatCard icon="🏙️" title="Şehir Sayısı" value={totalStats.totalCities} color="#9C27B0" />
-          <StatCard icon="📍" title="Yer Sayısı" value={totalStats.totalPlaces} color="#FF9800" />
+        <div className="kb-stats-grid">
+          <StatCard icon="visibility" title="Toplam Açılma" value={totalStats.totalPlaceOpens} color="#4CAF50" />
+          <StatCard icon="map" title="Toplam Rota" value={totalStats.totalRouteOpens} color="#2196F3" />
+          <StatCard icon="favorite" title="Toplam Favori" value={totalStats.totalFavorites} color="#FF7043" />
+          <StatCard icon="location_city" title="Şehir Sayısı" value={totalStats.totalCities} color="#9C27B0" />
+          <StatCard icon="place" title="Yer Sayısı" value={totalStats.totalPlaces} color="#FF9800" />
         </div>
       </div>
 
@@ -225,7 +226,7 @@ const StatsPage = () => {
       <div className="section">
         <TopListCard title="En Çok Favorilere Eklenen Yerler (Top 20)" data={topPlacesByFavorites} type="place" valueType="favorites" />
       </div>
-    </div>
+    </PageShell>
   );
 };
 

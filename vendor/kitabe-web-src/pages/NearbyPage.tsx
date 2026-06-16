@@ -7,6 +7,7 @@ import { getPlaceImageUri } from '../utils/imageUtils';
 import { openPlaceDetail } from '../utils/placeDetailUrl';
 import { getLocalizedText } from '../utils/multilang';
 import MapView from '../components/MapView';
+import { PageShell } from '../components/PageShell';
 import './NearbyPage.css';
 
 interface UserLocation {
@@ -70,14 +71,24 @@ const NearbyPage = () => {
   }, [places, userLocation, selectedRadius]);
 
   if (loading) {
-    return <div className="nearby-page loading">{t('common.loading') || 'Yükleniyor...'}</div>;
+    return (
+      <PageShell
+        title={t('nearby.title') || 'Yakınımdaki Yerler'}
+        backTo="/home"
+        className="nearby-page loading"
+      >
+        <div>{t('common.loading') || 'Yükleniyor...'}</div>
+      </PageShell>
+    );
   }
 
   return (
-    <div className="nearby-page">
+    <PageShell
+      title={t('nearby.title') || 'Yakınımdaki Yerler'}
+      backTo="/home"
+      className="nearby-page"
+    >
       <header className="nearby-header">
-        <h1>{t('nearby.title') || 'Yakınımdaki Yerler'}</h1>
-
         {!userLocation && !locationError && (
           <p className="loading-location">{t('nearby.loadingLocation') || 'Konumunuz bulunuyor...'}</p>
         )}
@@ -102,10 +113,7 @@ const NearbyPage = () => {
         )}
       </header>
 
-      {/* Main Layout Area */}
       <div className="nearby-layout">
-
-        {/* Map Section */}
         {userLocation && nearbyPlaces.length > 0 && (
           <div className="map-section">
             <div className="map-container">
@@ -120,7 +128,6 @@ const NearbyPage = () => {
           </div>
         )}
 
-        {/* Places List / Side Panel */}
         <div className="list-section">
           {userLocation && nearbyPlaces.length === 0 && (
             <div className="no-nearby glass-panel">
@@ -128,7 +135,6 @@ const NearbyPage = () => {
             </div>
           )}
 
-          {/* Fallback Grid when no location */}
           {!userLocation && !locationError && (
             <div className="places-grid">
               {places.slice(0, 10).map(place => {
@@ -170,7 +176,6 @@ const NearbyPage = () => {
             </div>
           )}
 
-          {/* Actual Nearby List */}
           {userLocation && nearbyPlaces.length > 0 && (
             <div className="places-list">
               <div className="list-header">
@@ -227,9 +232,8 @@ const NearbyPage = () => {
           )}
         </div>
       </div>
-    </div>
+    </PageShell>
   );
 };
 
 export default NearbyPage;
-
