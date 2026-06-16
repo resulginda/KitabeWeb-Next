@@ -59,11 +59,20 @@ const nextConfig: NextConfig = {
   },
   outputFileTracingRoot: path.join(__dirname),
   output: 'standalone',
-  webpack: (config) => {
+  webpack: (config, { isServer, webpack }) => {
+    const emptyPolyfill = path.join(__dirname, 'lib/empty-polyfill.js');
     config.resolve.alias = {
       ...config.resolve.alias,
       '@kitabe': kitabeSrc,
     };
+    if (!isServer) {
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /next[\\/]dist[\\/]build[\\/]polyfills[\\/]polyfill-module(\.js)?$/,
+          emptyPolyfill
+        )
+      );
+    }
     return config;
   },
 };
