@@ -37,6 +37,8 @@ const nextConfig: NextConfig = {
       { source: '/logo-header.webp', headers: cacheHeader },
       { source: '/:file.webp', headers: cacheHeader },
       { source: '/_next/static/css/:path*', headers: cacheHeader },
+      { source: '/_next/static/media/:path*', headers: cacheHeader },
+      { source: '/_next/static/chunks/:path*', headers: cacheHeader },
     ];
   },
   async rewrites() {

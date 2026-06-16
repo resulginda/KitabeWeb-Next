@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { AdSlot } from '@/components/AdSlot';
+import { HubAdSlot } from '@/components/HubAdSlot';
 import { getCityLabel } from '@/lib/citySlugLabel';
 import { encodePathSegments } from '@/lib/detectLocale';
 import { cityHubImage, FEATURED_EXPLORE_SLUGS } from '@/lib/featuredCities';
@@ -92,7 +92,7 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
     <div className="listing-page-shell locale-hub-page">
       <div className="listing-page-layout">
         <aside className="listing-ad-left">
-          <AdSlot position="left-sidebar" />
+          <HubAdSlot position="left-sidebar" />
         </aside>
 
         <main className="listing-main-column locale-hub-main">
@@ -151,7 +151,7 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
             </section>
           )}
 
-          <AdSlot position="in-content" />
+          <HubAdSlot position="in-content" />
 
           {others.length > 0 && (
             <section className="locale-hub-section" aria-labelledby="all-cities">
@@ -164,11 +164,11 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
             </section>
           )}
 
-          <AdSlot position="below-content" />
+          <HubAdSlot position="below-content" />
         </main>
 
         <aside className="listing-ad-right">
-          <AdSlot position="sidebar" />
+          <HubAdSlot position="sidebar" />
         </aside>
       </div>
     </div>

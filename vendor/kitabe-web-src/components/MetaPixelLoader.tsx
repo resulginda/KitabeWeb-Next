@@ -25,14 +25,18 @@ export function MetaPixelLoader() {
       document.head.appendChild(script);
     };
 
-    if ('requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(inject, { timeout: 3500 });
-      return () => window.cancelIdleCallback(id);
-    }
+    const scheduleInject = (): (() => void) => {
+      if (typeof window.requestIdleCallback === 'function') {
+        const id = window.requestIdleCallback(inject, { timeout: 3500 });
+        return () => window.cancelIdleCallback(id);
+      }
 
-    const onLoad = () => window.setTimeout(inject, 1);
-    window.addEventListener('load', onLoad, { once: true });
-    return () => window.removeEventListener('load', onLoad);
+      const onLoad = () => window.setTimeout(inject, 1);
+      window.addEventListener('load', onLoad, { once: true });
+      return () => window.removeEventListener('load', onLoad);
+    };
+
+    return scheduleInject();
   }, []);
 
   if (!PIXEL_ID) return null;

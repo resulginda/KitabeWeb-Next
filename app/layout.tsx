@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 import { MetaPixel } from '@/components/MetaPixel';
-import { KitabePageShell } from '@/components/KitabePageShell';
 import { getPreferredLocale } from '@/lib/preferredLocale';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 import { siteFontClassName } from '@/lib/siteFonts';
@@ -36,18 +35,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <style
           dangerouslySetInnerHTML={{
-            __html: `${HUB_CRITICAL_CSS}@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/material-icons.woff2) format('woff2');}`,
+            __html: HUB_CRITICAL_CSS,
           }}
         />
         <link rel="apple-touch-icon" href="/icon-180.png" />
-        <link rel="preload" href="/fonts/material-icons.woff2" as="font" type="font/woff2" crossOrigin="anonymous" fetchPriority="low" />
       </head>
       <body>
         <GoogleAnalytics />
         <MetaPixel />
-        <KitabePageShell>
-          <div className="page-container">{children}</div>
-        </KitabePageShell>
+        {children}
       </body>
     </html>
   );

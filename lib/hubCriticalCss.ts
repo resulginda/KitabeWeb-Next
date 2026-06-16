@@ -8,6 +8,9 @@ body{margin:0;background:var(--bg-main);color:#232323}
 .site-header-inner{height:100%;display:flex;align-items:center;padding:0 16px;gap:var(--gap-md)}
 .site-header-logo{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none;font-size:1.5rem;font-weight:600}
 .site-header-logo-img{width:36px;height:36px;border-radius:10px}
+.hub-static-lang{display:flex;align-items:center;gap:.35rem}
+.hub-lang-link{display:inline-flex;width:2rem;height:2rem;border-radius:8px;align-items:center;justify-content:center;opacity:.85}
+.hub-lang-link.is-active{background:rgba(255,255,255,.2);opacity:1}
 .locale-hub-card-image{position:relative;aspect-ratio:16/10;background:#e8f0ea;overflow:hidden}
 .locale-hub-card-img-native,.locale-hub-card-image img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .locale-hub-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1rem}

@@ -32,7 +32,6 @@ export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
 
-/** sitemap.xml gibi yolların [locale] ile eşleşmesini engelle */
 export const dynamicParams = false;
 
 export async function generateMetadata({
@@ -94,7 +93,6 @@ export default async function LocaleRootPage({
         type="image/webp"
         imageSrcSet={hubLcpSrcSet}
         imageSizes="(max-width: 768px) 50vw, 280px"
-        // React → HTML fetchpriority (LCP preload keşfi)
         {...({ fetchpriority: 'high' } as Record<string, string>)}
       />
       <LocaleHubPage locale={loc} />

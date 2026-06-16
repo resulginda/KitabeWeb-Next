@@ -15,6 +15,7 @@ ARG NEXT_PUBLIC_API_URL=https://api.kitabe.org
 ARG NEXT_PUBLIC_SITE_URL=https://kitabe.org
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+RUN npm run optimize-images || true
 RUN npm run build
 
 FROM node:20-alpine AS runner

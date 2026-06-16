@@ -285,3 +285,29 @@
     padding-bottom: 5.5rem;
   }
 }
+
+.hub-static-lang {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.hub-lang-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  opacity: 0.85;
+}
+
+.hub-lang-link.is-active {
+  background: rgba(255, 255, 255, 0.2);
+  opacity: 1;
+}
+
+.hub-static-bottom .bottom-nav-label {
+  font-size: 0.65rem;
+}
