@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter } from 'react-router-dom';
 import { AuthProvider } from '@kitabe/contexts/AuthContext';
@@ -15,13 +15,12 @@ import { NotificationProvider } from '@kitabe/contexts/NotificationContext';
 import { PhotoSubmissionProvider } from '@kitabe/contexts/PhotoSubmissionContext';
 import { RatingProvider } from '@kitabe/contexts/RatingContext';
 import { VisitedPlacesProvider } from '@kitabe/contexts/VisitedPlacesContext';
+import { whenMaterialIconsReady } from '@kitabe/components/IconFontLoader';
 import type { Place } from '@kitabe/types/place';
 import '@/lib/i18n-client';
 
-/** Leaflet / react-router SSR'da patlamasın — sadece tarayıcıda yükle */
 const DetailPage = dynamic(() => import('@kitabe/pages/DetailPage'), {
   ssr: false,
-  loading: () => <div className="detail-page loading">Yükleniyor...</div>,
 });
 
 function LocaleSync({ locale }: { locale: Language }) {
@@ -77,20 +76,32 @@ export function PlaceDetailClient({
   place: Record<string, unknown>;
   locale: Language;
 }) {
+  const [interactiveReady, setInteractiveReady] = useState(false);
   const initialPlace = useMemo(
     () => mapToClientPlace(place, locale),
     [place, locale]
   );
 
   useEffect(() => {
-    const root = document.getElementById('place-detail-interactive');
-    const statik = document.getElementById('place-detail-static');
-    if (root) root.classList.add('is-ready');
-    if (statik) statik.classList.add('is-hidden');
+    let cancelled = false;
+    Promise.all([whenMaterialIconsReady(), import('@kitabe/pages/DetailPage')]).then(() => {
+      if (!cancelled) setInteractiveReady(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
+  useEffect(() => {
+    if (!interactiveReady) return;
+    document.getElementById('place-detail-interactive')?.classList.add('is-ready');
+    document.getElementById('place-detail-static')?.classList.add('is-hidden');
+  }, [interactiveReady]);
+
+  if (!interactiveReady) return null;
+
   return (
-    <div id="place-detail-interactive">
+    <div id="place-detail-interactive" className="is-ready">
       <HelmetProvider>
         <AuthProvider>
           <LanguageProvider defaultLanguage={locale} localeFromUrl={locale}>

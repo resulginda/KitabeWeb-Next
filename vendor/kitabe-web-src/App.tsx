@@ -13,6 +13,7 @@ import { RatingProvider } from './contexts/RatingContext';
 import { VisitedPlacesProvider } from './contexts/VisitedPlacesContext';
 import ScrollToTop from './components/ScrollToTop';
 import { AdSenseLoader } from './components/AdSenseLoader';
+import { IconFontLoader } from './components/IconFontLoader';
 import { MainLayout } from './components/MainLayout';
 import './i18n';
 import './App.css';
@@ -63,6 +64,7 @@ import './styles/desktop-density.css';
 function AppContent() {
   return (
     <>
+      <IconFontLoader />
       <AdSenseLoader />
       <ScrollToTop />
       <Routes>

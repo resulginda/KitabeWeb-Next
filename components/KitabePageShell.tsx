@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { LOCALES, type Locale } from '@/lib/places';
+import { IconFontLoader } from '@kitabe/components/IconFontLoader';
 import { DesktopSidebarNext } from './DesktopSidebarNext';
 import { DesktopHeaderNext } from './DesktopHeaderNext';
 import { KitabeNavigation } from './KitabeNavigation';
@@ -18,6 +19,7 @@ export function KitabePageShell({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="app-shell">
+      <IconFontLoader />
       <DesktopSidebarNext locale={locale} pathname={pathname} />
       <div className="app-shell-main">
         <DesktopHeaderNext locale={locale} pathname={pathname} />
