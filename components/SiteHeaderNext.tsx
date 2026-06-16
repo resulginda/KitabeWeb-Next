@@ -8,6 +8,7 @@ import type { ExploreCityLocale } from '@kitabe/data/featuredExploreCities';
 import { NavIcon } from '@kitabe/components/NavIcons';
 import { HeaderLanguageMenu } from '@kitabe/components/HeaderLanguageMenu';
 import type { Locale } from '@/lib/places';
+import { siteLogoHeader } from '@/lib/siteLogo';
 
 type Props = {
   locale: Locale;
@@ -24,7 +25,13 @@ export function SiteHeaderNext({ locale, pathname }: Props) {
     <header className="site-header" data-od-id="header">
       <div className="site-header-inner">
         <a href="/home" className="site-header-logo" title="Kitabe">
-          <img src="/logo-header.webp" alt="" className="site-header-logo-img" width={36} height={36} />
+          <img
+            src={siteLogoHeader.src}
+            alt=""
+            className="site-header-logo-img"
+            width={siteLogoHeader.width}
+            height={siteLogoHeader.height}
+          />
           <span>Kitabe</span>
         </a>
 

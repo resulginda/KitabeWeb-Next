@@ -1,15 +1,10 @@
-@import '@kitabe/styles/material-icons.css';
 @import '@kitabe/index.css';
-@import '@kitabe/App.css';
 @import '@kitabe/components/SiteHeader.css';
 @import '@kitabe/components/HeaderLanguageMenu.css';
 @import '@kitabe/styles/kitabe-ui.css';
-@import '@kitabe/styles/pages-shared.css';
 @import '@kitabe/components/Navigation.css';
 @import '@kitabe/components/AppShell.css';
-@import '@kitabe/styles/desktop-density.css';
 
-/* Eski Next sidebar/header — artık kullanılmıyor */
 .desktop-sidebar,
 .desktop-header {
   display: none !important;
@@ -17,68 +12,6 @@
 
 :root {
   --kitabe-max-width: 1200px;
-}
-
-/* ——— Detay sayfası reklam yerleşimi ——— */
-.place-detail-shell {
-  width: 100%;
-}
-
-.place-detail-with-ads {
-  display: grid;
-  grid-template-columns: minmax(120px, 200px) minmax(0, 1440px) minmax(120px, 200px);
-  gap: 1rem 1.25rem;
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 0 0.5rem;
-  align-items: start;
-}
-
-.place-ad-margin {
-  position: sticky;
-  top: calc(var(--header-h, 64px) + 0.75rem);
-  min-height: 250px;
-}
-
-.place-ad-margin-left,
-.place-ad-margin-right {
-  display: flex;
-  justify-content: center;
-}
-
-.place-ad-below {
-  grid-column: 1 / -1;
-  max-width: 1440px;
-  width: 100%;
-  margin: 0.5rem auto 1rem;
-  padding: 0 1rem;
-}
-
-.place-main-column--full {
-  width: 100%;
-  min-width: 0;
-}
-
-@media (max-width: 1500px) {
-  .place-ad-margin-left {
-    display: none;
-  }
-
-  .place-detail-with-ads {
-    grid-template-columns: minmax(0, 1fr) minmax(120px, 200px);
-  }
-}
-
-@media (max-width: 1100px) {
-  .place-ad-margin-right,
-  .place-ad-margin {
-    display: none;
-  }
-
-  .place-detail-with-ads {
-    grid-template-columns: 1fr;
-    padding: 0;
-  }
 }
 
 .ad-slot {
@@ -108,48 +41,12 @@
   overflow: hidden;
 }
 
-@media (max-width: 1100px) {
-  .listing-page-layout {
-    grid-template-columns: minmax(0, 1fr) minmax(100px, 200px);
-  }
-
-  .listing-ad-left {
-    display: none;
-  }
-}
-
-@media (max-width: 900px) {
-  .listing-page-layout {
-    grid-template-columns: 1fr;
-    padding: 0;
-  }
-
-  .listing-ad-left,
-  .listing-ad-right {
-    display: none;
-  }
-}
-
-/* Next.js detay: interaktif katman yüklenince statik HTML gizlenir */
-#place-detail-interactive {
-  display: none;
-}
-
-#place-detail-interactive.is-ready {
-  display: block;
-}
-
-#place-detail-interactive.is-ready ~ #place-detail-static,
-#place-detail-static.is-hidden {
-  display: none !important;
-}
-
-/* ——— Liste (kesfet) sayfası ——— */
-.listing-page-shell {
+/* Hub: listing-page-* sınıfları — seo-pages.css yüklenmeden */
+.locale-hub-page.listing-page-shell {
   width: 100%;
 }
 
-.listing-page-layout {
+.locale-hub-page .listing-page-layout {
   display: grid;
   grid-template-columns: minmax(120px, 160px) minmax(0, 1fr) minmax(120px, 300px);
   gap: 1rem 1.25rem;
@@ -159,11 +56,11 @@
   align-items: start;
 }
 
-.listing-main-column {
+.locale-hub-page .listing-main-column {
   min-width: 0;
 }
 
-.listing-breadcrumb ol {
+.locale-hub-page .listing-breadcrumb ol {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem 0.5rem;
@@ -174,232 +71,37 @@
   color: #666;
 }
 
-.listing-breadcrumb li:not(:last-child)::after {
-  content: '›';
-  margin-left: 0.5rem;
-  color: #aaa;
-}
-
-.listing-breadcrumb a {
+.locale-hub-page .listing-breadcrumb a {
   color: var(--primary);
   text-decoration: none;
 }
 
-.listing-breadcrumb a:hover {
-  text-decoration: underline;
-}
-
-.listing-header h1 {
-  font-size: clamp(1.35rem, 2.5vw, 1.85rem);
-  margin: 0 0 0.35rem;
-  line-height: 1.25;
-}
-
-.listing-subtitle {
-  margin: 0 0 1rem;
-  color: #666;
-  font-size: 0.95rem;
-}
-
-.listing-intro {
-  margin: 0 0 1.5rem;
-  max-width: 68ch;
-  color: #3d3d3d;
-  font-size: 0.98rem;
-  line-height: 1.65;
-}
-
-.listing-intro p {
-  margin: 0 0 0.85rem;
-}
-
-.listing-intro p:last-child {
-  margin-bottom: 0;
-}
-
-.listing-app-banner {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.15rem;
-  margin-bottom: 1.25rem;
-  border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--primary) 8%, var(--bg-surface));
-  border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
-}
-
-.listing-app-banner h2 {
-  margin: 0 0 0.25rem;
-  font-size: 1.05rem;
-}
-
-.listing-app-banner p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #444;
-}
-
-.listing-app-banner-icon .material-icons {
-  font-size: 2.2rem;
-  color: var(--primary);
-}
-
-.listing-app-banner-cta {
-  margin-left: auto;
-  padding: 0.55rem 1rem;
-  border-radius: var(--radius-md);
-  background: var(--primary);
-  color: var(--text-on-primary);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.9rem;
-  white-space: nowrap;
-}
-
-.listing-app-banner-cta:hover {
-  background: var(--primary-hover);
-}
-
-.listing-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1rem;
-}
-
-.listing-card {
-  display: flex;
-  flex-direction: column;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 1px solid var(--border-light);
-  background: var(--bg-surface);
-  text-decoration: none;
-  color: inherit;
-  transition: box-shadow var(--transition-normal), transform var(--transition-fast);
-}
-
-.listing-card:hover {
-  box-shadow: var(--shadow-lg);
-  transform: translateY(-2px);
-}
-
-.listing-card-image {
-  aspect-ratio: 16 / 10;
-  background: #f0f0f0;
-  overflow: hidden;
-}
-
-.listing-card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.listing-card-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  background: color-mix(in srgb, var(--primary) 12%, var(--bg-main));
-}
-
-.listing-card-initial {
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--primary);
-  line-height: 1;
-}
-
-.listing-card-body {
-  padding: 0.85rem 1rem 1rem;
-}
-
-.listing-card-title {
-  margin: 0 0 0.25rem;
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.3;
-}
-
-.listing-card-district {
-  margin: 0;
-  font-size: 0.82rem;
-  color: #777;
-}
-
-.listing-ad-left,
-.listing-ad-right {
+.locale-hub-page .listing-ad-left,
+.locale-hub-page .listing-ad-right {
   position: sticky;
   top: 1rem;
 }
 
 @media (max-width: 1100px) {
-  .listing-page-layout {
+  .locale-hub-page .listing-page-layout {
     grid-template-columns: minmax(0, 1fr) minmax(100px, 200px);
   }
 
-  .listing-ad-left {
+  .locale-hub-page .listing-ad-left {
     display: none;
   }
 }
 
 @media (max-width: 900px) {
-  .listing-page-layout {
+  .locale-hub-page .listing-page-layout {
     grid-template-columns: 1fr;
-    padding: 0.5rem 0.75rem 1.5rem;
+    padding: 0;
   }
 
-  .listing-ad-left,
-  .listing-ad-right {
+  .locale-hub-page .listing-ad-left,
+  .locale-hub-page .listing-ad-right {
     display: none;
   }
-
-  .listing-app-banner-cta {
-    margin-left: 0;
-    width: 100%;
-    text-align: center;
-  }
-}
-
-/* Fotoğrafsız detay — negatif margin iptal (desktop-density ile çakışmayı önle) */
-.detail-page .detail-content.no-header {
-  margin-top: 0;
-  padding-top: 1.75rem;
-}
-
-.detail-no-photo-hero {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  min-height: 88px;
-  padding: 1.25rem 1rem;
-  background: linear-gradient(135deg, #e8f0ea 0%, #d4e5d8 55%, #c5d9c9 100%);
-  border-bottom: 1px solid #d4e5d8;
-}
-
-.detail-no-photo-icon {
-  font-size: 1.75rem;
-  line-height: 1;
-}
-
-.detail-no-photo-initial {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  background: rgba(90, 122, 94, 0.15);
-  color: #5a7a5e;
-  font-size: 1.25rem;
-  font-weight: 700;
-}
-
-/* ——— Dil hub (/tr, /en, /ru, /ar) ——— */
-.locale-hub-page .listing-page-layout {
-  max-width: 1400px;
 }
 
 .locale-hub-main {
@@ -552,7 +254,6 @@
   font-size: 1.15rem;
 }
 
-/* ——— App shell (Next.js SEO = KitabeWeb üst header) ——— */
 @media (min-width: 1024px) {
   .bottom-nav {
     display: none !important;
@@ -564,16 +265,10 @@
     padding: 1.5rem var(--gutter) 2rem;
   }
 
-  .listing-page-layout {
+  .locale-hub-page .listing-page-layout {
     max-width: var(--container-max);
-    margin: 0 auto;
     padding-top: 0.5rem;
     padding-bottom: 2rem;
-  }
-
-  .place-page-layout {
-    max-width: 1400px;
-    margin: 0 auto;
   }
 
   .page-container {
@@ -586,11 +281,7 @@
     padding-bottom: 5.5rem;
   }
 
-  .listing-page-layout {
+  .locale-hub-page .listing-page-layout {
     padding-bottom: 5.5rem;
-  }
-
-  .place-detail-shell {
-    padding-bottom: 5rem;
   }
 }

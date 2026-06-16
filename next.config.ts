@@ -36,6 +36,7 @@ const nextConfig: NextConfig = {
       { source: '/logo-:name.webp', headers: cacheHeader },
       { source: '/logo-header.webp', headers: cacheHeader },
       { source: '/:file.webp', headers: cacheHeader },
+      { source: '/_next/static/css/:path*', headers: cacheHeader },
     ];
   },
   async rewrites() {
@@ -56,6 +57,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     externalDir: true,
+    optimizeCss: true,
   },
   outputFileTracingRoot: path.join(__dirname),
   output: 'standalone',

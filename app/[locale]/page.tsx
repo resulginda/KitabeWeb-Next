@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LocaleHubPage } from '@/components/LocaleHubPage';
-import { LOCALE_HUB_LCP_IMAGE } from '@/lib/featuredCities';
-import { cityCardLcpSrcSet } from '@/lib/cityCardImage';
+import { hubLcpImage, hubLcpSrcSet } from '@/lib/hubLcpImage';
 import { LOCALES, type Locale } from '@/lib/places';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 
@@ -91,9 +90,9 @@ export default async function LocaleRootPage({
       <link
         rel="preload"
         as="image"
-        href={LOCALE_HUB_LCP_IMAGE.replace(/\.webp$/i, '-480.webp')}
+        href={hubLcpImage.src}
         type="image/webp"
-        imageSrcSet={cityCardLcpSrcSet(LOCALE_HUB_LCP_IMAGE)}
+        imageSrcSet={hubLcpSrcSet}
         imageSizes="(max-width: 768px) 50vw, 280px"
         // React → HTML fetchpriority (LCP preload keşfi)
         {...({ fetchpriority: 'high' } as Record<string, string>)}

@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
-import i18n from '../i18n';
+import { ensureI18n, loadI18nLanguage, type I18nLanguage } from '../i18n';
 import {
   detectBrowserLanguage,
   getInitialAppLanguage,
@@ -35,7 +35,6 @@ export const LanguageProvider = ({
   const [currentLanguage, setCurrentLanguage] = useState<Language>(() => {
     if (typeof window === 'undefined') return localeFromUrl ?? defaultLanguage;
     const lang = resolveLanguage(localeFromUrl);
-    if (i18n.language !== lang) i18n.changeLanguage(lang);
     if (localeFromUrl) {
       persistLanguageChoice(localeFromUrl, true);
     } else if (!hasManualLanguageChoice()) {
@@ -46,37 +45,15 @@ export const LanguageProvider = ({
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    if (localeFromUrl) {
-      setCurrentLanguage(localeFromUrl);
-      i18n.changeLanguage(localeFromUrl);
-      persistLanguageChoice(localeFromUrl, true);
-      return;
-    }
-    const lang = hasManualLanguageChoice()
-      ? (getStoredLanguage() ?? detectBrowserLanguage())
-      : detectBrowserLanguage();
-    setCurrentLanguage(lang);
-    if (i18n.language !== lang) i18n.changeLanguage(lang);
-    if (!hasManualLanguageChoice()) {
-      persistLanguageChoice(lang, false);
-    }
+    const lang = localeFromUrl ?? resolveLanguage(localeFromUrl);
+    void ensureI18n(lang as I18nLanguage);
   }, [localeFromUrl]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (i18n.language !== currentLanguage) {
-      i18n.changeLanguage(currentLanguage);
-    }
-    if (hasManualLanguageChoice()) {
-      persistLanguageChoice(currentLanguage, true);
-    }
-  }, [currentLanguage]);
 
   const setLanguage = (lang: Language, options?: { manual?: boolean }) => {
     const manual = options?.manual !== false;
     persistLanguageChoice(lang, manual);
     setCurrentLanguage(lang);
-    i18n.changeLanguage(lang);
+    void loadI18nLanguage(lang as I18nLanguage);
   };
 
   return (

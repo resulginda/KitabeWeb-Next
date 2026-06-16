@@ -43,7 +43,7 @@ const ExploreCitiesGrid = () => {
                   sizes="(max-width: 768px) 50vw, 280px"
                   alt={alt}
                   loading={city.slug === 'antalya' ? 'eager' : aboveFold ? 'eager' : 'lazy'}
-                  fetchPriority={city.slug === 'antalya' ? 'high' : undefined}
+                  fetchPriority={city.slug === 'istanbul' ? 'high' : undefined}
                   width={480}
                   height={300}
                   className="explore-city-image"

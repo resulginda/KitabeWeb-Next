@@ -16,7 +16,6 @@ import { PhotoSubmissionProvider } from '@kitabe/contexts/PhotoSubmissionContext
 import { RatingProvider } from '@kitabe/contexts/RatingContext';
 import { VisitedPlacesProvider } from '@kitabe/contexts/VisitedPlacesContext';
 import type { Place } from '@kitabe/types/place';
-import '@/lib/i18n-client';
 
 const DetailPage = dynamic(() => import('@kitabe/pages/DetailPage'), {
   ssr: false,

@@ -6,6 +6,7 @@ import { KitabePageShell } from '@/components/KitabePageShell';
 import { getPreferredLocale } from '@/lib/preferredLocale';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 import { siteFontClassName } from '@/lib/siteFonts';
+import { HUB_CRITICAL_CSS } from '@/lib/hubCriticalCss';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -35,7 +36,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <head>
         <style
           dangerouslySetInnerHTML={{
-            __html: `@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/material-icons.woff2) format('woff2');}`,
+            __html: `${HUB_CRITICAL_CSS}@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/material-icons.woff2) format('woff2');}`,
           }}
         />
         <link rel="apple-touch-icon" href="/icon-180.png" />

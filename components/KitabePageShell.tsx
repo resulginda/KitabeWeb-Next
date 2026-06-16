@@ -7,8 +7,6 @@ import { IconFontLoader } from '@kitabe/components/IconFontLoader';
 import { LOCALES, type Locale } from '@/lib/places';
 import { SiteHeaderNext } from './SiteHeaderNext';
 import { KitabeNavigation } from './KitabeNavigation';
-import '@/lib/i18n-client';
-
 function localeFromPath(pathname: string): Locale {
   const first = pathname.split('/').filter(Boolean)[0];
   return (LOCALES as readonly string[]).includes(first) ? (first as Locale) : 'tr';

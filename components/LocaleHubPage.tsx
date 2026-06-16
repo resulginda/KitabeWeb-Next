@@ -9,6 +9,7 @@ import {
   CITY_CARD_IMAGE_SIZES,
   cityCardLcpSrcSet,
 } from '@/lib/cityCardImage';
+import { hubLcpImage, hubLcpSrcSet, isHubLcpCitySlug } from '@/lib/hubLcpImage';
 import { localeHubIntroParagraphs } from '@/lib/listingIntro';
 import { buildListingPath, getTaxonomyIndex } from '@/lib/listings';
 import type { Locale } from '@/lib/places';
@@ -202,10 +203,9 @@ function CityHubCard({
     <Link href={href} className={`locale-hub-card${large ? ' locale-hub-card-large' : ''}`}>
       <div className="locale-hub-card-image">
         {image && lcp ? (
-          // LCP: doğrudan webp — PageSpeed fetchpriority=high + lazy yok
           <img
-            src={image.replace(/\.webp$/i, '-480.webp')}
-            srcSet={cityCardLcpSrcSet(image)}
+            src={isHubLcpCitySlug(city.citySlug) ? hubLcpImage.src : image.replace(/\.webp$/i, '-480.webp')}
+            srcSet={isHubLcpCitySlug(city.citySlug) ? hubLcpSrcSet : cityCardLcpSrcSet(image)}
             sizes={CITY_CARD_IMAGE_SIZES}
             alt={cityName}
             className="locale-hub-card-img locale-hub-card-img-native"

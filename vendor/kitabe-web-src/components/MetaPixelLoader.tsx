@@ -7,9 +7,11 @@ export function MetaPixelLoader() {
   useEffect(() => {
     if (!PIXEL_ID || document.getElementById('meta-pixel')) return;
 
-    const script = document.createElement('script');
-    script.id = 'meta-pixel';
-    script.innerHTML = `
+    const inject = () => {
+      if (document.getElementById('meta-pixel')) return;
+      const script = document.createElement('script');
+      script.id = 'meta-pixel';
+      script.innerHTML = `
       !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
       n.callMethod.apply(n,arguments):n.queue.push(arguments)};
       if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
@@ -20,7 +22,17 @@ export function MetaPixelLoader() {
       fbq('init', '${PIXEL_ID}');
       fbq('track', 'PageView');
     `;
-    document.head.appendChild(script);
+      document.head.appendChild(script);
+    };
+
+    if ('requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(inject, { timeout: 3500 });
+      return () => window.cancelIdleCallback(id);
+    }
+
+    const onLoad = () => window.setTimeout(inject, 1);
+    window.addEventListener('load', onLoad, { once: true });
+    return () => window.removeEventListener('load', onLoad);
   }, []);
 
   if (!PIXEL_ID) return null;

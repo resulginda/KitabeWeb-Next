@@ -14,9 +14,9 @@ const roots = [
 ];
 
 const CITY_MAX_WIDTH = 560;
-const CITY_WEBP_QUALITY = 68;
-const CITY_LCP_WIDTH = 480;
-const CITY_LCP_QUALITY = 62;
+const CITY_WEBP_QUALITY = 64;
+const CITY_LCP_WIDTH = 400;
+const CITY_LCP_QUALITY = 50;
 
 async function optimizeLogo(publicDir) {
   const iconPath = path.join(publicDir, 'icon.png');
@@ -49,13 +49,18 @@ function citySourcePath(citiesDir, base) {
 }
 
 async function encodeCityVariant(input, outPath, width, quality) {
-  const tmp = `${outPath}.tmp`;
-  await sharp(input)
+  const pipeline = sharp(input)
     .rotate()
     .resize(width, null, { withoutEnlargement: true })
-    .webp({ quality, effort: 6 })
-    .toFile(tmp);
-  fs.renameSync(tmp, outPath);
+    .webp({ quality, effort: 6, smartSubsample: true });
+
+  if (path.resolve(input) === path.resolve(outPath)) {
+    const buf = await pipeline.toBuffer();
+    fs.writeFileSync(outPath, buf);
+    return;
+  }
+
+  await pipeline.toFile(outPath);
 }
 
 async function optimizeCities(publicDir) {
