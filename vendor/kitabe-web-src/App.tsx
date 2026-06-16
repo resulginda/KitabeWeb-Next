@@ -15,6 +15,8 @@ import ScrollToTop from './components/ScrollToTop';
 import { AdSenseLoader } from './components/AdSenseLoader';
 import { IconFontLoader } from './components/IconFontLoader';
 import { MainLayout } from './components/MainLayout';
+import { SpaSeoMeta } from './components/SpaSeoMeta';
+import { SeoHubRedirect } from './components/SeoHubRedirect';
 import './i18n';
 import './App.css';
 import './styles/kitabe-ui.css';
@@ -68,9 +70,10 @@ function AppContent() {
       <IconFontLoader />
       <AdSenseLoader />
       <ScrollToTop />
+      <SpaSeoMeta />
       <Routes>
         <Route path="/app" element={<LandingPage />} />
-        <Route path="/" element={<Navigate to="/home" replace />} />
+        <Route path="/" element={<SeoHubRedirect />} />
         <Route element={<MainLayout />}>
           <Route path="/home" element={<HomePage />} />
           <Route path="/list" element={<ListPage />} />

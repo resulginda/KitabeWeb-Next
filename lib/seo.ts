@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { pickText, type Locale, type SeoPlace, LOCALES } from './places';
 import { encodePathSegments } from './detectLocale';
 import { absoluteOgImage, DEFAULT_OG } from './og';
+import { HUB_SLUGS } from './listings';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
 
@@ -67,26 +68,57 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
 export function buildPlaceJsonLd(place: SeoPlace, locale: Locale) {
   const name = pickText(place.name as never, locale);
   const description = pickText(place.description as never, locale);
+  const cityLabel = pickText(place.city as never, locale);
   const fullSlug = place.slug?.[locale] ?? '';
   const [citySlug, ...rest] = fullSlug.split('/');
+  const placeUrl = absolutePlaceUrl(locale, citySlug, rest);
+  const hubSlug = HUB_SLUGS[locale];
+  const cityHubUrl = `${SITE}${encodePathSegments(`/${locale}/${citySlug}/${hubSlug}`)}`;
 
   return {
     '@context': 'https://schema.org',
-    '@type': 'TouristAttraction',
-    name,
-    description,
-    image: place.imageUrl || place.thumbnailUrl,
-    url: absolutePlaceUrl(locale, citySlug, rest),
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: place.latitude,
-      longitude: place.longitude,
-    },
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: pickText(place.city as never, locale),
-      addressRegion: pickText(place.district as never, locale),
-      addressCountry: 'TR',
-    },
+    '@graph': [
+      {
+        '@type': 'TouristAttraction',
+        name,
+        description,
+        image: place.imageUrl || place.thumbnailUrl,
+        url: placeUrl,
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: place.latitude,
+          longitude: place.longitude,
+        },
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: cityLabel,
+          addressRegion: pickText(place.district as never, locale),
+          addressCountry: 'TR',
+        },
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          {
+            '@type': 'ListItem',
+            position: 1,
+            name: 'Kitabe',
+            item: `${SITE}/${locale}`,
+          },
+          {
+            '@type': 'ListItem',
+            position: 2,
+            name: cityLabel,
+            item: cityHubUrl,
+          },
+          {
+            '@type': 'ListItem',
+            position: 3,
+            name,
+            item: placeUrl,
+          },
+        ],
+      },
+    ],
   };
 }

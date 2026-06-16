@@ -1,7 +1,7 @@
 import { LOCALES, type Locale } from '@/lib/places';
 
 export { LOCALES, type Locale };
-export const DEFAULT_LOCALE: Locale = 'en';
+export const DEFAULT_LOCALE: Locale = 'tr';
 export const LOCALE_COOKIE = 'kitabe_locale';
 
 /** tr/en/ru/ar veya null (desteklenmiyor → caller en kullanır) */
