@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { LocaleHubPage } from '@/components/LocaleHubPage';
+import { LOCALE_HUB_LCP_IMAGE } from '@/lib/featuredCities';
 import { LOCALES, type Locale } from '@/lib/places';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 
@@ -86,6 +87,13 @@ export default async function LocaleRootPage({
 
   return (
     <>
+      <link
+        rel="preload"
+        as="image"
+        href={LOCALE_HUB_LCP_IMAGE}
+        type="image/webp"
+        fetchPriority="high"
+      />
       <LocaleHubPage locale={loc} />
     </>
   );

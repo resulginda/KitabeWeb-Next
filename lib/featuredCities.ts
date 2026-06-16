@@ -27,3 +27,6 @@ export const FEATURED_EXPLORE_SLUGS = [
 export function cityHubImage(slug: string): string | null {
   return FEATURED_CITY_IMAGES[slug] ?? null;
 }
+
+/** Locale hub LCP — PageSpeed'te en sık öne çıkan kart görseli */
+export const LOCALE_HUB_LCP_IMAGE = FEATURED_CITY_IMAGES.antalya;

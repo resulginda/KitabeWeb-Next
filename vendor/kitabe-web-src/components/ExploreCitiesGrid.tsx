@@ -28,15 +28,22 @@ const ExploreCitiesGrid = () => {
       </div>
 
       <div className="explore-cities-grid">
-        {FEATURED_EXPLORE_CITIES.map((city) => {
+        {FEATURED_EXPLORE_CITIES.map((city, index) => {
           const name = city.names[locale] || city.names.tr;
           const alt = city.imageAlt[locale] || city.imageAlt.tr;
           const href = buildExploreCityUrl(locale, city.slug);
+          const aboveFold = index < 3;
 
           return (
             <a key={city.slug} href={href} className="explore-city-card">
               <div className="explore-city-image-wrap">
-                <img src={city.image} alt={alt} loading="lazy" className="explore-city-image" />
+                <img
+                  src={city.image}
+                  alt={alt}
+                  loading={aboveFold ? 'eager' : 'lazy'}
+                  fetchPriority={index === 1 ? 'high' : undefined}
+                  className="explore-city-image"
+                />
                 <div className="explore-city-overlay" />
               </div>
               <div className="explore-city-body">

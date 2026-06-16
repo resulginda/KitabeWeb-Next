@@ -66,7 +66,15 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
     .sort((a, b) => b.placeCount - a.placeCount);
 
   const featuredSet = new Set<string>(FEATURED_EXPLORE_SLUGS);
-  const featured = cityHubs.filter((c) => featuredSet.has(c.citySlug));
+  const featuredOrder = new Map<string, number>(
+    FEATURED_EXPLORE_SLUGS.map((slug, index) => [slug, index])
+  );
+  const featured = cityHubs
+    .filter((c) => featuredSet.has(c.citySlug))
+    .sort(
+      (a, b) =>
+        (featuredOrder.get(a.citySlug) ?? 99) - (featuredOrder.get(b.citySlug) ?? 99)
+    );
   const others = cityHubs.filter((c) => !featuredSet.has(c.citySlug));
 
   const t = COPY[locale];
@@ -115,7 +123,8 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
                 city={city}
                 t={t}
                 large
-                priority={index < 3}
+                aboveFold={index < 3}
+                lcp={index === 1}
               />
             ))}
           </div>
@@ -141,7 +150,8 @@ function CityHubCard({
   city,
   t,
   large = false,
-  priority = false,
+  aboveFold = false,
+  lcp = false,
 }: {
   locale: Locale;
   city: {
@@ -151,7 +161,8 @@ function CityHubCard({
   };
   t: (typeof COPY)[Locale];
   large?: boolean;
-  priority?: boolean;
+  aboveFold?: boolean;
+  lcp?: boolean;
 }) {
   const href = encodePathSegments(buildListingPath(locale, city.citySlug, []));
   const image = cityHubImage(city.citySlug);
@@ -168,8 +179,9 @@ function CityHubCard({
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 280px"
             className="locale-hub-card-img"
-            loading={priority ? 'eager' : 'lazy'}
-            priority={priority}
+            priority={lcp}
+            fetchPriority={lcp ? 'high' : aboveFold ? 'auto' : 'low'}
+            loading={aboveFold ? 'eager' : 'lazy'}
           />
         ) : (
           <div className="locale-hub-card-placeholder" aria-hidden>
