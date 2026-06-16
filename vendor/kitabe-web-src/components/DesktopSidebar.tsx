@@ -14,7 +14,7 @@ const DesktopSidebar = () => {
     <aside className="desktop-sidebar" aria-label={t('navigation.mainNav', { defaultValue: 'Ana menü' })}>
       <div className="desktop-sidebar-inner">
         <Link to="/home" className="desktop-sidebar-brand" title="Kitabe">
-          <img src="/icon.png" alt="" className="desktop-sidebar-logo" />
+          <img src="/logo-header.webp" alt="" className="desktop-sidebar-logo" width={36} height={36} />
           <span className="desktop-sidebar-brand-text">Kitabe</span>
         </Link>
 

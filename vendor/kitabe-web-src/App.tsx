@@ -13,6 +13,7 @@ import { RatingProvider } from './contexts/RatingContext';
 import { VisitedPlacesProvider } from './contexts/VisitedPlacesContext';
 import ScrollToTop from './components/ScrollToTop';
 import { AdSenseLoader } from './components/AdSenseLoader';
+import { MetaPixelLoader } from './components/MetaPixelLoader';
 import { IconFontLoader } from './components/IconFontLoader';
 import { MainLayout } from './components/MainLayout';
 import { SpaSeoMeta } from './components/SpaSeoMeta';
@@ -69,6 +70,7 @@ function AppContent() {
     <>
       <IconFontLoader />
       <AdSenseLoader />
+      <MetaPixelLoader />
       <ScrollToTop />
       <SpaSeoMeta />
       <Routes>

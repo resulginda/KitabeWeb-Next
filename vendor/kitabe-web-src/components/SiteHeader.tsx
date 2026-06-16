@@ -23,7 +23,7 @@ export function SiteHeader() {
     <header className="site-header" data-od-id="header">
       <div className="site-header-inner">
         <Link to="/home" className="site-header-logo" title="Kitabe">
-          <img src="/icon.png" alt="" className="site-header-logo-img" />
+          <img src="/logo-header.webp" alt="" className="site-header-logo-img" width={36} height={36} />
           <span>Kitabe</span>
         </Link>
 

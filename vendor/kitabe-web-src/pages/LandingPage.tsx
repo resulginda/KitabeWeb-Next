@@ -24,7 +24,7 @@ const LandingPage = () => {
     <div className="landing-page">
       <div className="landing-content">
         <div className="landing-logo">
-          <img src="/icon.png" alt="KitabeApp" className="landing-icon" />
+          <img src="/logo-260.webp" alt="KitabeApp" className="landing-icon" width={130} height={130} />
           <h1>KitabeApp</h1>
           <p>{t('landing.welcomeMessage') || 'Türkiye\'nin kültürel mirasını keşfedin'}</p>
         </div>

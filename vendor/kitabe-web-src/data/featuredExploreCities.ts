@@ -20,7 +20,7 @@ export const FEATURED_EXPLORE_CITIES: FeaturedExploreCity[] = [
   {
     slug: 'istanbul',
     names: { tr: 'İstanbul', en: 'Istanbul', ru: 'Стамбул', ar: 'إسطنبول' },
-    image: '/cities/istanbul.jpg',
+    image: '/cities/istanbul.webp',
     imageAlt: {
       tr: 'İstanbul Boğaz manzarası',
       en: 'Istanbul Bosphorus view',
@@ -31,7 +31,7 @@ export const FEATURED_EXPLORE_CITIES: FeaturedExploreCity[] = [
   {
     slug: 'antalya',
     names: { tr: 'Antalya', en: 'Antalya', ru: 'Анталья', ar: 'أنطاليا' },
-    image: '/cities/antalya.jpg',
+    image: '/cities/antalya.webp',
     imageAlt: {
       tr: 'Antalya kıyısı',
       en: 'Antalya coastline',
@@ -42,7 +42,7 @@ export const FEATURED_EXPLORE_CITIES: FeaturedExploreCity[] = [
   {
     slug: 'izmir',
     names: { tr: 'İzmir', en: 'Izmir', ru: 'Измир', ar: 'إزمير' },
-    image: '/cities/izmir.jpg',
+    image: '/cities/izmir.webp',
     imageAlt: {
       tr: 'İzmir Saat Kulesi',
       en: 'Izmir Clock Tower',
@@ -53,7 +53,7 @@ export const FEATURED_EXPLORE_CITIES: FeaturedExploreCity[] = [
   {
     slug: 'mugla',
     names: { tr: 'Muğla', en: 'Mugla', ru: 'Мугла', ar: 'موغلا' },
-    image: '/cities/mugla.jpg',
+    image: '/cities/mugla.webp',
     imageAlt: {
       tr: 'Muğla — Bodrum kıyısı',
       en: 'Mugla — Bodrum coast',
@@ -64,7 +64,7 @@ export const FEATURED_EXPLORE_CITIES: FeaturedExploreCity[] = [
   {
     slug: 'nevsehir',
     names: { tr: 'Nevşehir', en: 'Nevsehir', ru: 'Невшехир', ar: 'نوشهير' },
-    image: '/cities/nevsehir.jpg',
+    image: '/cities/nevsehir.webp',
     imageAlt: {
       tr: 'Kapadokya balonları',
       en: 'Cappadocia hot air balloons',
@@ -75,7 +75,7 @@ export const FEATURED_EXPLORE_CITIES: FeaturedExploreCity[] = [
   {
     slug: 'ankara',
     names: { tr: 'Ankara', en: 'Ankara', ru: 'Анкара', ar: 'أنقرة' },
-    image: '/cities/ankara.jpg',
+    image: '/cities/ankara.webp',
     imageAlt: {
       tr: 'Ankara',
       en: 'Ankara',
@@ -86,7 +86,7 @@ export const FEATURED_EXPLORE_CITIES: FeaturedExploreCity[] = [
   {
     slug: 'bursa',
     names: { tr: 'Bursa', en: 'Bursa', ru: 'Бурса', ar: 'بورصة' },
-    image: '/cities/bursa.jpg',
+    image: '/cities/bursa.webp',
     imageAlt: {
       tr: 'Bursa Ulu Camii',
       en: 'Bursa Grand Mosque',
@@ -97,7 +97,7 @@ export const FEATURED_EXPLORE_CITIES: FeaturedExploreCity[] = [
   {
     slug: 'aydin',
     names: { tr: 'Aydın', en: 'Aydin', ru: 'Айдын', ar: 'أيدين' },
-    image: '/cities/aydin.jpg',
+    image: '/cities/aydin.webp',
     imageAlt: {
       tr: 'Efes Celsus Kütüphanesi',
       en: 'Ephesus Celsus Library',
@@ -108,7 +108,7 @@ export const FEATURED_EXPLORE_CITIES: FeaturedExploreCity[] = [
   {
     slug: 'trabzon',
     names: { tr: 'Trabzon', en: 'Trabzon', ru: 'Трабзон', ar: 'طرابزون' },
-    image: '/cities/trabzon.jpg',
+    image: '/cities/trabzon.webp',
     imageAlt: {
       tr: 'Sümela Manastırı',
       en: 'Sumela Monastery',

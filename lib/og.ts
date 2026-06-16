@@ -11,7 +11,7 @@ export function absoluteOgImage(url?: string | null): string {
 }
 
 export function cityOgImage(citySlug: string): string {
-  return absoluteOgImage(`/cities/${citySlug}.jpg`);
+  return absoluteOgImage(`/cities/${citySlug}.webp`);
 }
 
 export const DEFAULT_OG = {

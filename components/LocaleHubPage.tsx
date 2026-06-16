@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { getCityLabel } from '@/lib/citySlugLabel';
 import { encodePathSegments } from '@/lib/detectLocale';
 import { cityHubImage, FEATURED_EXPLORE_SLUGS } from '@/lib/featuredCities';
@@ -107,8 +108,8 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
         <section className="locale-hub-section" aria-labelledby="featured-cities">
           <h2 id="featured-cities">{t.featuredTitle}</h2>
           <div className="locale-hub-grid locale-hub-grid-featured">
-            {featured.map((city) => (
-              <CityHubCard key={city.citySlug} locale={locale} city={city} t={t} large />
+            {featured.map((city, index) => (
+              <CityHubCard key={city.citySlug} locale={locale} city={city} t={t} large priority={index === 0} />
             ))}
           </div>
         </section>
@@ -133,6 +134,7 @@ function CityHubCard({
   city,
   t,
   large = false,
+  priority = false,
 }: {
   locale: Locale;
   city: {
@@ -142,6 +144,7 @@ function CityHubCard({
   };
   t: (typeof COPY)[Locale];
   large?: boolean;
+  priority?: boolean;
 }) {
   const href = encodePathSegments(buildListingPath(locale, city.citySlug, []));
   const image = cityHubImage(city.citySlug);
@@ -152,7 +155,15 @@ function CityHubCard({
     <Link href={href} className={`locale-hub-card${large ? ' locale-hub-card-large' : ''}`}>
       <div className="locale-hub-card-image">
         {image ? (
-          <img src={image} alt={cityName} loading="lazy" />
+          <Image
+            src={image}
+            alt={cityName}
+            width={640}
+            height={400}
+            sizes="(max-width: 768px) 100vw, 33vw"
+            loading={priority ? 'eager' : 'lazy'}
+            priority={priority}
+          />
         ) : (
           <div className="locale-hub-card-placeholder" aria-hidden>
             <span>{initial}</span>

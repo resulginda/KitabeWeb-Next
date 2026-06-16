@@ -55,7 +55,7 @@ export function DesktopSidebarNext({ locale, pathname }: Props) {
     <aside className="desktop-sidebar" aria-label="Main menu">
       <div className="desktop-sidebar-inner">
         <a href="/home" className="desktop-sidebar-brand" title="Kitabe">
-          <img src="/icon.png" alt="" className="desktop-sidebar-logo" />
+          <img src="/logo-header.webp" alt="" className="desktop-sidebar-logo" width={36} height={36} />
           <span className="desktop-sidebar-brand-text">Kitabe</span>
         </a>
 

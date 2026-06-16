@@ -9,7 +9,7 @@ const Footer = () => {
     <footer className="site-footer">
       <div className="footer-container">
         <div className="footer-brand">
-          <img src="/icon.png" alt="KitabeApp" className="footer-logo" />
+          <img src="/logo-160.webp" alt="KitabeApp" className="footer-logo" width={80} height={80} />
           <h2>KitabeApp</h2>
         </div>
         <div className="footer-content">
