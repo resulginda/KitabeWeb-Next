@@ -4,6 +4,11 @@ import { AdSlot } from '@/components/AdSlot';
 import { getCityLabel } from '@/lib/citySlugLabel';
 import { encodePathSegments } from '@/lib/detectLocale';
 import { cityHubImage, FEATURED_EXPLORE_SLUGS } from '@/lib/featuredCities';
+import {
+  CITY_CARD_IMAGE_QUALITY,
+  CITY_CARD_IMAGE_SIZES,
+  cityCardLcpSrcSet,
+} from '@/lib/cityCardImage';
 import { localeHubIntroParagraphs } from '@/lib/listingIntro';
 import { buildListingPath, getTaxonomyIndex } from '@/lib/listings';
 import type { Locale } from '@/lib/places';
@@ -199,11 +204,13 @@ function CityHubCard({
         {image && lcp ? (
           // LCP: doğrudan webp — PageSpeed fetchpriority=high + lazy yok
           <img
-            src={image}
+            src={image.replace(/\.webp$/i, '-480.webp')}
+            srcSet={cityCardLcpSrcSet(image)}
+            sizes={CITY_CARD_IMAGE_SIZES}
             alt={cityName}
             className="locale-hub-card-img locale-hub-card-img-native"
-            width={640}
-            height={400}
+            width={480}
+            height={300}
             loading="eager"
             fetchPriority="high"
             decoding="async"
@@ -213,7 +220,8 @@ function CityHubCard({
             src={image}
             alt={cityName}
             fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 280px"
+            sizes={CITY_CARD_IMAGE_SIZES}
+            quality={CITY_CARD_IMAGE_QUALITY}
             className="locale-hub-card-img"
             loading={aboveFold ? 'eager' : 'lazy'}
           />
