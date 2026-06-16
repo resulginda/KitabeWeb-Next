@@ -6,7 +6,9 @@ import {
   ListingBreadcrumbs,
   PlaceListingCard,
 } from '@/components/ListingPage';
-import { buildListingJsonLd, buildListingMetadata } from '@/lib/listingSeo';import {
+import { buildListingJsonLd, buildListingMetadata } from '@/lib/listingSeo';
+import { listingIntroParagraphs } from '@/lib/listingIntro';
+import {
   getListingByFilter,
   isHubSegment,
   isHubDashSegment,
@@ -58,6 +60,7 @@ async function renderListing(
 
   const jsonLd = buildListingJsonLd(data, locale);
   const heading = listingTitle(data, locale).replace(' | Kitabe', '');
+  const introParagraphs = listingIntroParagraphs(data, locale);
 
   const countLabel =
     locale === 'tr' ? 'yer' : locale === 'en' ? 'places' : locale === 'ru' ? 'мест' : 'مكان';
@@ -82,6 +85,12 @@ async function renderListing(
                 {data.total} {countLabel}
               </p>
             </header>
+
+            <div className="listing-intro">
+              {introParagraphs.map((paragraph) => (
+                <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+              ))}
+            </div>
 
             <AppPromoBanner locale={locale} />
 

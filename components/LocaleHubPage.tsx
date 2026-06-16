@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { getCityLabel } from '@/lib/citySlugLabel';
 import { encodePathSegments } from '@/lib/detectLocale';
 import { cityHubImage, FEATURED_EXPLORE_SLUGS } from '@/lib/featuredCities';
+import { localeHubIntroParagraphs } from '@/lib/listingIntro';
 import { buildListingPath, getTaxonomyIndex } from '@/lib/listings';
 import type { Locale } from '@/lib/places';
 
@@ -68,6 +69,8 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
   const others = cityHubs.filter((c) => !featuredSet.has(c.citySlug));
 
   const t = COPY[locale];
+  const totalPlaces = cityHubs.reduce((s, c) => s + c.placeCount, 0);
+  const introParagraphs = localeHubIntroParagraphs(locale, cityHubs.length, totalPlaces);
 
   return (
     <div className="locale-hub-shell">
@@ -85,11 +88,15 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
           {locale === 'ru' && 'Достопримечательности Турции'}
           {locale === 'ar' && 'أماكن للزيارة في تركيا'}
         </h1>
-        <p className="locale-hub-intro">{t.intro}</p>
+        <div className="locale-hub-intro">
+          {introParagraphs.map((paragraph) => (
+            <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+          ))}
+        </div>
         <p className="locale-hub-stats">
           {cityHubs.length} {locale === 'tr' ? 'şehir' : locale === 'en' ? 'cities' : locale === 'ru' ? 'городов' : 'مدينة'}
           {' · '}
-          {cityHubs.reduce((s, c) => s + c.placeCount, 0)} {t.places}
+          {totalPlaces} {t.places}
         </p>
         <a className="locale-hub-web-link" href={`${SPA_BASE}/home`}>
           {t.webApp} →
