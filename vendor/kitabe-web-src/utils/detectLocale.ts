@@ -1,6 +1,6 @@
 export type AppLanguage = 'tr' | 'en' | 'ru' | 'ar';
 
-export const DEFAULT_LANGUAGE: AppLanguage = 'en';
+export const DEFAULT_LANGUAGE: AppLanguage = 'tr';
 const LANG_KEY = 'kitabe_language';
 const MANUAL_KEY = 'kitabe_language_manual';
 
