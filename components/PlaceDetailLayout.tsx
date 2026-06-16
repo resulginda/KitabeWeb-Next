@@ -2,6 +2,7 @@ import { AdSlot } from '@/components/AdSlot';
 import { PlaceDetailStatic } from '@/components/PlaceDetailStatic';
 import { PlaceDetailClient } from '@/components/PlaceDetailClient';
 import type { Locale, SeoPlace } from '@/lib/places';
+import '@kitabe/pages/DetailPage.css';
 
 /** Detay — ortada içerik, geniş ekranda yan boşluklarda reklam */
 export function PlaceDetailLayout({
