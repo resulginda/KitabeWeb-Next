@@ -109,7 +109,14 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
           <h2 id="featured-cities">{t.featuredTitle}</h2>
           <div className="locale-hub-grid locale-hub-grid-featured">
             {featured.map((city, index) => (
-              <CityHubCard key={city.citySlug} locale={locale} city={city} t={t} large priority={index === 0} />
+              <CityHubCard
+                key={city.citySlug}
+                locale={locale}
+                city={city}
+                t={t}
+                large
+                priority={index < 3}
+              />
             ))}
           </div>
         </section>
@@ -158,9 +165,9 @@ function CityHubCard({
           <Image
             src={image}
             alt={cityName}
-            width={640}
-            height={400}
-            sizes="(max-width: 768px) 100vw, 33vw"
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 280px"
+            className="locale-hub-card-img"
             loading={priority ? 'eager' : 'lazy'}
             priority={priority}
           />

@@ -5,6 +5,8 @@ export const siteFontInter = Inter({
   weight: ['400', '500', '600'],
   variable: '--font-inter',
   display: 'swap',
+  adjustFontFallback: true,
+  preload: true,
 });
 
 export const siteFontOutfit = Outfit({
@@ -12,6 +14,8 @@ export const siteFontOutfit = Outfit({
   weight: ['400', '500', '600', '700', '800'],
   variable: '--font-outfit',
   display: 'swap',
+  adjustFontFallback: true,
+  preload: true,
 });
 
 export const siteFontClassName = `${siteFontInter.variable} ${siteFontOutfit.variable}`;

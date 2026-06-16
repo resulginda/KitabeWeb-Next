@@ -411,6 +411,7 @@
   font-size: clamp(1.5rem, 3vw, 2rem);
   margin: 0 0 0.75rem;
   line-height: 1.2;
+  min-height: 1.2em;
 }
 
 .locale-hub-intro {
@@ -419,6 +420,7 @@
   font-size: 1.05rem;
   line-height: 1.65;
   max-width: 720px;
+  min-height: 11rem;
 }
 
 .locale-hub-intro p {
@@ -483,9 +485,14 @@
 }
 
 .locale-hub-card-image {
+  position: relative;
   aspect-ratio: 16 / 10;
   background: #e8f0ea;
   overflow: hidden;
+}
+
+.locale-hub-card-img {
+  object-fit: cover;
 }
 
 .locale-hub-card-image img {

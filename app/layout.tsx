@@ -35,14 +35,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang={locale} className={siteFontClassName}>
       <head>
         <link rel="apple-touch-icon" href="/icon-180.png" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="preload"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-          href="https://fonts.gstatic.com/s/materialicons/v143/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2"
-        />
+        <link rel="preload" href="/fonts/material-icons.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       </head>
       <body>
         <GoogleAnalytics />
