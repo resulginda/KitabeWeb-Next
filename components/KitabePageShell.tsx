@@ -1,31 +1,36 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { LOCALES, type Locale } from '@/lib/places';
+import { AuthProvider } from '@kitabe/contexts/AuthContext';
+import { LanguageProvider } from '@kitabe/contexts/LanguageContext';
 import { IconFontLoader } from '@kitabe/components/IconFontLoader';
-import { DesktopSidebarNext } from './DesktopSidebarNext';
-import { DesktopHeaderNext } from './DesktopHeaderNext';
+import { LOCALES, type Locale } from '@/lib/places';
+import { SiteHeaderNext } from './SiteHeaderNext';
 import { KitabeNavigation } from './KitabeNavigation';
+import '@/lib/i18n-client';
 
 function localeFromPath(pathname: string): Locale {
   const first = pathname.split('/').filter(Boolean)[0];
   return (LOCALES as readonly string[]).includes(first) ? (first as Locale) : 'tr';
 }
 
-/** Tüm Next.js SEO sayfaları: masaüstü sidebar + header, mobil alt nav */
+/** KitabeWeb AppShell + SiteHeader — SEO sayfalarında aynı üst menü */
 export function KitabePageShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const locale = localeFromPath(pathname);
 
   return (
-    <div className="app-shell">
-      <IconFontLoader />
-      <DesktopSidebarNext locale={locale} pathname={pathname} />
-      <div className="app-shell-main">
-        <DesktopHeaderNext locale={locale} pathname={pathname} />
-        <div className="app-shell-content">{children}</div>
-      </div>
-      <KitabeNavigation locale={locale} />
-    </div>
+    <AuthProvider>
+      <LanguageProvider defaultLanguage={locale} localeFromUrl={locale}>
+        <IconFontLoader />
+        <div className="app-shell">
+          <SiteHeaderNext locale={locale} pathname={pathname} />
+          <div className="app-shell-main">
+            <div className="app-shell-content">{children}</div>
+          </div>
+        </div>
+        <KitabeNavigation locale={locale} pathname={pathname} />
+      </LanguageProvider>
+    </AuthProvider>
   );
 }

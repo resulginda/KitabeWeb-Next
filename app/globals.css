@@ -1,11 +1,19 @@
 @import '@kitabe/index.css';
 @import '@kitabe/App.css';
+@import '@kitabe/components/SiteHeader.css';
+@import '@kitabe/components/HeaderLanguageMenu.css';
+@import '@kitabe/styles/kitabe-ui.css';
+@import '@kitabe/styles/pages-shared.css';
 @import '@kitabe/pages/DetailPage.css';
 @import '@kitabe/components/Navigation.css';
 @import '@kitabe/components/AppShell.css';
-@import '@kitabe/components/DesktopSidebar.css';
-@import '@kitabe/components/DesktopHeader.css';
 @import '@kitabe/styles/desktop-density.css';
+
+/* Eski Next sidebar/header — artık kullanılmıyor */
+.desktop-sidebar,
+.desktop-header {
+  display: none !important;
+}
 
 :root {
   --kitabe-max-width: 1200px;
@@ -142,7 +150,7 @@
 }
 
 .listing-breadcrumb a {
-  color: #5a7a5e;
+  color: var(--primary);
   text-decoration: none;
 }
 
@@ -169,9 +177,9 @@
   gap: 1rem;
   padding: 1rem 1.15rem;
   margin-bottom: 1.25rem;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #f0f6f1 0%, #e8f0ea 100%);
-  border: 1px solid #d4e5d8;
+  border-radius: var(--radius-lg);
+  background: color-mix(in srgb, var(--primary) 8%, var(--bg-surface));
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, transparent);
 }
 
 .listing-app-banner h2 {
@@ -187,15 +195,15 @@
 
 .listing-app-banner-icon .material-icons {
   font-size: 2.2rem;
-  color: #5a7a5e;
+  color: var(--primary);
 }
 
 .listing-app-banner-cta {
   margin-left: auto;
   padding: 0.55rem 1rem;
-  border-radius: 8px;
-  background: #5a7a5e;
-  color: #fff;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: var(--text-on-primary);
   text-decoration: none;
   font-weight: 600;
   font-size: 0.9rem;
@@ -203,7 +211,7 @@
 }
 
 .listing-app-banner-cta:hover {
-  background: #4a6a4e;
+  background: var(--primary-hover);
 }
 
 .listing-grid {
@@ -215,17 +223,17 @@
 .listing-card {
   display: flex;
   flex-direction: column;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid #e8e8e8;
-  background: #fff;
+  border: 1px solid var(--border-light);
+  background: var(--bg-surface);
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: box-shadow var(--transition-normal), transform var(--transition-fast);
 }
 
 .listing-card:hover {
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
 }
 
@@ -246,13 +254,13 @@
   align-items: center;
   justify-content: center;
   height: 100%;
-  background: linear-gradient(145deg, #e8f0ea 0%, #d4e5d8 100%);
+  background: color-mix(in srgb, var(--primary) 12%, var(--bg-main));
 }
 
 .listing-card-initial {
   font-size: 2rem;
   font-weight: 700;
-  color: #5a7a5e;
+  color: var(--primary);
   line-height: 1;
 }
 
@@ -375,7 +383,7 @@
 
 .locale-hub-web-link {
   display: inline-block;
-  color: #5a7a5e;
+  color: var(--accent);
   font-weight: 600;
   text-decoration: none;
 }
@@ -454,7 +462,7 @@
 .locale-hub-card-body p {
   margin: 0;
   font-size: 0.82rem;
-  color: #5a7a5e;
+  color: var(--accent);
   font-weight: 600;
 }
 
@@ -462,26 +470,28 @@
   font-size: 1.15rem;
 }
 
-/* ——— App shell (Next.js SEO sayfaları) ——— */
+/* ——— App shell (Next.js SEO = KitabeWeb üst header) ——— */
 @media (min-width: 1024px) {
   .bottom-nav {
     display: none !important;
   }
 
   .locale-hub-shell {
-    max-width: 1440px;
+    max-width: var(--container-max);
     margin: 0 auto;
-    padding: 1.5rem 1.5rem 2rem;
+    padding: 1.5rem var(--gutter) 2rem;
   }
 
   .listing-page-layout {
-    max-width: min(1480px, calc(100vw - var(--shell-sidebar-collapsed, 72px) - 2rem));
+    max-width: var(--container-max);
+    margin: 0 auto;
     padding-top: 0.5rem;
     padding-bottom: 2rem;
   }
 
   .place-page-layout {
-    max-width: min(1480px, calc(100vw - var(--shell-sidebar-collapsed, 72px) - 2rem));
+    max-width: 1400px;
+    margin: 0 auto;
   }
 
   .page-container {
