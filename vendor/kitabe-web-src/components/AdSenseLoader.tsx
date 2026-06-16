@@ -1,9 +1,14 @@
 import { useEffect } from 'react';
-import { getAdClientId } from '../lib/adsense';
+import { useLocation } from 'react-router-dom';
+import { getAdClientId, shouldShowPageAds } from '../lib/adsense';
 
-/** AdSense Auto Ads + manuel birimler — tek seferlik script */
+/** AdSense Auto Ads + manuel birimler — yalnızca reklamlı sayfalarda */
 export function AdSenseLoader() {
+  const { pathname } = useLocation();
+
   useEffect(() => {
+    if (!shouldShowPageAds(pathname)) return;
+
     const clientId = getAdClientId();
     if (!clientId) return;
 
@@ -15,7 +20,7 @@ export function AdSenseLoader() {
     script.async = true;
     script.crossOrigin = 'anonymous';
     document.head.appendChild(script);
-  }, []);
+  }, [pathname]);
 
   return null;
 }
