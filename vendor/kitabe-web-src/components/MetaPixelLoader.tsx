@@ -1,6 +1,11 @@
 import { useEffect } from 'react';
+import { readEnv } from '../utils/env';
+import { readViteEnv } from '../utils/env.vite';
 
-const PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID ?? '1693954058304683';
+const PIXEL_ID =
+  readEnv('NEXT_PUBLIC_META_PIXEL_ID') ??
+  readViteEnv('VITE_META_PIXEL_ID') ??
+  '1693954058304683';
 
 /** Meta (Facebook) Pixel — SPA sayfaları (/home, /list, /app…) */
 export function MetaPixelLoader() {
