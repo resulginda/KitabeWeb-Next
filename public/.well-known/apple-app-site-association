@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "4M6F9WR7WL.com.kitabeapp",
+        "paths": [
+          "/detail/*",
+          "/tr/*",
+          "/en/*",
+          "/ru/*",
+          "/ar/*",
+          "/reset-password",
+          "/reset-password/*"
+        ]
+      }
+    ]
+  }
+}
