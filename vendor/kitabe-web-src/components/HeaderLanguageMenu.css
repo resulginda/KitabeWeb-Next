@@ -22,13 +22,26 @@
   background: color-mix(in srgb, var(--text-on-primary) 22%, transparent);
 }
 
-.header-lang-flag {
-  font-size: 1.1rem;
+/* Dil rozeti (TR/EN/RU/AR) — bayrak emoji bazı platformlarda görünmüyor */
+.header-lang-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.65rem;
+  height: 1.2rem;
+  padding: 0 5px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--text-on-primary) 22%, transparent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   line-height: 1;
 }
 
-.header-lang-code {
-  letter-spacing: 0.04em;
+.header-lang-badge--menu {
+  background: color-mix(in srgb, var(--primary) 14%, var(--bg-main));
+  color: var(--primary);
+  flex-shrink: 0;
 }
 
 .header-lang-chevron {

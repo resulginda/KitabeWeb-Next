@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { LOCALES, type Locale } from '@/lib/places';
 import { siteLogoHeader } from '@/lib/siteLogo';
-import { HUB_HEADER_COPY, HUB_LANG_FLAGS } from '@/lib/hubHeaderCopy';
+import { HUB_HEADER_COPY } from '@/lib/hubHeaderCopy';
 
 /** Hub (/tr …) — istemci JS yok; PageSpeed için statik header + alt nav */
 export function HubStaticChrome({
@@ -70,7 +70,7 @@ export function HubStaticChrome({
                 aria-current={code === locale ? 'page' : undefined}
                 title={code.toUpperCase()}
               >
-                <span aria-hidden>{HUB_LANG_FLAGS[code]}</span>
+                <span className="header-lang-badge" aria-hidden>{code.toUpperCase()}</span>
               </Link>
             ))}
             <a href="/login" className="btn btn-secondary btn-sm site-header-login">

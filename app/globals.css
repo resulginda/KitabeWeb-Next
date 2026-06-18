@@ -296,16 +296,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
   border-radius: 8px;
   text-decoration: none;
   opacity: 0.85;
 }
 
 .hub-lang-link.is-active {
-  background: rgba(255, 255, 255, 0.2);
   opacity: 1;
+}
+
+.hub-lang-link.is-active .header-lang-badge {
+  background: color-mix(in srgb, var(--text-on-primary) 38%, transparent);
 }
 
 .hub-static-bottom .bottom-nav-label {
@@ -320,26 +321,7 @@
   overflow: visible;
 }
 
-.header-lang-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.65rem;
-  height: 1.2rem;
-  padding: 0 5px;
-  border-radius: 4px;
-  background: color-mix(in srgb, var(--text-on-primary) 22%, transparent);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 1;
-}
-
-.header-lang-badge--menu {
-  background: color-mix(in srgb, var(--primary) 14%, var(--bg-main));
-  color: var(--primary);
-  flex-shrink: 0;
-}
+/* .header-lang-badge stilleri @kitabe/components/HeaderLanguageMenu.css'te (tek kaynak) */
 
 .seo-header-lang .header-lang-menu {
   z-index: 1300;

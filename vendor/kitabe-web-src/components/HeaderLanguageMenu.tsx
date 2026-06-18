@@ -37,8 +37,8 @@ export function HeaderLanguageMenu() {
         aria-haspopup="listbox"
         title={t('common.language')}
       >
-        <span className="header-lang-flag" aria-hidden>
-          {current.flag}
+        <span className="header-lang-badge" aria-hidden>
+          {current.code.toUpperCase()}
         </span>
         <span className="header-lang-chevron" aria-hidden>
           {open ? '▴' : '▾'}
@@ -54,7 +54,7 @@ export function HeaderLanguageMenu() {
                 className={`header-lang-item ${currentLanguage === lang.code ? 'is-active' : ''}`}
                 onClick={() => pick(lang.code)}
               >
-                <span className="header-lang-flag">{lang.flag}</span>
+                <span className="header-lang-badge header-lang-badge--menu">{lang.code.toUpperCase()}</span>
                 <span className="header-lang-name">{lang.name}</span>
                 {currentLanguage === lang.code && <span className="header-lang-check">✓</span>}
               </button>
