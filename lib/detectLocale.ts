@@ -39,16 +39,20 @@ export function isSupportedLocale(value: string): value is Locale {
   return (LOCALES as readonly string[]).includes(value);
 }
 
-/** Kiril/Arap slug'lar — HTTP Location header yalnızca ASCII kabul eder */
+/**
+ * Kiril/Arap slug'lar — HTTP Location header yalnızca ASCII kabul eder.
+ * Arapça slug'lar backend'de NFD (decomposed: ا + ٔ) saklanıyor; tüm URL/link/
+ * canonical/sitemap üretimini NFC'ye (composed: أ) sabitleyerek eşleşmeyi garanti eder.
+ */
 export function encodePathSegments(path: string): string {
   return path
     .split('/')
     .map((segment) => {
       if (!segment) return segment;
       try {
-        return encodeURIComponent(decodeURIComponent(segment));
+        return encodeURIComponent(decodeURIComponent(segment).normalize('NFC'));
       } catch {
-        return encodeURIComponent(segment);
+        return encodeURIComponent(segment.normalize('NFC'));
       }
     })
     .join('/');

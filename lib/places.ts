@@ -168,9 +168,9 @@ export const resolvePlaceForDetail = cache(async (
 
   const index = await getPlaceIndex();
 
-  // Tam path herhangi bir dilde eşleşirse
+  // Tam path herhangi bir dilde eşleşirse (index NFD, hedef NFC → iki taraf da NFC)
   const entry = index.find((row) =>
-    LOCALES.some((l) => row.slug[l] === targetPath)
+    LOCALES.some((l) => row.slug[l] && row.slug[l].normalize('NFC') === targetPath)
   );
   if (entry) return getPlaceById(entry.id);
 
@@ -178,7 +178,7 @@ export const resolvePlaceForDetail = cache(async (
   const placeOnly = index.find((row) => {
     const path = row.slug[locale];
     if (!path) return false;
-    const parts = path.split('/');
+    const parts = path.normalize('NFC').split('/');
     return parts.length >= 2 && parts.slice(1).join('/') === slug;
   });
   if (placeOnly) return getPlaceById(placeOnly.id);

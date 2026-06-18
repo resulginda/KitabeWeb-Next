@@ -40,7 +40,8 @@ export async function generateStaticParams() {
     for (const locale of LOCALES) {
       const full = place.slug?.[locale];
       if (!full) continue;
-      const [city, ...rest] = full.split('/');
+      // Arapça slug'lar NFD saklanıyor; statik sayfa anahtarını NFC'ye sabitle
+      const [city, ...rest] = full.normalize('NFC').split('/');
       if (!city || rest.length === 0) continue;
       params.push({ locale, city, segments: rest });
     }
