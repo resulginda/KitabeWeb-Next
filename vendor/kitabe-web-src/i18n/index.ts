@@ -10,70 +10,49 @@ const loaders: Record<I18nLanguage, () => Promise<{ default: Record<string, unkn
   ar: () => import('./locales/ar.json'),
 };
 
-let initPromise: Promise<typeof i18n> | null = null;
-let initialized = false;
+/**
+ * i18n instance'ı SENKRON başlatılır (boş resource ile). Böylece ilk render'da
+ * useTranslation her zaman bir instance bulur — aksi halde react-i18next
+ * "NO_I18NEXT_INSTANCE" verip metinleri çevirmeden anahtar olarak gösterir
+ * (bundle'lar async yüklendiğinden init geç kalırsa toparlanamıyordu).
+ * Gerçek diller ensureI18n ile sonradan eklenir.
+ */
+if (!i18n.isInitialized) {
+  void i18n.use(initReactI18next).init({
+    resources: {},
+    lng: 'tr',
+    fallbackLng: 'en',
+    interpolation: { escapeValue: false },
+    react: { useSuspense: false, bindI18nStore: 'added removed' },
+  });
+}
 
-async function loadBundles(locale: I18nLanguage) {
-  const primary = await loaders[locale]();
-  const resources: Record<string, { translation: Record<string, unknown> }> = {
-    [locale]: { translation: primary.default },
-  };
-  if (locale !== 'en') {
-    const fallback = await loaders.en();
-    resources.en = { translation: fallback.default };
+let loadingPromise: Promise<typeof i18n> | null = null;
+
+async function addBundles(locale: I18nLanguage) {
+  if (!i18n.hasResourceBundle(locale, 'translation')) {
+    const primary = await loaders[locale]();
+    i18n.addResourceBundle(locale, 'translation', primary.default, true, true);
   }
-  return resources;
+  if (locale !== 'en' && !i18n.hasResourceBundle('en', 'translation')) {
+    const fallback = await loaders.en();
+    i18n.addResourceBundle('en', 'translation', fallback.default, true, true);
+  }
 }
 
 /** Aktif locale + en fallback — tüm dilleri başta yükleme */
 export function ensureI18n(locale: I18nLanguage): Promise<typeof i18n> {
-  if (initialized && i18n.hasResourceBundle(locale, 'translation')) {
-    if (i18n.language !== locale) {
-      return i18n.changeLanguage(locale).then(() => i18n);
-    }
-    return Promise.resolve(i18n);
-  }
-
-  if (!initPromise) {
-    initPromise = (async () => {
-      const resources = await loadBundles(locale);
-      if (!initialized) {
-        await i18n.use(initReactI18next).init({
-          resources,
-          lng: locale,
-          fallbackLng: 'en',
-          interpolation: { escapeValue: false },
-        });
-        initialized = true;
-      } else {
-        for (const [code, bundle] of Object.entries(resources)) {
-          if (!i18n.hasResourceBundle(code, 'translation')) {
-            i18n.addResourceBundle(code, 'translation', bundle.translation, true, true);
-          }
-        }
-        await i18n.changeLanguage(locale);
-      }
-      return i18n;
-    })();
-  }
-
-  return initPromise;
+  loadingPromise = (async () => {
+    await addBundles(locale);
+    // changeLanguage her durumda 'languageChanged' yayar → consumer'lar re-render
+    await i18n.changeLanguage(locale);
+    return i18n;
+  })();
+  return loadingPromise;
 }
 
 export async function loadI18nLanguage(locale: I18nLanguage) {
-  if (!initialized) {
-    await ensureI18n(locale);
-    return;
-  }
-  if (!i18n.hasResourceBundle(locale, 'translation')) {
-    const resources = await loadBundles(locale);
-    for (const [code, bundle] of Object.entries(resources)) {
-      if (!i18n.hasResourceBundle(code, 'translation')) {
-        i18n.addResourceBundle(code, 'translation', bundle.translation, true, true);
-      }
-    }
-  }
-  await i18n.changeLanguage(locale);
+  await ensureI18n(locale);
 }
 
 export default i18n;
