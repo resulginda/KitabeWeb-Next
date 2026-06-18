@@ -33,16 +33,18 @@ type PageProps = {
 };
 
 /**
- * Detay sayfaları VARSAYILAN olarak build anında üretilmez — ilk ziyarette
- * üretilip cache'lenir (on-demand ISR, dynamicParams=true + revalidate=3600).
- * Sebep: ~8500 sayfayı build sırasında üretmek api.kitabe.org'u HTTP 429
- * (rate limit) ile boğuyor ve build başarısız oluyordu. On-demand üretimde
- * istekler zamana yayılır; SEO korunur çünkü bot ilk istekte tam SSR HTML alır.
- *
- * Tümünü build anında üretmek istersen PRERENDER_DETAILS=1 ile çalıştır.
+ * Detay sayfalarını build anında üretme stratejisi:
+ * - Sunucu bypass anahtarı (SERVER_API_KEY / REVALIDATE_SECRET) VARSA: tüm
+ *   sayfalar build'de üretilir. Anahtar X-Kitabe-Internal-Key olarak gider ve
+ *   backend rate-limit'ini bypass eder → ~8500 sayfa 429 yemeden üretilir.
+ * - Anahtar YOKSA: build sırasında API rate-limit'e (HTTP 429) takılıp build
+ *   patlamasın diye on-demand ISR'ye düşeriz (dynamicParams=true + revalidate).
+ *   Bu durumda sayfa yine "var": ilk istekte tam SSR HTML üretilip cache'lenir.
+ * - PRERENDER_DETAILS=0 ile build-de üretimi elle kapatabilirsin.
  */
 export async function generateStaticParams() {
-  if (process.env.PRERENDER_DETAILS !== '1') {
+  const serverKey = process.env.SERVER_API_KEY || process.env.REVALIDATE_SECRET;
+  if (process.env.PRERENDER_DETAILS === '0' || !serverKey) {
     return [];
   }
 

@@ -13,8 +13,14 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ARG NEXT_PUBLIC_API_URL=https://api.kitabe.org
 ARG NEXT_PUBLIC_SITE_URL=https://kitabe.org
+# Build sırasında detay sayfalarını üretirken API rate-limit'ini bypass etmek
+# için gereken anahtar(lar). Dokploy bunları build-arg olarak geçmeli.
+ARG REVALIDATE_SECRET
+ARG SERVER_API_KEY
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_SITE_URL=$NEXT_PUBLIC_SITE_URL
+ENV REVALIDATE_SECRET=$REVALIDATE_SECRET
+ENV SERVER_API_KEY=$SERVER_API_KEY
 RUN npm run optimize-images || true
 RUN npm run build
 
