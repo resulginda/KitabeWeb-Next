@@ -326,3 +326,70 @@
 .seo-header-lang .header-lang-menu {
   z-index: 1300;
 }
+
+/* Hub dil dropdown (CSS-only <details>) */
+.hub-lang-dropdown {
+  position: relative;
+}
+
+.hub-lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  list-style: none;
+  padding: 0.35rem 0.7rem;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--text-on-primary, #fff) 18%, transparent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: inherit;
+  user-select: none;
+}
+
+.hub-lang-trigger::-webkit-details-marker { display: none; }
+
+.hub-lang-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
+  padding: 6px 0;
+  list-style: none;
+  margin: 0;
+  min-width: 7rem;
+  z-index: 1400;
+}
+
+.hub-lang-dropdown[open] .hub-lang-menu {
+  display: block;
+}
+
+.hub-lang-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  color: var(--text-main, #333);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.hub-lang-item:hover {
+  background: #f5f5f5;
+}
+
+.hub-lang-item.is-active {
+  color: var(--primary, #8D6E63);
+  font-weight: 700;
+}
+
+/* Logo: standart görünüm */
+.site-header-logo-img {
+  display: block;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}

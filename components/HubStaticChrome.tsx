@@ -62,17 +62,24 @@ export function HubStaticChrome({
           </nav>
 
           <div className="site-header-actions hub-static-lang">
-            {LOCALES.map((code) => (
-              <Link
-                key={code}
-                href={`/${code}`}
-                className={`hub-lang-link${code === locale ? ' is-active' : ''}`}
-                aria-current={code === locale ? 'page' : undefined}
-                title={code.toUpperCase()}
-              >
-                <span className="header-lang-badge" aria-hidden>{code.toUpperCase()}</span>
-              </Link>
-            ))}
+            <details className="hub-lang-dropdown">
+              <summary className="hub-lang-trigger">
+                {locale.toUpperCase()} <span aria-hidden>▾</span>
+              </summary>
+              <ul className="hub-lang-menu">
+                {LOCALES.map((code) => (
+                  <li key={code}>
+                    <Link
+                      href={`/${code}`}
+                      className={`hub-lang-item${code === locale ? ' is-active' : ''}`}
+                      aria-current={code === locale ? 'page' : undefined}
+                    >
+                      {code.toUpperCase()}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </details>
             <a href="/login" className="btn btn-secondary btn-sm site-header-login">
               {t.login}
             </a>
