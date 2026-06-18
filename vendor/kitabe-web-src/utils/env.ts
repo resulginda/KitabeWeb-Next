@@ -6,10 +6,11 @@
  */
 export function readEnv(key: string): string | undefined {
   try {
-    if (typeof process !== 'undefined' && process.env) {
-      const val = process.env[key];
-      if (val) return val;
-    }
+    // `process` adına doğrudan erişmek Vite/tsc'de TS2591 verir (@types/node yok).
+    // globalThis üzerinden cast ile erişerek Node tipleri olmadan güvenli okuruz.
+    const proc = (globalThis as { process?: { env?: Record<string, string | undefined> } }).process;
+    const val = proc?.env?.[key];
+    if (val) return val;
   } catch {
     /* Vite ortamı — process yok */
   }
