@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 import { MetaPixel } from '@/components/MetaPixel';
-import { getPreferredLocale } from '@/lib/preferredLocale';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 import { siteFontClassName } from '@/lib/siteFonts';
 import { HUB_CRITICAL_CSS } from '@/lib/hubCriticalCss';
@@ -27,17 +26,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = await getPreferredLocale();
+/**
+ * Kök layout BİLEREK statiktir: cookies()/headers() gibi dinamik API kullanmaz.
+ * Aksi halde tüm alt rotalar (statik SEO hub/detay sayfaları ve force-static
+ * SPA host'u) dinamiğe zorlanır ve `DYNAMIC_SERVER_USAGE` ile patlardı.
+ * `lang`/`dir` istemcide URL'in ilk segmentinden düzeltilir; içerik dili zaten
+ * `[locale]` rotasından ve sayfa metadata'sından doğru şekilde gelir.
+ */
+const LANG_DIR_SCRIPT = `(function(){try{var s=location.pathname.split('/')[1];if(['tr','en','ru','ar'].indexOf(s)>-1){var d=document.documentElement;d.lang=s;d.dir=s==='ar'?'rtl':'ltr';}}catch(e){}})();`;
 
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang={locale} className={siteFontClassName}>
+    <html lang="tr" className={siteFontClassName}>
       <head>
         <style
           dangerouslySetInnerHTML={{
             __html: HUB_CRITICAL_CSS,
           }}
         />
+        <script dangerouslySetInnerHTML={{ __html: LANG_DIR_SCRIPT }} />
         <link rel="apple-touch-icon" href="/icon-180.png" />
         <link rel="stylesheet" href="/fonts/kitabe-fonts.css" />
       </head>
