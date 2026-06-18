@@ -59,7 +59,10 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     externalDir: true,
-    optimizeCss: true,
+    // optimizeCss (beasties) Next 15.5'te CSS chunk dosyalarini emit etmiyor:
+    // webpack runtime static/css/*.css'e referans veriyor ama dosyalar yazilmiyor
+    // -> 404 -> ChunkLoadError -> ssr:false SPA (/home) cokuyor. Kritik CSS zaten
+    // layout'ta HUB_CRITICAL_CSS ile elle inline edildigi icin buna gerek yok.
   },
   outputFileTracingRoot: path.join(__dirname),
   output: 'standalone',
