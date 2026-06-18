@@ -32,7 +32,20 @@ type PageProps = {
   params: Promise<{ locale: string; city: string; segments?: string[] }>;
 };
 
+/**
+ * Detay sayfaları VARSAYILAN olarak build anında üretilmez — ilk ziyarette
+ * üretilip cache'lenir (on-demand ISR, dynamicParams=true + revalidate=3600).
+ * Sebep: ~8500 sayfayı build sırasında üretmek api.kitabe.org'u HTTP 429
+ * (rate limit) ile boğuyor ve build başarısız oluyordu. On-demand üretimde
+ * istekler zamana yayılır; SEO korunur çünkü bot ilk istekte tam SSR HTML alır.
+ *
+ * Tümünü build anında üretmek istersen PRERENDER_DETAILS=1 ile çalıştır.
+ */
 export async function generateStaticParams() {
+  if (process.env.PRERENDER_DETAILS !== '1') {
+    return [];
+  }
+
   const index = await getPlaceIndex();
   const params: { locale: string; city: string; segments?: string[] }[] = [];
 
