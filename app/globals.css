@@ -393,3 +393,73 @@
   height: 32px;
   object-fit: contain;
 }
+
+/* ── Mobil Uygulama Banner'ı ── */
+.app-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-top: 1px solid #e0e0e0;
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.10);
+}
+
+.app-banner-close {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  font-size: 1rem;
+  color: #888;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.app-banner-icon {
+  flex-shrink: 0;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.app-banner-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-banner-text strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1.2;
+}
+
+.app-banner-text span {
+  font-size: 0.78rem;
+  color: #666;
+  margin-top: 2px;
+}
+
+.app-banner-btn {
+  flex-shrink: 0;
+  background: var(--primary, #8D6E63);
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.app-banner-btn:active {
+  opacity: 0.85;
+}

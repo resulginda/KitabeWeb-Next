@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { GoogleAnalytics } from '@/components/GoogleAnalytics';
 import { MetaPixel } from '@/components/MetaPixel';
+import AppBanner from '@/components/AppBanner';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 import { siteFontClassName } from '@/lib/siteFonts';
 import { HUB_CRITICAL_CSS } from '@/lib/hubCriticalCss';
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <GoogleAnalytics />
         <MetaPixel />
         {children}
+        <AppBanner />
       </body>
     </html>
   );
