@@ -1,7 +1,7 @@
 import { AdSenseScript } from '@/components/AdSenseScript';
 import { AdResourceHints } from '@/components/AdResourceHints';
 
-/** Tüm SEO locale rotaları: /tr, /en, /ru, /ar ve şehir/detay alt sayfaları */
+/** Tüm locale rotaları için paylaşılan layout: /tr, /en, /ru, /ar */
 export default function LocaleLayout({ children }: { children: React.ReactNode }) {
   return (
     <>

@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { HubStaticChrome } from '@/components/HubStaticChrome';
 import { LocaleHubPage } from '@/components/LocaleHubPage';
 import { hubLcpImage, hubLcpSrcSet } from '@/lib/hubLcpImage';
 import { LOCALES, type Locale } from '@/lib/places';
@@ -84,17 +85,19 @@ export default async function LocaleRootPage({
   const loc = locale as Locale;
 
   return (
-    <>
-      <link
-        rel="preload"
-        as="image"
-        href={hubLcpImage.src}
-        type="image/webp"
-        imageSrcSet={hubLcpSrcSet}
-        imageSizes="(max-width: 768px) 50vw, 280px"
-        {...({ fetchpriority: 'high' } as Record<string, string>)}
-      />
-      <LocaleHubPage locale={loc} />
-    </>
+    <HubStaticChrome locale={loc}>
+      <div className="page-container">
+        <link
+          rel="preload"
+          as="image"
+          href={hubLcpImage.src}
+          type="image/webp"
+          imageSrcSet={hubLcpSrcSet}
+          imageSizes="(max-width: 768px) 50vw, 280px"
+          {...({ fetchpriority: 'high' } as Record<string, string>)}
+        />
+        <LocaleHubPage locale={loc} />
+      </div>
+    </HubStaticChrome>
   );
 }
