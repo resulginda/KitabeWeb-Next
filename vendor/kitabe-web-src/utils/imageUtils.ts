@@ -1,6 +1,24 @@
 import type { Place } from '../types/place';
 import { API_BASE_URL } from '../config/api';
 
+/**
+ * URL'in Google Places kaynaklı olup olmadığını tespit eder.
+ * Google Places API ToS gereği bu görsellerin yanında "Powered by Google"
+ * atıfı gösterilmelidir.
+ */
+export const isGooglePhotoUrl = (url?: string | null): boolean => {
+  if (!url || typeof url !== 'string') return false;
+  const u = url.toLowerCase();
+  return (
+    u.includes('googleusercontent.com') ||
+    u.includes('maps.googleapis.com') ||
+    u.includes('googleapis.com/maps') ||
+    u.includes('/api/google/photo') ||
+    u.includes('/maps/api/place/photo') ||
+    /lh[3-6]\.google/.test(u)
+  );
+};
+
 const isValidImageUrl = (url: string): boolean => {
   if (!url || typeof url !== 'string' || url.trim() === '') {
     return false;

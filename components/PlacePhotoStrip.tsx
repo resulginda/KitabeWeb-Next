@@ -1,11 +1,13 @@
 import Image from 'next/image';
 import { collectGalleryUrls, pickText, type Locale, type SeoPlace } from '@/lib/places';
+import { isGooglePhotoUrl } from '@kitabe/utils/imageUtils';
 
 /** Sunucu tarafında crawl edilebilir fotoğraf şeridi (botlar + hızlı LCP) */
 export function PlacePhotoStrip({ place, locale }: { place: SeoPlace; locale: Locale }) {
   const name = pickText(place.name as never, locale);
   const photos = collectGalleryUrls(place);
   if (photos.length === 0) return null;
+  const hasGoogle = photos.slice(0, 12).some(isGooglePhotoUrl);
 
   return (
     <section aria-label={`${name} fotoğrafları`} style={{ marginBottom: '0.5rem' }}>
@@ -23,6 +25,9 @@ export function PlacePhotoStrip({ place, locale }: { place: SeoPlace; locale: Lo
           />
         ))}
       </div>
+      {hasGoogle ? (
+        <span className="kb-google-attribution kb-google-attribution-inline">Powered by Google</span>
+      ) : null}
     </section>
   );
 }

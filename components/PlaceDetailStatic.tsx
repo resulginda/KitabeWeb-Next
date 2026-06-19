@@ -3,6 +3,7 @@ import { pickArray } from '@/lib/placeText';
 import { DETAIL_LABELS } from '@/lib/detailLabels';
 import { PhotoGalleryClient } from '@/components/PhotoGalleryClient';
 import { AdSlot } from '@/components/AdSlot';
+import { isGooglePhotoUrl } from '@kitabe/utils/imageUtils';
 
 /** SSR — DetailPage ile aynı kb-detail-layout (flash önleme) */
 export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: Locale }) {
@@ -81,6 +82,9 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
             <div className="kb-detail-hero kb-detail-hero-main">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={heroUrl} alt={name} fetchPriority="high" />
+              {isGooglePhotoUrl(heroUrl) ? (
+                <span className="kb-google-attribution">Powered by Google</span>
+              ) : null}
             </div>
           ) : null}
 
@@ -132,6 +136,11 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
               altPrefix={name}
               emptyText={labels.noPhotosYet}
             />
+            {galleryPhotos.some(isGooglePhotoUrl) ? (
+              <span className="kb-google-attribution kb-google-attribution-inline">
+                Powered by Google
+              </span>
+            ) : null}
           </div>
         </aside>
       </div>

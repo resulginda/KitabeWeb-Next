@@ -41,6 +41,15 @@ function isSpaPath(pathname: string): boolean {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Bu projede Next.js Server Action YOK. Bot/scanner'lar ve eski (stale) tarayıcı
+  // client'ları 'Next-Action' header'lı POST atıp sunucu loglarını
+  // "Failed to find Server Action" hatalarıyla dolduruyor. Bunları erkenden kısa
+  // devre yapıp 404 dönüyoruz: log temiz kalır, Googlebot/Facebook GET ile geldiği
+  // için arama indeksine hiçbir etkisi olmaz.
+  if (request.method === 'POST' && request.headers.has('next-action')) {
+    return new NextResponse(null, { status: 404 });
+  }
+
   if (isSpaPath(pathname)) {
     const url = request.nextUrl.clone();
     url.pathname = '/kitabe-app';

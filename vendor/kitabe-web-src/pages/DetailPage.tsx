@@ -12,7 +12,7 @@ import { useRatings } from '../contexts/RatingContext';
 import { usePhotoSubmissions } from '../contexts/PhotoSubmissionContext';
 import { useVisitedPlaces } from '../contexts/VisitedPlacesContext';
 import { getLocalizedText, getLocalizedArray } from '../utils/multilang';
-import { getPlaceImageUri, getGooglePhotoGalleryUrls } from '../utils/imageUtils';
+import { getPlaceImageUri, getGooglePhotoGalleryUrls, isGooglePhotoUrl } from '../utils/imageUtils';
 import { getPlaceDetailAbsoluteUrl, getPlaceDetailUrl } from '../utils/placeDetailUrl';
 import MapView from '../components/MapView';
 import StarRating from '../components/StarRating';
@@ -588,6 +588,9 @@ const DetailPage = ({
                     (e.target as HTMLImageElement).style.display = 'none';
                   }}
                 />
+                {isGooglePhotoUrl(heroImageUrl) ? (
+                  <span className="kb-google-attribution">Powered by Google</span>
+                ) : null}
               </div>
             ) : null}
 
@@ -746,7 +749,14 @@ const DetailPage = ({
                 )}
               </div>
               {galleryPhotos.length > 0 ? (
-                <PhotoLightbox photos={galleryPhotos} altPrefix={name} />
+                <>
+                  <PhotoLightbox photos={galleryPhotos} altPrefix={name} />
+                  {galleryPhotos.some(isGooglePhotoUrl) ? (
+                    <span className="kb-google-attribution kb-google-attribution-inline">
+                      Powered by Google
+                    </span>
+                  ) : null}
+                </>
               ) : (
                 <p style={{ color: 'var(--text-secondary)', fontStyle: 'italic', fontSize: '0.875rem' }}>
                   {t('detail.noPhotosYet')}
