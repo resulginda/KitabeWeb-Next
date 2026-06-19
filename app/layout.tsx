@@ -10,6 +10,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: 'Kitabe — Kültürel Miras Rehberi', template: '%s' },
   description: 'Türkiye\'nin tarihi ve kültürel yerlerini keşfedin.',
+  icons: {
+    icon: '/icon.png',
+    apple: '/icon-180.png',
+  },
   openGraph: {
     ...DEFAULT_OG,
     title: 'Kitabe — Türkiye Kültürel Miras Rehberi',
