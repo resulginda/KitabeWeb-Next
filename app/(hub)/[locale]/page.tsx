@@ -33,6 +33,7 @@ export function generateStaticParams() {
 }
 
 export const dynamicParams = false;
+export const dynamic = 'force-static';
 
 export async function generateMetadata({
   params,
@@ -70,8 +71,6 @@ export async function generateMetadata({
     },
   };
 }
-
-export const revalidate = 3600;
 
 export default async function LocaleRootPage({
   params,
