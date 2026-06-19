@@ -1,6 +1,7 @@
 @import './styles/material-icons.css';
 
 :root {
+  --kb: 2;
   /* Mobil uygulama paleti */
   --primary: #8D6E63;
   --primary-hover: #795548;

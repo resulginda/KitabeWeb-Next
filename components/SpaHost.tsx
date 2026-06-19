@@ -14,5 +14,5 @@ const SpaApp = dynamic(() => import('@kitabe/App'), {
 });
 
 export default function SpaHost() {
-  return <SpaApp />;
+  return <div id="kitabe-spa"><SpaApp /></div>;
 }
