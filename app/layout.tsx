@@ -35,6 +35,11 @@ export const metadata: Metadata = {
  */
 const LANG_DIR_SCRIPT = `(function(){try{var s=location.pathname.split('/')[1];if(['tr','en','ru','ar'].indexOf(s)>-1){var d=document.documentElement;d.lang=s;d.dir=s==='ar'?'rtl':'ltr';}}catch(e){}})();`;
 
+// Eski Vite PWA'nın bıraktığı service worker'ları iptal et.
+// Vite'tan Next.js'e geçişte kalan SW'lar CSS chunk'larını yanlış cache'leyip
+// ChunkLoadError'a yol açıyordu.
+const SW_KILL_SCRIPT = `(function(){if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(r){r.forEach(function(sw){sw.unregister();});});}})();`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="tr" className={siteFontClassName}>
@@ -45,6 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <script dangerouslySetInnerHTML={{ __html: LANG_DIR_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: SW_KILL_SCRIPT }} />
         <link rel="apple-touch-icon" href="/icon-180.png" />
         <link rel="stylesheet" href="/fonts/kitabe-fonts.css" />
       </head>
