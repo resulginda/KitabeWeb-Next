@@ -6,6 +6,58 @@ import {
   type ListingPlace,
   type Locale,
 } from '@/lib/listings';
+import type { FilterChip } from '@/lib/taxonomyChips';
+
+const CHIP_HEADINGS: Record<Locale, { districts: string; categories: string }> = {
+  tr: { districts: 'İlçeler', categories: 'Kategoriler' },
+  en: { districts: 'Districts', categories: 'Categories' },
+  ru: { districts: 'Районы', categories: 'Категории' },
+  ar: { districts: 'الأحياء', categories: 'الفئات' },
+};
+
+export function FilterChipGroup({
+  title,
+  chips,
+}: {
+  title: string;
+  chips: FilterChip[];
+}) {
+  if (!chips.length) return null;
+  return (
+    <section className="listing-chips" aria-label={title}>
+      <h2 className="listing-chips-title">{title}</h2>
+      <ul className="listing-chips-list">
+        {chips.map((chip) => (
+          <li key={chip.slug}>
+            <Link href={chip.href} className="listing-chip">
+              <span className="listing-chip-label">{chip.label}</span>
+              <span className="listing-chip-count">{chip.count}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+export function ListingFilters({
+  locale,
+  districts = [],
+  categories = [],
+}: {
+  locale: Locale;
+  districts?: FilterChip[];
+  categories?: FilterChip[];
+}) {
+  if (!districts.length && !categories.length) return null;
+  const h = CHIP_HEADINGS[locale] ?? CHIP_HEADINGS.en;
+  return (
+    <div className="listing-filters">
+      <FilterChipGroup title={h.districts} chips={districts} />
+      <FilterChipGroup title={h.categories} chips={categories} />
+    </div>
+  );
+}
 
 export function PlaceListingCard({
   place,

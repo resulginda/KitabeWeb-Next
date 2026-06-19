@@ -4,8 +4,13 @@ import { AdSlot } from '@/components/AdSlot';
 import {
   AppPromoBanner,
   ListingBreadcrumbs,
+  ListingFilters,
   PlaceListingCard,
 } from '@/components/ListingPage';
+import {
+  getCityFilterChips,
+  getDistrictCategoryChips,
+} from '@/lib/taxonomyChips';
 import { buildListingJsonLd, buildListingMetadata } from '@/lib/listingSeo';
 import { listingIntroParagraphs } from '@/lib/listingIntro';
 import {
@@ -78,6 +83,17 @@ async function renderListing(
   const heading = listingTitle(data, locale).replace(' | Kitabe', '');
   const introParagraphs = listingIntroParagraphs(data, locale);
 
+  // İç-link çipleri: şehir sayfasında ilçe + kategori; ilçe sayfasında kategori.
+  let chipDistricts: Awaited<ReturnType<typeof getCityFilterChips>>['districts'] = [];
+  let chipCategories: Awaited<ReturnType<typeof getCityFilterChips>>['categories'] = [];
+  if (data.kind === 'city') {
+    const chips = await getCityFilterChips(locale, data.citySlug);
+    chipDistricts = chips.districts;
+    chipCategories = chips.categories;
+  } else if (data.kind === 'district' && data.filter[0]) {
+    chipCategories = await getDistrictCategoryChips(locale, data.citySlug, data.filter[0]);
+  }
+
   const countLabel =
     locale === 'tr' ? 'yer' : locale === 'en' ? 'places' : locale === 'ru' ? 'мест' : 'مكان';
 
@@ -107,6 +123,12 @@ async function renderListing(
                 <p key={paragraph.slice(0, 48)}>{paragraph}</p>
               ))}
             </div>
+
+            <ListingFilters
+              locale={locale}
+              districts={chipDistricts}
+              categories={chipCategories}
+            />
 
             <AppPromoBanner locale={locale} />
 
