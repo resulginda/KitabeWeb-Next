@@ -10,6 +10,9 @@ export const isGooglePhotoUrl = (url?: string | null): boolean => {
   if (!url || typeof url !== 'string') return false;
   const u = url.toLowerCase();
   return (
+    // Backend'e indirilip yeniden barındirilan Google Places fotograflari:
+    // .../uploads/places_google/{id}_{n}.jpg
+    u.includes('/places_google/') ||
     u.includes('googleusercontent.com') ||
     u.includes('maps.googleapis.com') ||
     u.includes('googleapis.com/maps') ||
