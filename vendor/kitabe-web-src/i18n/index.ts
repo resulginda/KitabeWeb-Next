@@ -1,25 +1,30 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+// Varsayılan (tr) ve fallback (en) STATİK gömülür → ilk render'da çeviriler
+// senkron hazır. Yavaş bağlantıda ham anahtar ("common.xxx") flash'ı önlenir.
+import trTranslation from './locales/tr.json';
+import enTranslation from './locales/en.json';
 
 export type I18nLanguage = 'tr' | 'en' | 'ru' | 'ar';
 
-const loaders: Record<I18nLanguage, () => Promise<{ default: Record<string, unknown> }>> = {
-  tr: () => import('./locales/tr.json'),
-  en: () => import('./locales/en.json'),
+// Yalnızca ru/ar talep üzerine (lazy) yüklenir; tr+en zaten bundle içinde.
+const lazyLoaders: Record<'ru' | 'ar', () => Promise<{ default: Record<string, unknown> }>> = {
   ru: () => import('./locales/ru.json'),
   ar: () => import('./locales/ar.json'),
 };
 
 /**
- * i18n instance'ı SENKRON başlatılır (boş resource ile). Böylece ilk render'da
- * useTranslation her zaman bir instance bulur — aksi halde react-i18next
- * "NO_I18NEXT_INSTANCE" verip metinleri çevirmeden anahtar olarak gösterir
- * (bundle'lar async yüklendiğinden init geç kalırsa toparlanamıyordu).
- * Gerçek diller ensureI18n ile sonradan eklenir.
+ * i18n instance'ı SENKRON ve DOLU başlatılır (tr + en gömülü). Böylece ilk
+ * render'da useTranslation gerçek metinleri döndürür; "common.xxx" gibi ham
+ * anahtarlar hiçbir zaman görünmez. ru/ar kullanıcıları kendi paketleri
+ * yüklenene kadar (kısa süre) en/tr fallback görür — ham anahtar değil.
  */
 if (!i18n.isInitialized) {
   void i18n.use(initReactI18next).init({
-    resources: {},
+    resources: {
+      tr: { translation: trTranslation as Record<string, unknown> },
+      en: { translation: enTranslation as Record<string, unknown> },
+    },
     lng: 'tr',
     fallbackLng: 'en',
     interpolation: { escapeValue: false },
@@ -30,13 +35,13 @@ if (!i18n.isInitialized) {
 let loadingPromise: Promise<typeof i18n> | null = null;
 
 async function addBundles(locale: I18nLanguage) {
-  if (!i18n.hasResourceBundle(locale, 'translation')) {
-    const primary = await loaders[locale]();
+  // tr ve en zaten gömülü; sadece ru/ar lazy yüklenir.
+  if (
+    (locale === 'ru' || locale === 'ar') &&
+    !i18n.hasResourceBundle(locale, 'translation')
+  ) {
+    const primary = await lazyLoaders[locale]();
     i18n.addResourceBundle(locale, 'translation', primary.default, true, true);
-  }
-  if (locale !== 'en' && !i18n.hasResourceBundle('en', 'translation')) {
-    const fallback = await loaders.en();
-    i18n.addResourceBundle('en', 'translation', fallback.default, true, true);
   }
 }
 
