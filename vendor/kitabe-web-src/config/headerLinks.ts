@@ -33,14 +33,16 @@ export const HEADER_LINKS: HeaderLinkConfig[] = [
   {
     id: 'about',
     labelKey: 'header.about',
-    path: '/hakkimizda',
-    isActive: (pathname) => pathname === '/hakkimizda',
+    getHref: (locale) => `/legal/${locale}/about`,
+    isActive: (pathname) =>
+      pathname === '/hakkimizda' || /^\/legal\/[^/]+\/about$/.test(pathname),
   },
   {
     id: 'contact',
     labelKey: 'header.contact',
-    path: '/iletisim',
-    isActive: (pathname) => pathname === '/iletisim',
+    getHref: (locale) => `/legal/${locale}/contact`,
+    isActive: (pathname) =>
+      pathname === '/iletisim' || /^\/legal\/[^/]+\/contact$/.test(pathname),
   },
   {
     id: 'suggest',

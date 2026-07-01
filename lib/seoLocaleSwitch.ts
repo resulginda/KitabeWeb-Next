@@ -1,3 +1,5 @@
+import type { LegalDoc } from '@/lib/legal/types';
+import { LEGAL_DOCS } from '@/lib/legal/types';
 import { encodePathSegments } from './detectLocale';
 import {
   buildListingPath,
@@ -15,6 +17,13 @@ import {
   LOCALES,
   resolvePlaceForDetail,
 } from './places';
+
+function parseLegalPath(pathname: string): { locale: Locale; doc: LegalDoc } | null {
+  const parts = pathname.split('/').filter(Boolean);
+  if (parts[0] !== 'legal' || !LOCALES.includes(parts[1] as Locale)) return null;
+  if (!LEGAL_DOCS.includes(parts[2] as LegalDoc)) return null;
+  return { locale: parts[1] as Locale, doc: parts[2] as LegalDoc };
+}
 
 function parseSeoPath(pathname: string): {
   locale: Locale;
@@ -66,6 +75,12 @@ export async function resolveSeoLocalePath(
   pathname: string,
   targetLocale: Locale
 ): Promise<string | null> {
+  const legal = parseLegalPath(pathname);
+  if (legal) {
+    if (legal.locale === targetLocale) return pathname;
+    return `/legal/${targetLocale}/${legal.doc}`;
+  }
+
   const parsed = parseSeoPath(pathname);
   if (!parsed) return null;
 
@@ -108,6 +123,12 @@ export async function resolveSeoLocalePath(
 
 /** İstemci yedek — hub slug öneki değişimi (API erişilemezse) */
 export function mapSeoPathToLocaleQuick(pathname: string, targetLocale: Locale): string | null {
+  const legal = parseLegalPath(pathname);
+  if (legal) {
+    if (legal.locale === targetLocale) return pathname;
+    return `/legal/${targetLocale}/${legal.doc}`;
+  }
+
   const parsed = parseSeoPath(pathname);
   if (!parsed) return null;
 

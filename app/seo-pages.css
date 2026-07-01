@@ -172,6 +172,49 @@
   margin-bottom: 0;
 }
 
+/* Uzun şehir rehberi: sol metin, sağ yerler + filtreler */
+.listing-split {
+  display: grid;
+  grid-template-columns: minmax(260px, 36%) minmax(0, 1fr);
+  gap: 1.25rem 1.75rem;
+  align-items: start;
+}
+
+.listing-intro-column {
+  position: sticky;
+  top: calc(var(--header-h, 64px) + 0.75rem);
+  max-height: calc(100vh - var(--header-h, 64px) - 1.25rem);
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+.listing-intro-column .listing-intro {
+  margin-bottom: 0;
+  max-width: none;
+}
+
+.listing-results-column {
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .listing-split {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .listing-intro-column {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    order: 2;
+  }
+
+  .listing-results-column {
+    order: 1;
+  }
+}
+
 /* ——— İç-link çipleri (ilçe / kategori) ——— */
 .listing-filters {
   margin: 0 0 1.5rem;
@@ -475,10 +518,21 @@
 }
 
 /* SSR yasal sayfalar */
+.legal-page-container {
+  padding-bottom: 5rem;
+}
+
 .legal-page-shell {
-  min-height: 100vh;
-  background: #faf8f4;
+  min-height: auto;
+  background: transparent;
   color: #3d3428;
+}
+
+.legal-subnav {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+  padding: 0.75rem 1rem 0;
+  border-bottom: 1px solid rgba(90, 122, 94, 0.15);
 }
 
 .legal-page-header {
@@ -499,7 +553,12 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem 1rem;
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.legal-doc-nav {
+  margin-top: 0.65rem;
+  padding-bottom: 0.65rem;
 }
 
 .legal-lang-switch a,
@@ -517,7 +576,7 @@
 }
 
 .legal-page-main {
-  max-width: 800px;
+  max-width: var(--container-max, 1200px);
   margin: 0 auto;
   padding: 1.5rem 1rem 2rem;
   line-height: 1.65;

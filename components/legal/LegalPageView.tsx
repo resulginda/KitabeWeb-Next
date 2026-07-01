@@ -24,10 +24,7 @@ export function LegalPageView({
 
   return (
     <div className="legal-page-shell" dir={dir}>
-      <header className="legal-page-header">
-        <Link href={`/${locale}`} className="legal-page-logo">
-          Kitabe
-        </Link>
+      <nav className="legal-subnav" aria-label="Legal navigation">
         <nav className="legal-lang-switch" aria-label="Language">
           {LOCALES.map((loc) => (
             <Link
@@ -40,7 +37,7 @@ export function LegalPageView({
             </Link>
           ))}
         </nav>
-        <nav className="legal-doc-nav" aria-label="Legal">
+        <nav className="legal-doc-nav" aria-label="Legal documents">
           {LEGAL_DOCS.map((d) => (
             <Link
               key={d}
@@ -51,7 +48,7 @@ export function LegalPageView({
             </Link>
           ))}
         </nav>
-      </header>
+      </nav>
 
       <main className="legal-page-main">
         <h1>{content.title}</h1>

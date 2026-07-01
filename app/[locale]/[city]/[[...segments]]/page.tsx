@@ -98,6 +98,26 @@ async function renderListing(
   const countLabel =
     locale === 'tr' ? 'yer' : locale === 'en' ? 'places' : locale === 'ru' ? 'мест' : 'مكان';
 
+  const useSplitIntro = introParagraphs.length >= 4;
+
+  const filtersBlock = (
+    <>
+      <ListingFilters
+        locale={locale}
+        districts={chipDistricts}
+        categories={chipCategories}
+      />
+      <AppPromoBanner locale={locale} />
+      <AdSlot position="in-content" />
+      <div className="listing-grid">
+        {data.places.map((place) => (
+          <PlaceListingCard key={place.id} place={place} locale={locale} />
+        ))}
+      </div>
+      <AdSlot position="below-content" />
+    </>
+  );
+
   return (
     <>
       <script
@@ -119,29 +139,27 @@ async function renderListing(
               </p>
             </header>
 
-            <div className="listing-intro">
-              {introParagraphs.map((paragraph) => (
-                <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-              ))}
-            </div>
-
-            <ListingFilters
-              locale={locale}
-              districts={chipDistricts}
-              categories={chipCategories}
-            />
-
-            <AppPromoBanner locale={locale} />
-
-            <AdSlot position="in-content" />
-
-            <div className="listing-grid">
-              {data.places.map((place) => (
-                <PlaceListingCard key={place.id} place={place} locale={locale} />
-              ))}
-            </div>
-
-            <AdSlot position="below-content" />
+            {useSplitIntro ? (
+              <div className="listing-split">
+                <aside className="listing-intro-column">
+                  <div className="listing-intro">
+                    {introParagraphs.map((paragraph) => (
+                      <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                    ))}
+                  </div>
+                </aside>
+                <div className="listing-results-column">{filtersBlock}</div>
+              </div>
+            ) : (
+              <>
+                <div className="listing-intro">
+                  {introParagraphs.map((paragraph) => (
+                    <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                  ))}
+                </div>
+                {filtersBlock}
+              </>
+            )}
           </main>
 
           <aside className="listing-ad-right">

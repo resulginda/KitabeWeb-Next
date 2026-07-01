@@ -15,13 +15,18 @@ import { SiteHeaderNext } from './SiteHeaderNext';
 import { KitabeNavigation } from './KitabeNavigation';
 
 function localeFromPath(pathname: string): Locale {
-  const first = pathname.split('/').filter(Boolean)[0];
+  const segments = pathname.split('/').filter(Boolean);
+  if (segments[0] === 'legal' && segments[1] && (LOCALES as readonly string[]).includes(segments[1])) {
+    return segments[1] as Locale;
+  }
+  const first = segments[0];
   return (LOCALES as readonly string[]).includes(first) ? (first as Locale) : 'tr';
 }
 
 function isSeoLocalePath(pathname: string): boolean {
-  const first = pathname.split('/').filter(Boolean)[0];
-  return (LOCALES as readonly string[]).includes(first);
+  const segments = pathname.split('/').filter(Boolean);
+  if (segments[0] === 'legal') return true;
+  return (LOCALES as readonly string[]).includes(segments[0]);
 }
 
 /** KitabeWeb AppShell + SiteHeader — SEO sayfalarında aynı üst menü */
