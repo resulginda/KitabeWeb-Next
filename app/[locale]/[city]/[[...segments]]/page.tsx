@@ -100,7 +100,7 @@ async function renderListing(
 
   const useSplitIntro = introParagraphs.length >= 4;
 
-  const filtersBlock = (
+  const filtersAndPromo = (
     <>
       <ListingFilters
         locale={locale}
@@ -108,13 +108,25 @@ async function renderListing(
         categories={chipCategories}
       />
       <AppPromoBanner locale={locale} />
+    </>
+  );
+
+  const placesBlock = (
+    <>
       <AdSlot position="in-content" />
-      <div className="listing-grid">
+      <div className={`listing-grid${useSplitIntro ? ' listing-grid--wide' : ''}`}>
         {data.places.map((place) => (
           <PlaceListingCard key={place.id} place={place} locale={locale} />
         ))}
       </div>
       <AdSlot position="below-content" />
+    </>
+  );
+
+  const filtersBlock = (
+    <>
+      {filtersAndPromo}
+      {placesBlock}
     </>
   );
 
@@ -140,16 +152,19 @@ async function renderListing(
             </header>
 
             {useSplitIntro ? (
-              <div className="listing-split">
-                <aside className="listing-intro-column">
-                  <div className="listing-intro">
-                    {introParagraphs.map((paragraph) => (
-                      <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-                    ))}
-                  </div>
-                </aside>
-                <div className="listing-results-column">{filtersBlock}</div>
-              </div>
+              <>
+                <div className="listing-split">
+                  <aside className="listing-intro-column">
+                    <div className="listing-intro listing-intro--compact">
+                      {introParagraphs.map((paragraph) => (
+                        <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                      ))}
+                    </div>
+                  </aside>
+                  <div className="listing-results-column">{filtersAndPromo}</div>
+                </div>
+                {placesBlock}
+              </>
             ) : (
               <>
                 <div className="listing-intro">
