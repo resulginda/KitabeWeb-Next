@@ -1,4 +1,4 @@
-import '../../seo-pages.css';
+import '@/app/seo-pages.css';
 import { KitabePageShell } from '@/components/KitabePageShell';
 
 /** Yasal sayfalar — şehir/liste sayfalarıyla aynı üst menü + alt navigasyon */
