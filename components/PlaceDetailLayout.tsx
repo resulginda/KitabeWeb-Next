@@ -1,4 +1,5 @@
 import { AdSlot } from '@/components/AdSlot';
+import { SiteFooter } from '@/components/SiteFooter';
 import { PlaceDetailStatic } from '@/components/PlaceDetailStatic';
 import { PlaceDetailClient } from '@/components/PlaceDetailClient';
 import type { Locale, SeoPlace } from '@/lib/places';
@@ -33,6 +34,7 @@ export function PlaceDetailLayout({
       <div className="place-ad-below">
         <AdSlot position="below-content" />
       </div>
+      <SiteFooter locale={locale} />
     </div>
   );
 }

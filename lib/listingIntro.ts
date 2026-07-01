@@ -1,4 +1,6 @@
 import type { ListingFilterResult, Locale } from './listings';
+import { shouldUseExtendedIntro } from './listingQuality';
+import { cityGuideParagraphs } from './cityGuideOverrides';
 
 type IntroCtx = {
   city: string;
@@ -85,6 +87,69 @@ function categoryHint(ctx: IntroCtx, locale: Locale): string {
 
 function joinParagraphs(parts: string[]): string[] {
   return parts.map((p) => p.trim()).filter(Boolean);
+}
+
+/** placeCount > 5 olan liste sayfalarına ek SEO paragrafları */
+function extendedIntroExtras(ctx: IntroCtx, locale: Locale, scope: ListingFilterResult['kind']): string[] {
+  if (!shouldUseExtendedIntro(ctx.total)) return [];
+
+  const { city, district, category, total } = ctx;
+
+  if (locale === 'tr') {
+    if (scope === 'city') {
+      return joinParagraphs([
+        `${city} gezisi planlarken müze günlerini, tarihi yarımadayı ve doğa duraklarını bir arada düşünmek rotanızı verimli kılar. Kitabe'deki her kayıt için konum bilgisi, fotoğraf galerisi ve pratik ziyaret ipuçları sunulur; böylece ${city}'de gezilecek yerleri önceden araştırabilirsiniz.`,
+        `Şehir içi ulaşımda metro, tramvay ve yürüyüş mesafesindeki noktaları gruplamak zaman kazandırır. ${total} kayıtlı mekân arasından ilçe ve kategori filtreleriyle ilginizi çeken temayı seçin; örneğin müzeler, dini yapılar veya doğal alanlar.`,
+        `Kitabe, ${city} turizmi ve kültür mirası meraklıları için düzenli güncellenen bir rehberdir. Mobil uygulama ile haritada gezebilir, favorilere ekleyebilir ve rotanızı paylaşabilirsiniz.`,
+      ]);
+    }
+    if (scope === 'district' && district) {
+      return joinParagraphs([
+        `${city} ${district} bölgesinde ${total} kültürel miras noktası bulunmaktadır. Mahalle mahalle gezerken camiler, müzeler, parklar ve tarihi sokakları aynı gün içinde birleştirebilirsiniz.`,
+        `Detay sayfalarında her yerin hikâyesi, dönem bilgisi ve ziyaret önerileri yer alır. ${district} için önerilen rota: önce merkezdeki ana duraklar, ardından çevredeki doğa veya arkeoloji noktaları.`,
+      ]);
+    }
+    if (scope === 'category' && category) {
+      return joinParagraphs([
+        `${city} genelinde ${category} temasında ${total} kayıtlı mekân vardır. Bu liste, şehirde bu kategoriye girmek isteyen gezginler için tek sayfada toplanmış bir rehber niteliğindedir.`,
+        `Kartlardan birini seçerek fotoğrafları, konumu ve ziyaret ipuçlarını inceleyin. Benzer temadaki yerleri haritada yan yana görerek günlük rotanızı planlayın.`,
+      ]);
+    }
+    if (scope === 'district_category' && district && category) {
+      return joinParagraphs([
+        `${district} (${city}) içinde ${category} kategorisinde ${total} nokta listelenmiştir. Dar filtreli bu sayfa, belirli bir mahallede belirli bir tema arayanlar için hazırlanmıştır.`,
+        `Yakın durakları yürüyüş mesafesine göre sıralayarak yarım veya tam gün rotası oluşturabilirsiniz.`,
+      ]);
+    }
+  }
+
+  if (locale === 'en') {
+    if (scope === 'city') {
+      return joinParagraphs([
+        `When planning a trip to ${city}, grouping museums, old-town walks and outdoor stops saves time. Each Kitabe entry includes location, photos and practical visit tips among ${total} listed sites.`,
+        `Use district and category filters to focus on museums, religious architecture or natural areas. The mobile app lets you browse on the map, save favourites and share your route.`,
+      ]);
+    }
+    if (scope === 'district' && district) {
+      return joinParagraphs([
+        `${district} in ${city} lists ${total} heritage sites. Combine mosques, museums and historic streets in a single day walk through the district.`,
+      ]);
+    }
+    if (scope === 'category' && category) {
+      return joinParagraphs([
+        `${city} has ${total} places in the ${category} category on this page — a focused guide for travellers with a specific interest.`,
+      ]);
+    }
+  }
+
+  return [];
+}
+
+function withExtended(base: string[], ctx: IntroCtx, locale: Locale, scope: ListingFilterResult['kind'], citySlug?: string): string[] {
+  const extras = extendedIntroExtras(ctx, locale, scope);
+  const manual =
+    scope === 'city' && citySlug ? cityGuideParagraphs(citySlug, locale) : [];
+  return [...base, ...extras, ...manual];
 }
 
 function cityIntro(ctx: IntroCtx, locale: Locale): string[] {
@@ -222,17 +287,22 @@ export function listingIntroParagraphs(
   locale: Locale
 ): string[] {
   const ctx = ctxFromData(data);
+  let base: string[];
   switch (data.kind) {
     case 'district':
-      return districtIntro(ctx, locale);
+      base = districtIntro(ctx, locale);
+      break;
     case 'category':
-      return categoryIntro(ctx, locale);
+      base = categoryIntro(ctx, locale);
+      break;
     case 'district_category':
-      return districtCategoryIntro(ctx, locale);
+      base = districtCategoryIntro(ctx, locale);
+      break;
     case 'city':
     default:
-      return cityIntro(ctx, locale);
+      base = cityIntro(ctx, locale);
   }
+  return withExtended(base, ctx, locale, data.kind, data.citySlug);
 }
 
 export function listingIntroText(data: ListingFilterResult, locale: Locale): string {

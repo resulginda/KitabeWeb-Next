@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { HubAdSlot } from '@/components/HubAdSlot';
+import { SiteFooter } from '@/components/SiteFooter';
 import { getCityLabel } from '@/lib/citySlugLabel';
 import { encodePathSegments } from '@/lib/detectLocale';
 import { cityHubImage, FEATURED_EXPLORE_SLUGS } from '@/lib/featuredCities';
@@ -171,6 +172,7 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
           <HubAdSlot position="sidebar" />
         </aside>
       </div>
+      <SiteFooter locale={locale} />
     </div>
   );
 }

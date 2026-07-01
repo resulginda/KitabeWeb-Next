@@ -12,8 +12,12 @@ export const metadata: Metadata = {
   title: { default: 'Kitabe — Kültürel Miras Rehberi', template: '%s' },
   description: 'Türkiye\'nin tarihi ve kültürel yerlerini keşfedin.',
   icons: {
-    icon: '/icon.png',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon.png', type: 'image/png', sizes: '32x32' },
+    ],
     apple: '/icon-180.png',
+    shortcut: '/favicon.ico',
   },
   openGraph: {
     ...DEFAULT_OG,
@@ -56,6 +60,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
         <script dangerouslySetInnerHTML={{ __html: LANG_DIR_SCRIPT }} />
         <script dangerouslySetInnerHTML={{ __html: SW_KILL_SCRIPT }} />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.png" type="image/png" sizes="32x32" />
         <link rel="apple-touch-icon" href="/icon-180.png" />
         <link rel="stylesheet" href="/fonts/kitabe-fonts.css" />
       </head>

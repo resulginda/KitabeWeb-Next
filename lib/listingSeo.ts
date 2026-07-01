@@ -8,6 +8,7 @@ import {
   type Locale,
   HUB_SLUGS,
 } from './listings';
+import { shouldIndexListing } from './listingQuality';
 import { LOCALES } from './places';
 import { cityOgImage, DEFAULT_OG } from './og';
 
@@ -30,6 +31,7 @@ export function buildListingMetadata(
   languages['x-default'] = languages.tr || canonical;
 
   const ogImage = cityOgImage(data.citySlug);
+  const indexable = shouldIndexListing(data);
 
   return {
     title,
@@ -45,7 +47,9 @@ export function buildListingMetadata(
       images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
     twitter: { card: 'summary_large_image', title, description, images: [ogImage] },
-    robots: { index: true, follow: true },
+    robots: indexable
+      ? { index: true, follow: true }
+      : { index: false, follow: true },
   };
 }
 

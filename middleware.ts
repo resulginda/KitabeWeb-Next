@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { LEGACY_LEGAL_REDIRECTS } from '@/lib/legal/types';
 
 const LONG_CACHE = 'public, max-age=31536000, immutable';
 const LOCALES = ['tr', 'en', 'ru', 'ar'];
@@ -10,6 +11,7 @@ const NEXT_OWNED_FIRST = new Set([
   'en',
   'ru',
   'ar',
+  'legal',
   'detail',
   'api',
   '_next',
@@ -41,12 +43,13 @@ function isSpaPath(pathname: string): boolean {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Bu projede Next.js Server Action YOK. Bot/scanner'lar ve eski (stale) tarayıcı
-  // client'ları 'Next-Action' header'lı POST atıp sunucu loglarını
-  // "Failed to find Server Action" hatalarıyla dolduruyor. Bunları erkenden kısa
-  // devre yapıp 404 dönüyoruz: log temiz kalır, Googlebot/Facebook GET ile geldiği
-  // için arama indeksine hiçbir etkisi olmaz.
+  const legacyTarget = LEGACY_LEGAL_REDIRECTS[pathname];
+  if (legacyTarget) {
+    return NextResponse.redirect(new URL(legacyTarget, request.url), 308);
+  }
+
   if (request.method === 'POST' && request.headers.has('next-action')) {
+    // Bu projede Server Action yok; bot POST'larını erken 404 ile kes.
     return new NextResponse(null, { status: 404 });
   }
 

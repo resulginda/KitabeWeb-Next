@@ -428,3 +428,176 @@
     padding-bottom: 5rem;
   }
 }
+
+/* SSR footer — AdSense güven / yasal linkler */
+.site-footer-ssr {
+  margin-top: 2.5rem;
+  padding: 1.5rem 1rem 2rem;
+  border-top: 1px solid rgba(90, 122, 94, 0.2);
+  background: #faf8f4;
+  text-align: center;
+}
+
+.site-footer-ssr .site-footer-inner {
+  max-width: var(--container-max, 1200px);
+  margin: 0 auto;
+}
+
+.site-footer-ssr .site-footer-tagline {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  color: #5a4a3a;
+}
+
+.site-footer-ssr .site-footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.site-footer-ssr .site-footer-nav a {
+  color: #5a7a5e;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.site-footer-ssr .site-footer-nav a:hover {
+  text-decoration: underline;
+}
+
+.site-footer-ssr .site-footer-copy {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #937959;
+}
+
+/* SSR yasal sayfalar */
+.legal-page-shell {
+  min-height: 100vh;
+  background: #faf8f4;
+  color: #3d3428;
+}
+
+.legal-page-header {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 0;
+}
+
+.legal-page-logo {
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #5a7a5e;
+  text-decoration: none;
+}
+
+.legal-lang-switch,
+.legal-doc-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-top: 0.75rem;
+}
+
+.legal-lang-switch a,
+.legal-doc-nav a {
+  font-size: 0.9rem;
+  color: #5a4a3a;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.legal-lang-switch a.is-active,
+.legal-doc-nav a.is-active {
+  color: #5a7a5e;
+  text-decoration: underline;
+}
+
+.legal-page-main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 2rem;
+  line-height: 1.65;
+}
+
+.legal-page-main h1 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  color: #3d3428;
+}
+
+.legal-section {
+  margin-bottom: 1.5rem;
+}
+
+.legal-section h2 {
+  font-size: 1.15rem;
+  margin: 0 0 0.5rem;
+  color: #5a4a3a;
+}
+
+.legal-section ul {
+  padding-left: 1.25rem;
+}
+
+.legal-contact-form label {
+  display: block;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.legal-contact-form input,
+.legal-contact-form select,
+.legal-contact-form textarea {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid #d4c9b8;
+  border-radius: 8px;
+  font: inherit;
+  background: #fff;
+}
+
+.legal-contact-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .legal-contact-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.legal-contact-submit {
+  background: #5a7a5e;
+  color: #fff;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.legal-contact-submit:disabled {
+  opacity: 0.6;
+}
+
+.legal-contact-msg--ok {
+  color: #2e7d32;
+}
+
+.legal-contact-msg--err {
+  color: #c62828;
+}
+
+.legal-contact-email {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}

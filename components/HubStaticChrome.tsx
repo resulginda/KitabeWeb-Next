@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { LOCALES, type Locale } from '@/lib/places';
+import { legalPath } from '@/lib/legal/types';
 import { siteLogoHeader } from '@/lib/siteLogo';
 import { HUB_HEADER_COPY } from '@/lib/hubHeaderCopy';
 
@@ -50,12 +51,12 @@ export function HubStaticChrome({
             <a href="/blog" className="site-header-secondary-link">
               {t.blog}
             </a>
-            <a href="/hakkimizda" className="site-header-secondary-link">
+            <Link href={legalPath(locale, 'about')} className="site-header-secondary-link">
               {t.about}
-            </a>
-            <a href="/iletisim" className="site-header-secondary-link">
+            </Link>
+            <Link href={legalPath(locale, 'contact')} className="site-header-secondary-link">
               {t.contact}
-            </a>
+            </Link>
             <a href="/suggestion" className="site-header-secondary-link">
               {t.suggest}
             </a>

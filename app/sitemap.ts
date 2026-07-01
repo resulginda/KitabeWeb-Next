@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { encodePathSegments } from '@/lib/detectLocale';
 import { buildListingPath, getTaxonomyIndex } from '@/lib/listings';
+import { shouldIndexTaxonomy } from '@/lib/listingQuality';
 import { getPlaceIndex, LOCALES, type Locale } from '@/lib/places';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
@@ -54,16 +55,26 @@ export default async function sitemap({
   id: string;
 }): Promise<MetadataRoute.Sitemap> {
   if (id === 'home') {
-    return LOCALES.map((locale) => ({
+    const home = LOCALES.map((locale) => ({
       url: `${SITE}/${locale}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: 'weekly' as const,
       priority: 1,
     }));
+    const legalDocs = ['about', 'privacy', 'terms', 'contact'] as const;
+    const legal = LOCALES.flatMap((locale) =>
+      legalDocs.map((doc) => ({
+        url: `${SITE}/legal/${locale}/${doc}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly' as const,
+        priority: 0.6,
+      }))
+    );
+    return [...home, ...legal];
   }
 
   if (id === 'listings') {
-    const listings = await getTaxonomyIndex();
+    const listings = (await getTaxonomyIndex()).filter(shouldIndexTaxonomy);
     const listingAlternates = new Map<string, Record<string, string>>();
 
     for (const combo of listings) {

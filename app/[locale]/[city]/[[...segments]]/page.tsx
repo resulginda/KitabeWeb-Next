@@ -1,6 +1,7 @@
 import { notFound, permanentRedirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { AdSlot } from '@/components/AdSlot';
+import { SiteFooter } from '@/components/SiteFooter';
 import {
   AppPromoBanner,
   ListingBreadcrumbs,
@@ -147,6 +148,7 @@ async function renderListing(
             <AdSlot position="sidebar" />
           </aside>
         </div>
+        <SiteFooter locale={locale} />
       </div>
     </>
   );
