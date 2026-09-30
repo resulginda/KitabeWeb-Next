@@ -5,6 +5,7 @@ import { LocaleHubPage } from '@/components/LocaleHubPage';
 import { hubLcpImage, hubLcpSrcSet } from '@/lib/hubLcpImage';
 import { LOCALES, type Locale } from '@/lib/places';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
+import '../seo-pages.css';
 import '../hub-home.css';
 
 const META: Record<Locale, { title: string; description: string }> = {

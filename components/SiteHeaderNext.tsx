@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@kitabe/contexts/AuthContext';
-import { HEADER_NAV_ITEMS, isNavItemActive } from '@kitabe/config/navItems';
+import { HEADER_NAV_ITEMS, isNavItemActive, localeHomePath, navItemHref } from '@kitabe/config/navItems';
 import { HEADER_LINKS } from '@kitabe/config/headerLinks';
 import type { ExploreCityLocale } from '@kitabe/data/featuredExploreCities';
 import { NavIcon } from '@kitabe/components/NavIcons';
@@ -38,7 +38,7 @@ export function SiteHeaderNext({ locale, pathname }: Props) {
   return (
     <header className="site-header" data-od-id="header">
       <div className="site-header-inner">
-        <a href="/home" className="site-header-logo" title="Kitabe">
+        <a href={localeHomePath(locale)} className="site-header-logo" title="Kitabe">
           <img
             src="/logo-header.webp"
             alt=""
@@ -55,7 +55,7 @@ export function SiteHeaderNext({ locale, pathname }: Props) {
             const labelKey = NAV_LABEL[item.id];
             const label = labelKey ? copy[labelKey] : item.id;
             const needsAuth = (item.id === 'nearby' || item.id === 'route') && !kullanici;
-            const href = needsAuth ? '/login' : item.path;
+            const href = needsAuth ? '/login' : navItemHref(item, locale);
 
             return (
               <a

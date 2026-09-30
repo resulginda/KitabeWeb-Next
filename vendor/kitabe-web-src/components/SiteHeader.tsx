@@ -2,7 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
-import { HEADER_NAV_ITEMS, isNavItemActive } from '../config/navItems';
+import { HEADER_NAV_ITEMS, isNavItemActive, localeHomePath, navItemHref } from '../config/navItems';
 import { HEADER_LINKS } from '../config/headerLinks';
 import type { ExploreCityLocale } from '../data/featuredExploreCities';
 import { NavIcon } from './NavIcons';
@@ -22,10 +22,10 @@ export function SiteHeader() {
   return (
     <header className="site-header" data-od-id="header">
       <div className="site-header-inner">
-        <Link to="/home" className="site-header-logo" title="Kitabe">
+        <a href={localeHomePath(locale)} className="site-header-logo" title="Kitabe">
           <img src="/logo-header.webp" alt="" className="site-header-logo-img" width={36} height={36} />
           <span>Kitabe</span>
-        </Link>
+        </a>
 
         <nav className="site-header-main" aria-label={t('navigation.mainNav', { defaultValue: 'Ana menü' })}>
           {HEADER_NAV_ITEMS.map((item) => {
@@ -33,18 +33,32 @@ export function SiteHeader() {
             const label = t(item.labelKey);
             const needsAuth = (item.id === 'nearby' || item.id === 'route') && !kullanici;
             const to = needsAuth ? '/login' : item.path;
+            const className = `site-header-nav-link ${active ? 'is-active' : ''}`;
+            const content = (
+              <>
+                <span className="site-header-nav-icon" aria-hidden>
+                  <NavIcon id={item.id} size={18} />
+                </span>
+                <span className="site-header-nav-label">{label}</span>
+              </>
+            );
+
+            if (item.id === 'home') {
+              return (
+                <a key={item.id} href={navItemHref(item, locale)} className={className}>
+                  {content}
+                </a>
+              );
+            }
 
             return (
               <Link
                 key={item.id}
                 to={to}
                 state={needsAuth ? { from: item.path } : undefined}
-                className={`site-header-nav-link ${active ? 'is-active' : ''}`}
+                className={className}
               >
-                <span className="site-header-nav-icon" aria-hidden>
-                  <NavIcon id={item.id} size={18} />
-                </span>
-                <span className="site-header-nav-label">{label}</span>
+                {content}
               </Link>
             );
           })}

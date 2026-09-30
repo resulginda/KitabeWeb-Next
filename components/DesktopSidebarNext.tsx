@@ -1,7 +1,7 @@
 'use client';
 
 import { NavIcon } from '@kitabe/components/NavIcons';
-import { NAV_ITEMS, isNavItemActive } from '@kitabe/config/navItems';
+import { NAV_ITEMS, isNavItemActive, localeHomePath, navItemHref } from '@kitabe/config/navItems';
 import type { Locale } from '@/lib/places';
 
 const LABELS: Record<
@@ -54,7 +54,7 @@ export function DesktopSidebarNext({ locale, pathname }: Props) {
   return (
     <aside className="desktop-sidebar" aria-label="Main menu">
       <div className="desktop-sidebar-inner">
-        <a href="/home" className="desktop-sidebar-brand" title="Kitabe">
+        <a href={localeHomePath(locale)} className="desktop-sidebar-brand" title="Kitabe">
           <img src="/logo-header.webp" alt="" className="desktop-sidebar-logo" width={36} height={36} />
           <span className="desktop-sidebar-brand-text">Kitabe</span>
         </a>
@@ -68,7 +68,7 @@ export function DesktopSidebarNext({ locale, pathname }: Props) {
             return (
               <a
                 key={item.id}
-                href={item.path}
+                href={navItemHref(item, locale)}
                 className={`desktop-sidebar-link ${active ? 'active' : ''}`}
                 title={label}
               >

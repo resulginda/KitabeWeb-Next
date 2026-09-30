@@ -309,7 +309,7 @@
   background: color-mix(in srgb, var(--text-on-primary) 38%, transparent);
 }
 
-.hub-static-bottom .bottom-nav-label {
+.hub-static-bottom .nav-label {
   font-size: 0.65rem;
 }
 

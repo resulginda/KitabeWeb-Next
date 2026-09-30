@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@kitabe/contexts/AuthContext';
-import { MOBILE_NAV_ITEMS, isNavItemActive } from '@kitabe/config/navItems';
+import { MOBILE_NAV_ITEMS, isNavItemActive, navItemHref } from '@kitabe/config/navItems';
 import { NavIcon } from '@kitabe/components/NavIcons';
 import type { Locale } from '@/lib/places';
 import { HUB_HEADER_COPY } from '@/lib/hubHeaderCopy';
@@ -33,7 +33,7 @@ export function KitabeNavigation({ locale, pathname }: Props) {
 
         const needsAuth = (item.id === 'nearby' || item.id === 'route') && !kullanici;
         const href =
-          item.id === 'account' && !kullanici ? '/login' : needsAuth ? '/login' : item.path;
+          item.id === 'account' && !kullanici ? '/login' : needsAuth ? '/login' : navItemHref(item, locale);
 
         return (
           <a key={item.id} href={href} className={`nav-item ${active ? 'active' : ''}`}>

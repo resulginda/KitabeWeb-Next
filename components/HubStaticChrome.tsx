@@ -3,6 +3,17 @@ import { LOCALES, type Locale } from '@/lib/places';
 import { legalPath } from '@/lib/legal/types';
 import { siteLogoHeader } from '@/lib/siteLogo';
 import { HUB_HEADER_COPY } from '@/lib/hubHeaderCopy';
+import { NavIcon } from '@kitabe/components/NavIcons';
+import type { NavItemId } from '@kitabe/config/navItems';
+import '@kitabe/components/Navigation.css';
+
+const BOTTOM_ITEMS: { id: NavItemId; href: string; label: keyof (typeof HUB_HEADER_COPY)['tr'] }[] = [
+  { id: 'home', href: '/', label: 'bottomHome' },
+  { id: 'list', href: '/list', label: 'bottomList' },
+  { id: 'nearby', href: '/login', label: 'bottomNearby' },
+  { id: 'route', href: '/login', label: 'bottomRoute' },
+  { id: 'account', href: '/account', label: 'bottomAccount' },
+];
 
 /** Hub (/tr …) — istemci JS yok; PageSpeed için statik header + alt nav */
 export function HubStaticChrome({
@@ -18,7 +29,7 @@ export function HubStaticChrome({
     <div className="app-shell hub-static-shell">
       <header className="site-header" data-od-id="header">
         <div className="site-header-inner">
-          <a href="/home" className="site-header-logo" title="Kitabe">
+          <a href={`/${locale}`} className="site-header-logo" title="Kitabe">
             <img
               src={siteLogoHeader.src}
               alt=""
@@ -30,7 +41,7 @@ export function HubStaticChrome({
           </a>
 
           <nav className="site-header-main" aria-label={t.mainNav}>
-            <a href="/home" className="site-header-nav-link">
+            <a href={`/${locale}`} className="site-header-nav-link is-active" aria-current="page">
               <span className="site-header-nav-label">{t.home}</span>
             </a>
             <a href="/list" className="site-header-nav-link">
@@ -96,21 +107,19 @@ export function HubStaticChrome({
       </div>
 
       <nav className="bottom-nav hub-static-bottom" aria-label={t.mainNav}>
-        <a href="/home" className="bottom-nav-link">
-          <span className="bottom-nav-label">{t.bottomHome}</span>
-        </a>
-        <a href="/list" className="bottom-nav-link">
-          <span className="bottom-nav-label">{t.bottomList}</span>
-        </a>
-        <a href="/login" className="bottom-nav-link">
-          <span className="bottom-nav-label">{t.bottomNearby}</span>
-        </a>
-        <a href="/login" className="bottom-nav-link">
-          <span className="bottom-nav-label">{t.bottomRoute}</span>
-        </a>
-        <a href="/account" className="bottom-nav-link">
-          <span className="bottom-nav-label">{t.bottomAccount}</span>
-        </a>
+        {BOTTOM_ITEMS.map((item) => (
+          <a
+            key={item.id}
+            href={item.id === 'home' ? `/${locale}` : item.href}
+            className={`nav-item${item.id === 'home' ? ' active' : ''}`}
+            aria-current={item.id === 'home' ? 'page' : undefined}
+          >
+            <span className="nav-icon">
+              <NavIcon id={item.id} size={22} />
+            </span>
+            <span className="nav-label">{t[item.label]}</span>
+          </a>
+        ))}
       </nav>
     </div>
   );
