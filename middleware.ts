@@ -51,9 +51,31 @@ function isSpaPath(pathname: string): boolean {
   return true;
 }
 
+/** Başlıksız istekler (Googlebot, AdSense tarayıcısı) x-default olan /tr'ye gider. */
+function preferredLocale(acceptLanguage: string | null): string {
+  if (!acceptLanguage) return 'tr';
+  const ranked = acceptLanguage
+    .split(',')
+    .map((part) => {
+      const [tag, ...params] = part.trim().split(';');
+      const q = params.find((p) => p.trim().startsWith('q='));
+      return { lang: tag.trim().toLowerCase().split('-')[0], q: q ? Number(q.trim().slice(2)) || 0 : 1 };
+    })
+    .sort((a, b) => b.q - a.q);
+  return ranked.find((r) => LOCALES.includes(r.lang))?.lang ?? 'en';
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const segments = pathname.split('/').filter(Boolean);
+
+  if (segments.length === 0) {
+    const url = request.nextUrl.clone();
+    url.pathname = `/${preferredLocale(request.headers.get('accept-language'))}`;
+    const response = NextResponse.redirect(url, 307);
+    response.headers.set('Vary', 'Accept-Language');
+    return response;
+  }
 
   const legacyTarget = LEGACY_LEGAL_REDIRECTS[pathname];
   if (legacyTarget) {

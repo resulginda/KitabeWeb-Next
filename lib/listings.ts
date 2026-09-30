@@ -30,6 +30,8 @@ export type ListingPlace = {
   detailPath?: string | null;
   citySlug?: string | null;
   placeSlug?: string | null;
+  /** Dil başına "şehir/yer" slug'ı */
+  slug?: Partial<Record<Locale, string>> | null;
 };
 
 export type ListingBreadcrumb = { label: string; href: string };
@@ -142,23 +144,52 @@ export const getListingByFilter = cache(async (
     qs.set('filter', filterSegments.join('/'));
   }
 
-  try {
-    const res = await fetch(`${API}/api/places/seo/filter?${qs}`, {
-      headers: apiHeaders(),
-      next: { tags: ['listings-index'], revalidate: 3600 },
-    });
-    if (res.status === 404) return null;
-    if (!res.ok) {
-      console.warn(`[listings] filter HTTP ${res.status}`);
-      return null;
+  const maxAttempts = 3;
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+    try {
+      const res = await fetch(`${API}/api/places/seo/filter?${qs}`, {
+        headers: apiHeaders(),
+        next: { tags: ['listings-index'], revalidate: 3600 },
+      });
+      if (res.status === 404) return null;
+      if (res.ok) {
+        const json = await res.json();
+        return json.data ?? null;
+      }
+      if (!RETRYABLE_STATUS.has(res.status) || attempt === maxAttempts) {
+        console.warn(`[listings] filter HTTP ${res.status}`);
+        return null;
+      }
+    } catch (err) {
+      if (attempt === maxAttempts) {
+        console.warn('[listings] filter fetch failed:', err);
+        return null;
+      }
     }
-    const json = await res.json();
-    return json.data ?? null;
-  } catch (err) {
-    console.warn('[listings] filter fetch failed:', err);
-    return null;
+    await new Promise((r) => setTimeout(r, 500 * attempt));
   }
+  return null;
 });
+
+const RETRYABLE_STATUS = new Set([429, 502, 503, 504]);
+
+/** Backend'i aynı anda onlarca büyük şehir isteğiyle boğmamak için. */
+export async function mapWithConcurrency<T, R>(
+  items: T[],
+  limit: number,
+  fn: (item: T) => Promise<R>
+): Promise<R[]> {
+  const out = new Array<R>(items.length);
+  let next = 0;
+  const worker = async () => {
+    while (next < items.length) {
+      const i = next++;
+      out[i] = await fn(items[i]);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+  return out;
+}
 
 export const getTaxonomyIndex = cache(async (): Promise<TaxonomyCombination[]> => {
   const all: TaxonomyCombination[] = [];

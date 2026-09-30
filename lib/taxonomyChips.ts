@@ -188,6 +188,53 @@ export const getCityFilterChips = cache(async (
   return { districts, categories };
 });
 
+export type NationalTheme = {
+  slug: string;
+  label: string;
+  total: number;
+  cities: { citySlug: string; label: string; count: number; href: string }[];
+};
+
+/** Ülke geneli en kalabalık kategoriler; her biri için en çok yeri olan şehirler. */
+export const getNationalThemes = cache(async (
+  locale: Locale,
+  limit = 8,
+  citiesPerTheme = 4
+): Promise<NationalTheme[]> => {
+  const all = await getTaxonomyIndex();
+  const localeCombos = all.filter((c) => c.locale === locale);
+  const categorySlugs = buildCategorySlugSet(localeCombos);
+  const categoryLabels = await getCategoryLabelMap(locale);
+
+  const bySlug = new Map<string, TaxonomyCombination[]>();
+  for (const combo of localeCombos) {
+    if (combo.filter.length !== 1) continue;
+    const slug = combo.filter[0].toLowerCase();
+    if (!categorySlugs.has(slug)) continue;
+    const list = bySlug.get(slug) ?? [];
+    list.push(combo);
+    bySlug.set(slug, list);
+  }
+
+  return [...bySlug.entries()]
+    .map(([slug, combos]) => ({
+      slug,
+      label: resolveCategoryLabel(slug, categoryLabels),
+      total: combos.reduce((sum, c) => sum + c.placeCount, 0),
+      cities: [...combos]
+        .sort((a, b) => b.placeCount - a.placeCount)
+        .slice(0, citiesPerTheme)
+        .map((c) => ({
+          citySlug: c.citySlug,
+          label: c.labels.city,
+          count: c.placeCount,
+          href: chipHref(locale, c.citySlug, [c.filter[0]]),
+        })),
+    }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, limit);
+});
+
 /** İlçe sayfası için o ilçeye ait kategori çipleri (district_category kombolar). */
 export const getDistrictCategoryChips = cache(async (
   locale: Locale,

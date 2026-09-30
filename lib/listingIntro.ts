@@ -1,6 +1,7 @@
 import type { ListingFilterResult, Locale } from './listings';
 import { shouldUseExtendedIntro } from './listingQuality';
 import { cityGuideParagraphs } from './cityGuideOverrides';
+import { trGen, trLoc } from './trSuffix';
 
 type IntroCtx = {
   city: string;
@@ -87,32 +88,6 @@ function categoryHint(ctx: IntroCtx, locale: Locale): string {
 
 function joinParagraphs(parts: string[]): string[] {
   return parts.map((p) => p.trim()).filter(Boolean);
-}
-
-const TR_VOWELS = 'aeıioöuü';
-
-function trLastVowel(word: string): string {
-  const w = word.toLocaleLowerCase('tr').replace(/â/g, 'a').replace(/î/g, 'i').replace(/û/g, 'u');
-  for (let i = w.length - 1; i >= 0; i--) {
-    if (TR_VOWELS.includes(w[i])) return w[i];
-  }
-  return 'e';
-}
-
-/** Özel ada ünlü uyumuna göre ilgi eki: İstanbul'un, Amasya'nın, Kaş'ın */
-function trGen(word: string): string {
-  const v = trLastVowel(word);
-  const h = 'aı'.includes(v) ? 'ı' : 'ei'.includes(v) ? 'i' : 'ou'.includes(v) ? 'u' : 'ü';
-  const endsWithVowel = TR_VOWELS.includes(word.toLocaleLowerCase('tr').slice(-1));
-  return `${word}'${endsWithVowel ? 'n' : ''}${h}n`;
-}
-
-/** Özel ada bulunma eki: İstanbul'da, Kaş'ta, İzmir'de */
-function trLoc(word: string): string {
-  const v = trLastVowel(word);
-  const a = 'aıou'.includes(v) ? 'a' : 'e';
-  const d = 'çfhkpsşt'.includes(word.toLocaleLowerCase('tr').slice(-1)) ? 't' : 'd';
-  return `${word}'${d}${a}`;
 }
 
 /** placeCount > 5 olan liste sayfalarına ek SEO paragrafları */
@@ -333,37 +308,4 @@ export function listingIntroParagraphs(
 
 export function listingIntroText(data: ListingFilterResult, locale: Locale): string {
   return listingIntroParagraphs(data, locale).join('\n\n');
-}
-
-export function localeHubIntroParagraphs(
-  locale: Locale,
-  cityCount: number,
-  placeCount: number
-): string[] {
-  if (locale === 'tr') {
-    return joinParagraphs([
-      `Türkiye'nin ${cityCount} ilinde ${placeCount} kültürel miras noktası Kitabe'de listelenmektedir. Müzeler, antik kentler, kaleler, camiler ve doğal güzellikler şehir şehir, ilçe ve kategori bazında düzenlenmiştir.`,
-      `Aşağıdan şehrinizi seçerek gezilecek yer rehberine ulaşabilir; her il için ilçe ve tema filtreleriyle rotanızı daraltabilirsiniz. Popüler şehirlerden başlayın veya tüm illeri alfabetik olarak keşfedin.`,
-      `Kitabe, Türkiye turizmi ve kültür mirası araştırmacıları için güncel konum, fotoğraf ve ziyaret bilgisi sunar. Harita üzerinden yakınınızdaki noktaları da inceleyebilirsiniz.`,
-    ]);
-  }
-  if (locale === 'en') {
-    return joinParagraphs([
-      `Kitabe lists ${placeCount} cultural heritage sites across ${cityCount} provinces of Turkey — museums, ancient cities, castles, mosques and natural landmarks organised by city, district and theme.`,
-      `Pick a city below to open its travel guide, then filter by neighbourhood or category. Start with popular destinations or browse every province.`,
-      `Kitabe offers up-to-date locations, photos and visit tips for travellers and researchers. Use the map to find sites near you.`,
-    ]);
-  }
-  if (locale === 'ru') {
-    return joinParagraphs([
-      `В Kitabe — ${placeCount} объектов культурного наследия в ${cityCount} провинциях Турции: музеи, античные города, крепости и природные зоны по городам и районам.`,
-      `Выберите город ниже, затем сузьте маршрут по району или категории. Начните с популярных направлений или просмотрите все провинции.`,
-      `Актуальные фото, карты и советы для путешественников и исследователей.`,
-    ]);
-  }
-  return joinParagraphs([
-    `يسرد Kitabe ${placeCount} موقعاً للتراث الثقافي في ${cityCount} محافظة تركية: متاحف ومدن أثرية وقلاع ومساجد ومناطق طبيعية.`,
-    `اختر مدينة أدناه ثم ضيّق البحث حسب الحي أو الفئة. ابدأ بالوجهات الشائعة أو تصفّح كل المحافظات.`,
-    `صور وخرائط ونصائح محدّثة للمسافرين والباحثين.`,
-  ]);
 }

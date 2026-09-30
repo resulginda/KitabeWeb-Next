@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 
-/** kitabe.org/ → SPA ana ekranı */
+/** kitabe.org/ → dil yönlendirmesi middleware'de; bu yalnız yedek */
 export default function RootPage() {
-  redirect('/home');
+  redirect('/tr');
 }

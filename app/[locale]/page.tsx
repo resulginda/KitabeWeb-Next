@@ -5,6 +5,7 @@ import { LocaleHubPage } from '@/components/LocaleHubPage';
 import { hubLcpImage, hubLcpSrcSet } from '@/lib/hubLcpImage';
 import { LOCALES, type Locale } from '@/lib/places';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
+import '../hub-home.css';
 
 const META: Record<Locale, { title: string; description: string }> = {
   tr: {
@@ -39,6 +40,8 @@ export function generateStaticParams() {
  */
 export const dynamicParams = true;
 export const dynamic = 'force-static';
+/** "Ekim'de nereye gidilir?" bölümü aya göre değiştiği için saatlik yenilenir. */
+export const revalidate = 3600;
 
 export async function generateMetadata({
   params,
@@ -97,7 +100,7 @@ export default async function LocaleRootPage({
           href={hubLcpImage.src}
           type="image/webp"
           imageSrcSet={hubLcpSrcSet}
-          imageSizes="(max-width: 768px) 50vw, 280px"
+          imageSizes="100vw"
           {...({ fetchpriority: 'high' } as Record<string, string>)}
         />
         <LocaleHubPage locale={loc} />

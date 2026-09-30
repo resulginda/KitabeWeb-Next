@@ -2,7 +2,7 @@ import { FEATURED_EXPLORE_CITIES } from '@kitabe/data/featuredExploreCities';
 import { TURKIYE_ILLER } from '@kitabe/data/turkiyeIllerIlceler';
 import type { Locale } from './places';
 
-function cityNameToSlug(name: string): string {
+export function cityNameToSlug(name: string): string {
   return name
     .toLocaleLowerCase('tr-TR')
     .replace(/ı/g, 'i')
@@ -14,9 +14,27 @@ function cityNameToSlug(name: string): string {
     .replace(/[^a-z0-9]+/g, '');
 }
 
+/** Backend TR dışı dillerde ı harfini '-' yapıyor: Aydın → ayd-n, Ağrı → agr, Iğdır → igd-r. */
+function legacyCitySlug(trName: string): string {
+  return trName
+    .replace(/[Iİ]/g, 'i')
+    .toLocaleLowerCase('tr-TR')
+    .replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u')
+    .replace(/ş/g, 's')
+    .replace(/ö/g, 'o')
+    .replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 const SLUG_TO_TR: Record<string, string> = {};
 for (const name of TURKIYE_ILLER) {
   SLUG_TO_TR[cityNameToSlug(name)] = name;
+}
+const LEGACY_SLUG_TO_TR: Record<string, string> = {};
+for (const name of TURKIYE_ILLER) {
+  LEGACY_SLUG_TO_TR[legacyCitySlug(name)] = name;
 }
 
 const SLUG_LOCALE_LABELS: Record<string, Partial<Record<Locale, string>>> = {};
@@ -47,13 +65,21 @@ function titleCaseSlug(slug: string): string {
     .join(' ');
 }
 
+/** TR şehir slug'ının hedef dildeki hub karşılığı (yoksa null). */
+export function localeCitySlug(trSlug: string, available: ReadonlySet<string>): string | null {
+  if (available.has(trSlug)) return trSlug;
+  const tr = SLUG_TO_TR[trSlug];
+  const legacy = tr ? legacyCitySlug(tr) : null;
+  return legacy && available.has(legacy) ? legacy : null;
+}
+
 /** Human-readable city name when taxonomy-index omits labels.city */
 export function getCityLabel(citySlug: string, locale: Locale): string {
   const slug = citySlug.trim().toLowerCase();
   const featured = SLUG_LOCALE_LABELS[slug];
   if (featured?.[locale]) return featured[locale];
 
-  const tr = SLUG_TO_TR[slug];
+  const tr = SLUG_TO_TR[slug] ?? LEGACY_SLUG_TO_TR[slug];
   if (tr) {
     if (locale === 'tr') return tr;
     if (locale === 'en') return asciiLabel(tr);
