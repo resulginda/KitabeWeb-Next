@@ -89,6 +89,32 @@ function joinParagraphs(parts: string[]): string[] {
   return parts.map((p) => p.trim()).filter(Boolean);
 }
 
+const TR_VOWELS = 'aeıioöuü';
+
+function trLastVowel(word: string): string {
+  const w = word.toLocaleLowerCase('tr').replace(/â/g, 'a').replace(/î/g, 'i').replace(/û/g, 'u');
+  for (let i = w.length - 1; i >= 0; i--) {
+    if (TR_VOWELS.includes(w[i])) return w[i];
+  }
+  return 'e';
+}
+
+/** Özel ada ünlü uyumuna göre ilgi eki: İstanbul'un, Amasya'nın, Kaş'ın */
+function trGen(word: string): string {
+  const v = trLastVowel(word);
+  const h = 'aı'.includes(v) ? 'ı' : 'ei'.includes(v) ? 'i' : 'ou'.includes(v) ? 'u' : 'ü';
+  const endsWithVowel = TR_VOWELS.includes(word.toLocaleLowerCase('tr').slice(-1));
+  return `${word}'${endsWithVowel ? 'n' : ''}${h}n`;
+}
+
+/** Özel ada bulunma eki: İstanbul'da, Kaş'ta, İzmir'de */
+function trLoc(word: string): string {
+  const v = trLastVowel(word);
+  const a = 'aıou'.includes(v) ? 'a' : 'e';
+  const d = 'çfhkpsşt'.includes(word.toLocaleLowerCase('tr').slice(-1)) ? 't' : 'd';
+  return `${word}'${d}${a}`;
+}
+
 /** placeCount > 5 olan liste sayfalarına ek SEO paragrafları */
 function extendedIntroExtras(ctx: IntroCtx, locale: Locale, scope: ListingFilterResult['kind']): string[] {
   if (!shouldUseExtendedIntro(ctx.total)) return [];
@@ -98,8 +124,7 @@ function extendedIntroExtras(ctx: IntroCtx, locale: Locale, scope: ListingFilter
   if (locale === 'tr') {
     if (scope === 'city') {
       return joinParagraphs([
-        `${city} gezisi planlarken müze günlerini, tarihi yarımadayı ve doğa duraklarını bir arada düşünmek rotanızı verimli kılar. Kitabe'deki her kayıt için konum bilgisi, fotoğraf galerisi ve pratik ziyaret ipuçları sunulur; böylece ${city}'de gezilecek yerleri önceden araştırabilirsiniz.`,
-        `Şehir içi ulaşımda metro, tramvay ve yürüyüş mesafesindeki noktaları gruplamak zaman kazandırır. ${total} kayıtlı mekân arasından ilçe ve kategori filtreleriyle ilginizi çeken temayı seçin; örneğin müzeler, dini yapılar veya doğal alanlar.`,
+        `Birbirine yakın durakları aynı güne toplamak zaman kazandırır. Detay sayfalarında her yerin hikâyesini, dönem bilgisini ve ziyaret önerilerini okuyarak ${total} kayıtlı mekân arasından ${city} rotanızı önceden hazırlayabilirsiniz.`,
         `Kitabe, ${city} turizmi ve kültür mirası meraklıları için düzenli güncellenen bir rehberdir. Mobil uygulama ile haritada gezebilir, favorilere ekleyebilir ve rotanızı paylaşabilirsiniz.`,
       ]);
     }
@@ -126,8 +151,8 @@ function extendedIntroExtras(ctx: IntroCtx, locale: Locale, scope: ListingFilter
   if (locale === 'en') {
     if (scope === 'city') {
       return joinParagraphs([
-        `When planning a trip to ${city}, grouping museums, old-town walks and outdoor stops saves time. Each Kitabe entry includes location, photos and practical visit tips among ${total} listed sites.`,
-        `Use district and category filters to focus on museums, religious architecture or natural areas. The mobile app lets you browse on the map, save favourites and share your route.`,
+        `Grouping nearby stops into the same day saves time. Detail pages include each site's story, period and visit tips, so you can prepare your ${city} route from ${total} listed sites in advance.`,
+        `The Kitabe mobile app lets you browse on the map, save favourites and share your route.`,
       ]);
     }
     if (scope === 'district' && district) {
@@ -146,10 +171,11 @@ function extendedIntroExtras(ctx: IntroCtx, locale: Locale, scope: ListingFilter
 }
 
 function withExtended(base: string[], ctx: IntroCtx, locale: Locale, scope: ListingFilterResult['kind'], citySlug?: string): string[] {
-  const extras = extendedIntroExtras(ctx, locale, scope);
   const manual =
     scope === 'city' && citySlug ? cityGuideParagraphs(citySlug, locale) : [];
-  return [...base, ...extras, ...manual];
+  // El yazımı rehber varsa şablon paragraflar tekrar gibi durur; yalnız giriş cümlesi kalır.
+  if (manual.length > 0) return [...base.slice(0, 1), ...manual];
+  return [...base, ...extendedIntroExtras(ctx, locale, scope)];
 }
 
 function cityIntro(ctx: IntroCtx, locale: Locale): string[] {
@@ -157,27 +183,27 @@ function cityIntro(ctx: IntroCtx, locale: Locale): string[] {
   if (locale === 'tr') {
     return joinParagraphs([
       `${city}, Türkiye'nin kültürel miras açısından en zengin illerinden biridir. Kitabe'de ${city} için ${total} gezilecek yer; müzeler, tarihi yapılar, doğal alanlar ve arkeolojik noktalar tek rehberde toplanmıştır.`,
-      `Aşağıdaki listede ${city}'nin öne çıkan duraklarını inceleyebilir, ilçe veya kategori filtreleriyle rotanızı daraltabilirsiniz. Her kayıt için konum, fotoğraf ve ziyaret ipuçları sunulur; harita üzerinden yakınınızdaki noktaları da keşfedebilirsiniz.`,
-      `${city} gezisi planlarken müze günlerini, yürüyüş parkurlarını ve tarihi merkezleri bir arada değerlendirmenizi öneririz. Kitabe, ${city}'deki kültürel mirası güncel ve erişilebilir biçimde sunar.`,
+      `Yukarıdaki listede ${trGen(city)} öne çıkan duraklarını inceleyebilir, ilçe veya kategori filtreleriyle rotanızı daraltabilirsiniz. Her kayıt için konum, fotoğraf ve ziyaret ipuçları sunulur; harita üzerinden yakınınızdaki noktaları da keşfedebilirsiniz.`,
+      `${city} gezisi planlarken müze günlerini, yürüyüş parkurlarını ve tarihi merkezleri bir arada değerlendirmenizi öneririz. Kitabe, ${trLoc(city)}ki kültürel mirası güncel ve erişilebilir biçimde sunar.`,
     ]);
   }
   if (locale === 'en') {
     return joinParagraphs([
       `${city} ranks among Turkey's richest destinations for cultural heritage. On Kitabe you will find ${total} places to visit in ${city} — museums, historic buildings, natural sites and archaeological landmarks in one guide.`,
-      `Browse the highlights below, then narrow your route by district or category. Each entry includes location, photos and practical tips; use the map to discover nearby sites as you travel.`,
+      `Browse the highlights above, then narrow your route by district or category. Each entry includes location, photos and practical tips; use the map to discover nearby sites as you travel.`,
       `When planning a trip to ${city}, combine museum visits, old-town walks and outdoor stops for a balanced itinerary. Kitabe keeps ${city}'s heritage up to date and easy to explore.`,
     ]);
   }
   if (locale === 'ru') {
     return joinParagraphs([
       `${city} — один из самых богатых городов Турции с точки зрения культурного наследия. В Kitabe собрано ${total} мест для посещения: музеи, исторические здания, природные зоны и археологические объекты.`,
-      `Ниже — основные точки маршрута; фильтруйте по району или категории. У каждой записи есть фото, расположение и советы для визита.`,
+      `Выше — основные точки маршрута; фильтруйте по району или категории. У каждой записи есть фото, расположение и советы для визита.`,
       `Планируя поездку в ${city}, сочетайте музеи, прогулки по старому городу и природные остановки. Kitabe помогает открыть наследие ${city} в удобном формате.`,
     ]);
   }
   return joinParagraphs([
     `يُعدّ ${city} من أغنى مدن تركيا من حيث التراث الثقافي. في Kitabe تجد ${total} مكاناً للزيارة: متاحف ومبانٍ تاريخية ومناطق طبيعية ومواقع أثرية.`,
-    `استعرض القائمة أدناه وضيّق البحث حسب الحي أو الفئة. كل مكان يتضمن موقعاً وصوراً ونصائح للزيارة.`,
+    `استعرض القائمة أعلاه وضيّق البحث حسب الحي أو الفئة. كل مكان يتضمن موقعاً وصوراً ونصائح للزيارة.`,
     `عند التخطيط لرحلة إلى ${city}، اجمع بين المتاحف والمشي في البلدة القديمة والمحطات الطبيعية. Kitabe يعرض تراث ${city} بشكل محدّث وسهل.`,
   ]);
 }
@@ -188,27 +214,27 @@ function districtIntro(ctx: IntroCtx, locale: Locale): string[] {
   if (locale === 'tr') {
     return joinParagraphs([
       `${district}, ${city} ilinde gezilecek yerler açısından öne çıkan ilçelerden biridir. Bu sayfada ${district} sınırları içindeki ${total} kültürel miras noktası listelenmiştir.`,
-      `${district} bölgesinde tarihi yapılar, müzeler, dini mimari ve doğal alanlar bir arada bulunabilir. Aşağıdaki kartlardan ilginizi çeken durakları seçin; detay sayfalarında hikâye, konum ve ziyaret önerileri yer alır.`,
-      `${city} ${district} rotası oluştururken yürüyüş mesafesindeki noktaları gruplamak zaman kazandırır. Kitabe haritasıyla ${district}'deki yerleri sıralayabilir ve gezinizi adım adım planlayabilirsiniz.`,
+      `${district} bölgesinde tarihi yapılar, müzeler, dini mimari ve doğal alanlar bir arada bulunabilir. Yukarıdaki kartlardan ilginizi çeken durakları seçin; detay sayfalarında hikâye, konum ve ziyaret önerileri yer alır.`,
+      `${city} ${district} rotası oluştururken yürüyüş mesafesindeki noktaları gruplamak zaman kazandırır. Kitabe haritasıyla ${trLoc(district)}ki yerleri sıralayabilir ve gezinizi adım adım planlayabilirsiniz.`,
     ]);
   }
   if (locale === 'en') {
     return joinParagraphs([
       `${district} is one of the most rewarding districts to explore in ${city}. This page lists ${total} cultural heritage sites within ${district}.`,
-      `Historic quarters, museums, religious architecture and green spaces often sit side by side here. Pick cards below for photos, stories and visit tips.`,
+      `Historic quarters, museums, religious architecture and green spaces often sit side by side here. Pick cards above for photos, stories and visit tips.`,
       `Group nearby stops when building a ${district}, ${city} itinerary — Kitabe's map helps you order sites efficiently.`,
     ]);
   }
   if (locale === 'ru') {
     return joinParagraphs([
       `${district} — один из ключевых районов ${city} для путешественников. Здесь ${total} объектов культурного наследия.`,
-      `Исторические кварталы, музеи и природные зоны часто соседствуют в ${district}. Выберите карточки ниже для деталей и советов.`,
+      `Исторические кварталы, музеи и природные зоны часто соседствуют в ${district}. Выберите карточки выше для деталей и советов.`,
       `Составляя маршрут по ${district}, группируйте близкие точки — карта Kitabe упростит планирование.`,
     ]);
   }
   return joinParagraphs([
     `يُعدّ ${district} من أبرز أحياء ${city} للزيارة. هذه الصفحة تضم ${total} موقعاً للتراث الثقافي.`,
-    `تتجاور في ${district} غالباً المباني التاريخية والمتاحف والمساحات الخضراء. اختر البطاقات أدناه للتفاصيل.`,
+    `تتجاور في ${district} غالباً المباني التاريخية والمتاحف والمساحات الخضراء. اختر البطاقات أعلاه للتفاصيل.`,
     `عند التخطيط لجولة في ${district}، اجمع المحطات القريبة باستخدام خريطة Kitabe.`,
   ]);
 }
@@ -221,8 +247,8 @@ function categoryIntro(ctx: IntroCtx, locale: Locale): string[] {
     return joinParagraphs([
       `${city} genelinde ${category} kategorisinde ${total} kayıtlı nokta bulunmaktadır. Bu liste, şehirde bu tema etrafında gezilebilecek durakları tek sayfada toplar.`,
       hint ||
-        `${category} meraklıları için ${city}'de farklı dönemlere ait örnekler bir arada sunulur; her kayıt konum ve kısa bilgi içerir.`,
-      `Rotanızı ${city} sınırları içinde planlarken aşağıdaki yerleri sırayla veya haritaya göre ziyaret edebilirsiniz. Kitabe, ${city} ${category} rehberini düzenli olarak günceller.`,
+        `${category} meraklıları için ${trLoc(city)} farklı dönemlere ait örnekler bir arada sunulur; her kayıt konum ve kısa bilgi içerir.`,
+      `Rotanızı ${city} sınırları içinde planlarken yukarıdaki yerleri sırayla veya haritaya göre ziyaret edebilirsiniz. Kitabe, ${city} ${category} rehberini düzenli olarak günceller.`,
     ]);
   }
   if (locale === 'en') {
@@ -230,7 +256,7 @@ function categoryIntro(ctx: IntroCtx, locale: Locale): string[] {
       `${city} has ${total} listed places in the ${category} category. This page gathers them in one searchable guide.`,
       hint ||
         `Highlights across ${city} show how this theme appears in different periods; each entry includes location and context.`,
-      `Plan your ${city} route below or use the map to visit ${category} sites in a logical order. Kitabe keeps this ${city} guide current.`,
+      `Plan your ${city} route with the list above or use the map to visit ${category} sites in a logical order. Kitabe keeps this ${city} guide current.`,
     ]);
   }
   if (locale === 'ru') {
@@ -255,7 +281,7 @@ function districtCategoryIntro(ctx: IntroCtx, locale: Locale): string[] {
     return joinParagraphs([
       `${city} ${district} ilçesinde ${category} kategorisinde ${total} nokta yer almaktadır. Bu sayfa, bölgeyi daraltılmış ve odaklı biçimde keşfetmek isteyenler için hazırlanmıştır.`,
       hint ||
-        `${district} çevresinde ${category} örnekleri hem yerel tarih hem de mimari açıdan önem taşır; aşağıda en çok ziyaret edilen durakları bulabilirsiniz.`,
+        `${district} çevresinde ${category} örnekleri hem yerel tarih hem de mimari açıdan önem taşır; yukarıda en çok ziyaret edilen durakları bulabilirsiniz.`,
       `${district} rotanızı ${category} temasıyla planlarken yakın durakları bir günde birleştirmek mümkündür. Detay sayfalarından hikâyeleri okuyun, haritadan konumları kontrol edin.`,
     ]);
   }
@@ -263,14 +289,14 @@ function districtCategoryIntro(ctx: IntroCtx, locale: Locale): string[] {
     return joinParagraphs([
       `In ${district}, ${city}, there are ${total} places in the ${category} category. This focused list helps you explore one neighbourhood theme at a time.`,
       hint ||
-        `${category} sites in ${district} reflect local history and architecture; browse the cards below for the most visited stops.`,
+        `${category} sites in ${district} reflect local history and architecture; browse the cards above for the most visited stops.`,
       `Combine nearby entries into a single-day ${district} walk; read stories on detail pages and check locations on the map.`,
     ]);
   }
   if (locale === 'ru') {
     return joinParagraphs([
       `В районе ${district} (${city}) — ${total} объектов категории «${category}». Узкий список для целенаправленной прогулки.`,
-      hint || `В ${district} эта тема раскрывает местную историю; ниже — основные точки.`,
+      hint || `В ${district} эта тема раскрывает местную историю; выше — основные точки.`,
       `Объедините близкие остановки в маршрут на день; детали — на страницах объектов и на карте.`,
     ]);
   }

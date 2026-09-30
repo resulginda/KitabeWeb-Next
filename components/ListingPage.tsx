@@ -8,33 +8,62 @@ import {
 } from '@/lib/listings';
 import type { FilterChip } from '@/lib/taxonomyChips';
 
-const CHIP_HEADINGS: Record<Locale, { districts: string; categories: string }> = {
-  tr: { districts: 'İlçeler', categories: 'Kategoriler' },
-  en: { districts: 'Districts', categories: 'Categories' },
-  ru: { districts: 'Районы', categories: 'Категории' },
-  ar: { districts: 'الأحياء', categories: 'الفئات' },
+const CHIP_HEADINGS: Record<Locale, { districts: string; categories: string; more: string }> = {
+  tr: { districts: 'İlçeler', categories: 'Kategoriler', more: 'daha' },
+  en: { districts: 'Districts', categories: 'Categories', more: 'more' },
+  ru: { districts: 'Районы', categories: 'Категории', more: 'ещё' },
+  ar: { districts: 'الأحياء', categories: 'الفئات', more: 'المزيد' },
 };
+
+function ChipLink({ chip }: { chip: FilterChip }) {
+  return (
+    <Link href={chip.href} className="listing-chip">
+      <span className="listing-chip-label">{chip.label}</span>
+      <span className="listing-chip-count">{chip.count}</span>
+    </Link>
+  );
+}
 
 export function FilterChipGroup({
   title,
   chips,
+  limit,
+  moreLabel = 'more',
 }: {
   title: string;
   chips: FilterChip[];
+  /** Fazlası "+N" altında katlanır; linkler HTML'de kalır */
+  limit?: number;
+  moreLabel?: string;
 }) {
   if (!chips.length) return null;
+  const visible = limit ? chips.slice(0, limit) : chips;
+  const hidden = limit ? chips.slice(limit) : [];
   return (
     <section className="listing-chips" aria-label={title}>
       <h2 className="listing-chips-title">{title}</h2>
       <ul className="listing-chips-list">
-        {chips.map((chip) => (
+        {visible.map((chip) => (
           <li key={chip.slug}>
-            <Link href={chip.href} className="listing-chip">
-              <span className="listing-chip-label">{chip.label}</span>
-              <span className="listing-chip-count">{chip.count}</span>
-            </Link>
+            <ChipLink chip={chip} />
           </li>
         ))}
+        {hidden.length > 0 && (
+          <li className="listing-chips-more">
+            <details>
+              <summary className="listing-chip listing-chip--more">
+                +{hidden.length} {moreLabel}
+              </summary>
+              <ul className="listing-chips-list">
+                {hidden.map((chip) => (
+                  <li key={chip.slug}>
+                    <ChipLink chip={chip} />
+                  </li>
+                ))}
+              </ul>
+            </details>
+          </li>
+        )}
       </ul>
     </section>
   );
@@ -53,8 +82,8 @@ export function ListingFilters({
   const h = CHIP_HEADINGS[locale] ?? CHIP_HEADINGS.en;
   return (
     <div className="listing-filters">
-      <FilterChipGroup title={h.districts} chips={districts} />
-      <FilterChipGroup title={h.categories} chips={categories} />
+      <FilterChipGroup title={h.districts} chips={districts} limit={8} moreLabel={h.more} />
+      <FilterChipGroup title={h.categories} chips={categories} limit={10} moreLabel={h.more} />
     </div>
   );
 }

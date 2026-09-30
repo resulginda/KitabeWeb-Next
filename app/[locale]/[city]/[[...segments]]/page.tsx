@@ -73,6 +73,21 @@ export async function generateStaticParams() {
   return params;
 }
 
+const FIRST_GRID_COUNT = 8;
+
+function listingGuideTitle(
+  data: { labels: { city: string; district: string | null; category: string | null } },
+  locale: Locale
+): string {
+  const { city, district, category } = data.labels;
+  const place = district ?? city;
+  const name = category ? `${place} ${category}` : place;
+  if (locale === 'tr') return category ? `${name} Rehberi` : `${name} Gezi Rehberi`;
+  if (locale === 'en') return category ? `${name} Guide` : `${name} Travel Guide`;
+  if (locale === 'ru') return `Путеводитель: ${name}`;
+  return `دليل ${name}`;
+}
+
 async function renderListing(
   locale: Locale,
   city: string,
@@ -99,37 +114,10 @@ async function renderListing(
   const countLabel =
     locale === 'tr' ? 'yer' : locale === 'en' ? 'places' : locale === 'ru' ? 'мест' : 'مكان';
 
-  const useSplitIntro = introParagraphs.length >= 4;
-
-  const filtersAndPromo = (
-    <>
-      <ListingFilters
-        locale={locale}
-        districts={chipDistricts}
-        categories={chipCategories}
-      />
-      <AppPromoBanner locale={locale} />
-    </>
-  );
-
-  const placesBlock = (
-    <>
-      <AdSlot position="in-content" />
-      <div className={`listing-grid${useSplitIntro ? ' listing-grid--wide' : ''}`}>
-        {data.places.map((place) => (
-          <PlaceListingCard key={place.id} place={place} locale={locale} />
-        ))}
-      </div>
-      <AdSlot position="below-content" />
-    </>
-  );
-
-  const filtersBlock = (
-    <>
-      {filtersAndPromo}
-      {placesBlock}
-    </>
-  );
+  const [lead, ...guideParagraphs] = introParagraphs;
+  const guideTitle = listingGuideTitle(data, locale);
+  const firstPlaces = data.places.slice(0, FIRST_GRID_COUNT);
+  const restPlaces = data.places.slice(FIRST_GRID_COUNT);
 
   return (
     <>
@@ -147,35 +135,50 @@ async function renderListing(
             <ListingBreadcrumbs items={data.breadcrumb} />
             <header className="listing-header">
               <h1>{heading}</h1>
+              {lead ? <p className="listing-lead">{lead}</p> : null}
               <p className="listing-subtitle">
-                {data.total} {countLabel}
+                <span>
+                  {data.total} {countLabel}
+                </span>
+                {guideParagraphs.length > 0 && (
+                  <a href="#listing-guide" className="listing-guide-jump">
+                    {guideTitle} ↓
+                  </a>
+                )}
               </p>
             </header>
 
-            {useSplitIntro ? (
-              <>
-                <div className="listing-split">
-                  <aside className="listing-intro-column">
-                    <div className="listing-intro listing-intro--compact">
-                      {introParagraphs.map((paragraph) => (
-                        <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-                      ))}
-                    </div>
-                  </aside>
-                  <div className="listing-results-column">{filtersAndPromo}</div>
-                </div>
-                {placesBlock}
-              </>
-            ) : (
-              <>
-                <div className="listing-intro">
-                  {introParagraphs.map((paragraph) => (
-                    <p key={paragraph.slice(0, 48)}>{paragraph}</p>
-                  ))}
-                </div>
-                {filtersBlock}
-              </>
+            <ListingFilters
+              locale={locale}
+              districts={chipDistricts}
+              categories={chipCategories}
+            />
+
+            <div className="listing-grid listing-grid--wide">
+              {firstPlaces.map((place) => (
+                <PlaceListingCard key={place.id} place={place} locale={locale} />
+              ))}
+            </div>
+            <AdSlot position="in-content" />
+            {restPlaces.length > 0 && (
+              <div className="listing-grid listing-grid--wide">
+                {restPlaces.map((place) => (
+                  <PlaceListingCard key={place.id} place={place} locale={locale} />
+                ))}
+              </div>
             )}
+
+            <AppPromoBanner locale={locale} />
+
+            {guideParagraphs.length > 0 && (
+              <section id="listing-guide" className="listing-guide" aria-labelledby="listing-guide-title">
+                <h2 id="listing-guide-title">{guideTitle}</h2>
+                {guideParagraphs.map((paragraph) => (
+                  <p key={paragraph.slice(0, 48)}>{paragraph}</p>
+                ))}
+              </section>
+            )}
+            <AdSlot position="below-content" />
           </main>
 
           <aside className="listing-ad-right">
