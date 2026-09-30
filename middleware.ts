@@ -30,39 +30,16 @@ function wantsLongCache(pathname: string): boolean {
   return false;
 }
 
-const ROOT_PUBLIC_FILES = new Set([
-  'favicon.ico',
-  'robots.txt',
-  'sitemap.xml',
-  'ads.txt',
-  'app-ads.txt',
-  'icon.png',
-  'icon-180.png',
-  'app-icon.png',
-  'og-default.jpg',
-  'logo-header.webp',
-  'logo-header.png',
-  'logo-160.webp',
-  'logo-260.webp',
-]);
-
 function hasFileExtension(pathname: string): boolean {
   return /\.[a-zA-Z0-9]+$/.test(pathname);
 }
 
-/** Arama motoru site doğrulama dosyaları (Yandex, Google, Bing) */
-const VERIFICATION_FILE = /^(yandex_[a-f0-9]+\.html|google[a-z0-9]+\.html|BingSiteAuth\.xml)$/i;
-
-function isRealStaticAsset(pathname: string): boolean {
-  const file = pathname.replace(/^\//, '');
-  if (ROOT_PUBLIC_FILES.has(file)) return true;
-  if (VERIFICATION_FILE.test(file)) return true;
-  if (pathname.startsWith('/cities/')) return true;
-  if (pathname.startsWith('/fonts/')) return true;
-  if (pathname.startsWith('/_next/')) return true;
-  if (pathname.startsWith('/.well-known/')) return true;
-  return false;
-}
+/**
+ * Tarayıcı botlarının yokladığı sunucu/yapılandırma dosyaları. Engelleme listesi
+ * kasıtlı: izin listesi olursa sitemap/*.xml, doğrulama .html vb. meşru dosyalar da kesilir.
+ */
+const PROBE_EXTENSION =
+  /\.(php\d?|phtml|asp|aspx|ashx|jsp|jspx|cgi|pl|env|ini|sql|bak|old|orig|swp|log|sh|conf|cfg)$/i;
 
 /** App (giriş, hesap, admin, liste, blog...) path'leri → SPA adası */
 function isSpaPath(pathname: string): boolean {
@@ -87,8 +64,7 @@ export function middleware(request: NextRequest) {
     return new NextResponse(null, { status: 404 });
   }
 
-  // /index.php, /wp-login.php vb. [locale] rotasına düşmesin → NoFallbackError
-  if (hasFileExtension(pathname) && !isRealStaticAsset(pathname)) {
+  if (PROBE_EXTENSION.test(pathname)) {
     return new NextResponse(null, { status: 404 });
   }
 
