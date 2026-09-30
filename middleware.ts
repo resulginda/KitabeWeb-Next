@@ -50,9 +50,13 @@ function hasFileExtension(pathname: string): boolean {
   return /\.[a-zA-Z0-9]+$/.test(pathname);
 }
 
+/** Arama motoru site doğrulama dosyaları (Yandex, Google, Bing) */
+const VERIFICATION_FILE = /^(yandex_[a-f0-9]+\.html|google[a-z0-9]+\.html|BingSiteAuth\.xml)$/i;
+
 function isRealStaticAsset(pathname: string): boolean {
   const file = pathname.replace(/^\//, '');
   if (ROOT_PUBLIC_FILES.has(file)) return true;
+  if (VERIFICATION_FILE.test(file)) return true;
   if (pathname.startsWith('/cities/')) return true;
   if (pathname.startsWith('/fonts/')) return true;
   if (pathname.startsWith('/_next/')) return true;
