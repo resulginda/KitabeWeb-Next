@@ -108,10 +108,20 @@ export const PlacesProvider = ({ children }: { children: ReactNode }) => {
       setLoading(true);
     }
     setError(null);
-    fetch(
-      `${API_BASE_URL}/api/places?minimal=1&limit=3000&status=published&lang=${lang}`
-    )
-      .then((res) => res.json())
+    const url = `${API_BASE_URL}/api/places?minimal=1&limit=3000&status=published&lang=${lang}`;
+    const MAX_ATTEMPTS = 3;
+    const fetchWithRetry = async (attempt = 1): Promise<{ success?: boolean; data?: unknown; message?: string }> => {
+      try {
+        const res = await fetch(url);
+        if (res.status >= 500 && attempt < MAX_ATTEMPTS) throw new Error(`HTTP ${res.status}`);
+        return await res.json();
+      } catch (err) {
+        if (cancelled || attempt >= MAX_ATTEMPTS) throw err;
+        await new Promise((r) => setTimeout(r, 1500 * attempt));
+        return fetchWithRetry(attempt + 1);
+      }
+    };
+    fetchWithRetry()
       .then((data) => {
         if (cancelled) return;
         if (data.success && Array.isArray(data.data)) {
@@ -128,13 +138,13 @@ export const PlacesProvider = ({ children }: { children: ReactNode }) => {
           } catch {
             /* ignore quota errors */
           }
-        } else {
+        } else if (!hadCache) {
           setError(data.message || 'Yerler yüklenemedi');
           setPlaces([]);
         }
       })
       .catch((err) => {
-        if (!cancelled) {
+        if (!cancelled && !hadCache) {
           setError(err.message || 'Yerler yüklenemedi');
           setPlaces([]);
         }
