@@ -65,7 +65,11 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
   };
 }
 
-export function buildPlaceJsonLd(place: SeoPlace, locale: Locale) {
+export function buildPlaceJsonLd(
+  place: SeoPlace,
+  locale: Locale,
+  crumbs?: { label: string; href: string }[]
+) {
   const name = pickText(place.name as never, locale);
   const description = pickText(place.description as never, locale);
   const cityLabel = pickText(place.city as never, locale);
@@ -74,6 +78,12 @@ export function buildPlaceJsonLd(place: SeoPlace, locale: Locale) {
   const placeUrl = absolutePlaceUrl(locale, citySlug, rest);
   const hubSlug = HUB_SLUGS[locale];
   const cityHubUrl = `${SITE}${encodePathSegments(`/${locale}/${citySlug}/${hubSlug}`)}`;
+  const trail = crumbs?.length
+    ? crumbs.map((c) => ({ name: c.label, item: `${SITE}${encodePathSegments(c.href)}` }))
+    : [
+        { name: 'Kitabe', item: `${SITE}/${locale}` },
+        { name: cityLabel, item: cityHubUrl },
+      ];
 
   return {
     '@context': 'https://schema.org',
@@ -98,26 +108,12 @@ export function buildPlaceJsonLd(place: SeoPlace, locale: Locale) {
       },
       {
         '@type': 'BreadcrumbList',
-        itemListElement: [
-          {
-            '@type': 'ListItem',
-            position: 1,
-            name: 'Kitabe',
-            item: `${SITE}/${locale}`,
-          },
-          {
-            '@type': 'ListItem',
-            position: 2,
-            name: cityLabel,
-            item: cityHubUrl,
-          },
-          {
-            '@type': 'ListItem',
-            position: 3,
-            name,
-            item: placeUrl,
-          },
-        ],
+        itemListElement: [...trail, { name, item: placeUrl }].map((entry, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: entry.name,
+          item: entry.item,
+        })),
       },
     ],
   };

@@ -22,6 +22,7 @@ import {
 } from '@/lib/listings';
 import { buildPlaceJsonLd, buildPlaceMetadata } from '@/lib/seo';
 import { PlaceDetailLayout } from '@/components/PlaceDetailLayout';
+import { getPlaceRelated } from '@/lib/placeRelated';
 import {
   getPlaceIndex,
   resolvePlaceForDetail,
@@ -197,7 +198,8 @@ async function renderDetail(locale: Locale, city: string, placeSlugParts: string
     permanentRedirect(canonical);
   }
 
-  const jsonLd = buildPlaceJsonLd(place, locale);
+  const related = await getPlaceRelated(place, locale).catch(() => null);
+  const jsonLd = buildPlaceJsonLd(place, locale, related?.breadcrumb);
 
   return (
     <>
@@ -205,7 +207,7 @@ async function renderDetail(locale: Locale, city: string, placeSlugParts: string
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <PlaceDetailLayout place={place} locale={locale} />
+      <PlaceDetailLayout place={place} locale={locale} related={related} />
     </>
   );
 }
