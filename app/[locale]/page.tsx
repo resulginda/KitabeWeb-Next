@@ -33,7 +33,11 @@ export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
 }
 
-export const dynamicParams = false;
+/**
+ * true: tr/en/ru/ar build'de üretilir; diğer tek-segment istekler
+ * (bot /index.php, /legal vb.) NoFallbackError yerine notFound() 404 verir.
+ */
+export const dynamicParams = true;
 export const dynamic = 'force-static';
 
 export async function generateMetadata({

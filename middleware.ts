@@ -30,18 +30,49 @@ function wantsLongCache(pathname: string): boolean {
   return false;
 }
 
+const ROOT_PUBLIC_FILES = new Set([
+  'favicon.ico',
+  'robots.txt',
+  'sitemap.xml',
+  'ads.txt',
+  'app-ads.txt',
+  'icon.png',
+  'icon-180.png',
+  'app-icon.png',
+  'og-default.jpg',
+  'logo-header.webp',
+  'logo-header.png',
+  'logo-160.webp',
+  'logo-260.webp',
+]);
+
+function hasFileExtension(pathname: string): boolean {
+  return /\.[a-zA-Z0-9]+$/.test(pathname);
+}
+
+function isRealStaticAsset(pathname: string): boolean {
+  const file = pathname.replace(/^\//, '');
+  if (ROOT_PUBLIC_FILES.has(file)) return true;
+  if (pathname.startsWith('/cities/')) return true;
+  if (pathname.startsWith('/fonts/')) return true;
+  if (pathname.startsWith('/_next/')) return true;
+  if (pathname.startsWith('/.well-known/')) return true;
+  return false;
+}
+
 /** App (giriş, hesap, admin, liste, blog...) path'leri → SPA adası */
 function isSpaPath(pathname: string): boolean {
   const segments = pathname.split('/').filter(Boolean);
   if (segments.length === 0) return false; // "/" → hub redirect
   const first = segments[0];
   if (NEXT_OWNED_FIRST.has(first)) return false;
-  if (/\.[a-zA-Z0-9]+$/.test(pathname)) return false; // statik dosya (.webp, .png, .txt...)
+  if (hasFileExtension(pathname)) return false;
   return true;
 }
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const segments = pathname.split('/').filter(Boolean);
 
   const legacyTarget = LEGACY_LEGAL_REDIRECTS[pathname];
   if (legacyTarget) {
@@ -49,8 +80,20 @@ export function middleware(request: NextRequest) {
   }
 
   if (request.method === 'POST' && request.headers.has('next-action')) {
-    // Bu projede Server Action yok; bot POST'larını erken 404 ile kes.
     return new NextResponse(null, { status: 404 });
+  }
+
+  // /index.php, /wp-login.php vb. [locale] rotasına düşmesin → NoFallbackError
+  if (hasFileExtension(pathname) && !isRealStaticAsset(pathname)) {
+    return new NextResponse(null, { status: 404 });
+  }
+
+  const first = segments[0];
+
+  // /legal tek başına [locale]=legal olurdu; yasal ana sayfaya al
+  if (first === 'legal' && segments.length < 3) {
+    const loc = LOCALES.includes(segments[1] ?? '') ? segments[1] : 'tr';
+    return NextResponse.redirect(new URL(`/legal/${loc}/about`, request.url), 308);
   }
 
   if (isSpaPath(pathname)) {
