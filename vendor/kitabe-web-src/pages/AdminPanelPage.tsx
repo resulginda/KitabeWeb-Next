@@ -124,7 +124,7 @@ const AdminPanelPage = () => {
     }
     try {
       const [pr, sr] = await Promise.all([
-        fetch(`${API_BASE_URL}/api/places?status=all&limit=3000&page=1`, {
+        fetch(`${API_BASE_URL}/api/places?status=all&limit=10000&page=1`, {
           headers: { Authorization: `Bearer ${token}` },
         }),
         fetch(`${API_BASE_URL}/api/place-suggestions?status=editor_approved`, {
