@@ -19,6 +19,7 @@ import {
   getListingByFilter,
   isHubSegment,
   isHubDashSegment,
+  listingRedirectTarget,
   listingTitle,
 } from '@/lib/listings';
 import { buildPlaceJsonLd, buildPlaceMetadata, serializeJsonLd } from '@/lib/seo';
@@ -92,10 +93,14 @@ function listingGuideTitle(
 async function renderListing(
   locale: Locale,
   city: string,
-  filterSegments: string[]
+  filterSegments: string[],
+  requestedSegments: string[]
 ) {
   const data = await getListingByFilter(locale, city, filterSegments);
   if (!data) notFound();
+
+  const redirectTo = listingRedirectTarget(data, city, requestedSegments);
+  if (redirectTo) permanentRedirect(encodePathSegments(redirectTo));
 
   const jsonLd = buildListingJsonLd(data, locale);
   const heading = listingTitle(data, locale).replace(' | Kitabe', '');
@@ -252,11 +257,11 @@ export default async function CitySegmentsPage({ params }: PageProps) {
   const segs = segments ?? [];
 
   if (segs.length > 0 && isHubSegment(loc, segs[0])) {
-    return renderListing(loc, city, segs.slice(1));
+    return renderListing(loc, city, segs.slice(1), segs);
   }
 
   if (segs.length === 1 && isHubDashSegment(loc, segs[0])) {
-    return renderListing(loc, city, [segs[0]]);
+    return renderListing(loc, city, [segs[0]], segs);
   }
 
   if (segs.length > 0) {

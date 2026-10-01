@@ -126,6 +126,32 @@ export function buildListingPath(
   return `${base}/${hub}-${filter.join('-')}`;
 }
 
+function pathKey(path: string): string {
+  let decoded = path;
+  try {
+    decoded = decodeURIComponent(path);
+  } catch {
+    // olduğu gibi karşılaştır
+  }
+  return decoded.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+/**
+ * Şehir/ilçe adı yerlerde farklı yazıldığında (RU "анталия" / "antalya") backend takma adı
+ * kanonik slug'a çözer; istek kanonik dash veya slash biçiminde değilse kanonik yol döner.
+ */
+export function listingRedirectTarget(
+  data: Pick<ListingFilterResult, 'locale' | 'citySlug' | 'filter'>,
+  city: string,
+  segments: string[]
+): string | null {
+  const canonical = buildListingPath(data.locale, data.citySlug, data.filter);
+  const slashForm = [`/${data.locale}/${data.citySlug}/${HUB_SLUGS[data.locale]}`, ...data.filter].join('/');
+  const requested = pathKey(`/${data.locale}/${city}/${segments.join('/')}`);
+  if (requested === pathKey(canonical) || requested === pathKey(slashForm)) return null;
+  return canonical;
+}
+
 export const getListingByFilter = cache(async (
   locale: Locale,
   citySlug: string,

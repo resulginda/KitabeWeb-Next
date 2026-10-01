@@ -48,9 +48,23 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
   const statHubs = trHubs.length > 0 ? trHubs : cityHubs;
   const totalPlaces = statHubs.reduce((s, c) => s + c.placeCount, 0);
 
+  // TR slug → bu dildeki hub: RU/AR şehir slug'ları yerel yazımlı (анталья), eşleme groupKey ile.
+  const hubByGroup = new Map(cityHubs.map((c) => [c.groupKey, c]));
+  const trGroupBySlug = new Map(trHubs.map((c) => [c.citySlug, c.groupKey]));
+  const hubForTrSlug = (trSlug: string): TaxonomyCombination | undefined => {
+    const group = trGroupBySlug.get(trSlug);
+    const byGroup = group ? hubByGroup.get(group) : undefined;
+    if (byGroup) return byGroup;
+    const slug = localeCitySlug(trSlug, hubSlugs);
+    return slug ? hubBySlug.get(slug) : undefined;
+  };
+
   const featured = FEATURED_EXPLORE_SLUGS
-    .map((slug) => hubBySlug.get(slug))
-    .filter((c): c is TaxonomyCombination => Boolean(c));
+    .map((trSlug) => {
+      const hub = hubForTrSlug(trSlug);
+      return hub ? { trSlug, hub } : null;
+    })
+    .filter((c): c is { trSlug: (typeof FEATURED_EXPLORE_SLUGS)[number]; hub: TaxonomyCombination } => Boolean(c));
 
   const seasonCards = picks
     .map((p) => ({ place: resolved.get(p.ref.id), note: p.note[locale] }))
@@ -128,8 +142,15 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
             <section className="hub-section" aria-labelledby="featured-cities">
               <h2 id="featured-cities">{t.featuredTitle}</h2>
               <div className="locale-hub-grid locale-hub-grid-featured">
-                {featured.map((city) => (
-                  <CityHubCard key={city.citySlug} locale={locale} city={city} places={t.places} explore={t.explore} />
+                {featured.map(({ trSlug, hub }) => (
+                  <CityHubCard
+                    key={hub.citySlug}
+                    locale={locale}
+                    city={hub}
+                    trSlug={trSlug}
+                    places={t.places}
+                    explore={t.explore}
+                  />
                 ))}
               </div>
             </section>
@@ -223,8 +244,7 @@ export async function LocaleHubPage({ locale }: { locale: Locale }) {
               {HOME_REGIONS.map((region) => {
                 const cities = region.cities
                   .map((trSlug) => {
-                    const slug = localeCitySlug(trSlug, hubSlugs);
-                    const hub = slug ? hubBySlug.get(slug) : undefined;
+                    const hub = hubForTrSlug(trSlug);
                     return hub ? { trSlug, hub } : null;
                   })
                   .filter((c): c is { trSlug: string; hub: TaxonomyCombination } => Boolean(c))
@@ -300,17 +320,19 @@ function PlaceImage({ place, alt }: { place: HomePlace; alt?: string }) {
 function CityHubCard({
   locale,
   city,
+  trSlug,
   places,
   explore,
 }: {
   locale: Locale;
   city: TaxonomyCombination;
+  trSlug: string;
   places: string;
   explore: string;
 }) {
   const href = encodePathSegments(buildListingPath(locale, city.citySlug, []));
-  const image = cityHubImage(city.citySlug);
-  const cityName = city.labels.city || getCityLabel(city.citySlug, locale);
+  const image = cityHubImage(trSlug);
+  const cityName = city.labels.city || getCityLabel(trSlug, locale);
 
   return (
     <Link href={href} className="locale-hub-card locale-hub-card-large">

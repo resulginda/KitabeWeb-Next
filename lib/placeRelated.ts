@@ -63,13 +63,13 @@ function neighborsAfter(list: ListingPlace[], selfId: string, count: number): Li
 export async function getPlaceRelated(place: SeoPlace, locale: Locale): Promise<PlaceRelated | null> {
   const full = place.slug?.[locale];
   if (!full) return null;
-  const citySlug = full.normalize('NFC').split('/')[0];
-  if (!citySlug) return null;
+  const slugCity = full.normalize('NFC').split('/')[0];
+  if (!slugCity) return null;
 
-  const [listing, chips] = await Promise.all([
-    getListingByFilter(locale, citySlug, []),
-    getCityFilterChips(locale, citySlug),
-  ]);
+  // Yer slug'ındaki şehir öneki eski bir yazım olabilir; liste sayfası kanonik slug'ı döndürür.
+  const listing = await getListingByFilter(locale, slugCity, []);
+  const citySlug = listing?.citySlug || slugCity;
+  const chips = await getCityFilterChips(locale, citySlug);
 
   const cityLabel = listing?.labels.city || pickText(place.city, locale);
   const cityHref = encodePathSegments(buildListingPath(locale, citySlug));
