@@ -254,13 +254,13 @@ export function listingTitle(data: ListingFilterResult, locale: Locale): string 
     },
     ru: {
       city: `Достопримечательности ${city}`,
-      district: `${district} — ${city}`,
+      district: `Достопримечательности ${district}, ${city}`,
       category: `${category} в ${city}`,
       district_category: `${category} в ${district}, ${city}`,
     },
     ar: {
       city: `أماكن للزيارة في ${city}`,
-      district: `${district} — ${city}`,
+      district: `أماكن للزيارة في ${district}، ${city}`,
       category: `${category} في ${city}`,
       district_category: `${category} في ${district}، ${city}`,
     },
