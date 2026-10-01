@@ -105,7 +105,7 @@ export function PlaceDetailClient({
           <LanguageProvider defaultLanguage={locale} localeFromUrl={locale}>
             <LocaleSync locale={locale} />
             <CategoriesProvider>
-              <PlacesProvider>
+              <PlacesProvider loadCatalog={false} seedPlaces={[initialPlace]}>
                 <FavoritesProvider>
                   <FiltreProvider>
                     <RouteProvider>

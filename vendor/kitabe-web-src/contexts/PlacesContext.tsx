@@ -70,9 +70,18 @@ function mapApiPlaceToPlace(apiPlace: Record<string, unknown>, lang: string): Pl
   };
 }
 
-export const PlacesProvider = ({ children }: { children: ReactNode }) => {
-  const [places, setPlaces] = useState<Place[]>([]);
-  const [loading, setLoading] = useState(true);
+export const PlacesProvider = ({
+  children,
+  loadCatalog = true,
+  seedPlaces = [],
+}: {
+  children: ReactNode;
+  /** false: tüm katalog (~3000 yer, MB'larca) indirilmez; yalnız seedPlaces bilinir (SSR detay sayfası) */
+  loadCatalog?: boolean;
+  seedPlaces?: Place[];
+}) => {
+  const [places, setPlaces] = useState<Place[]>(seedPlaces);
+  const [loading, setLoading] = useState(loadCatalog);
   const [error, setError] = useState<string | null>(null);
   const { currentLanguage } = useLanguage();
 
@@ -80,6 +89,7 @@ export const PlacesProvider = ({ children }: { children: ReactNode }) => {
   const PLACES_CACHE_TTL_MS = 5 * 60 * 1000;
 
   useEffect(() => {
+    if (!loadCatalog) return;
     let cancelled = false;
     const lang = currentLanguage || 'tr';
     const cacheKey = `${PLACES_CACHE_KEY}_${lang}`;
@@ -155,7 +165,7 @@ export const PlacesProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       cancelled = true;
     };
-  }, [currentLanguage]);
+  }, [currentLanguage, loadCatalog]);
 
   const fetchPlaceById = useCallback(
     async (id: string): Promise<Place | null> => {
