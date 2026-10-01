@@ -3,6 +3,7 @@ import { LOCALES, type Locale } from '@/lib/places';
 import { legalPath } from '@/lib/legal/types';
 import { siteLogoHeader } from '@/lib/siteLogo';
 import { HUB_HEADER_COPY } from '@/lib/hubHeaderCopy';
+import { HubAuthActions } from '@/components/home/HubAuthActions';
 import { NavIcon } from '@kitabe/components/NavIcons';
 import type { NavItemId } from '@kitabe/config/navItems';
 import '@kitabe/components/Navigation.css';
@@ -10,12 +11,12 @@ import '@kitabe/components/Navigation.css';
 const BOTTOM_ITEMS: { id: NavItemId; href: string; label: keyof (typeof HUB_HEADER_COPY)['tr'] }[] = [
   { id: 'home', href: '/', label: 'bottomHome' },
   { id: 'list', href: '/list', label: 'bottomList' },
-  { id: 'nearby', href: '/login', label: 'bottomNearby' },
-  { id: 'route', href: '/login', label: 'bottomRoute' },
+  { id: 'nearby', href: '/nearby', label: 'bottomNearby' },
+  { id: 'route', href: '/route', label: 'bottomRoute' },
   { id: 'account', href: '/account', label: 'bottomAccount' },
 ];
 
-/** Hub (/tr …) — istemci JS yok; PageSpeed için statik header + alt nav */
+/** Hub (/tr â€¦) â€” istemci JS yok; PageSpeed iÃ§in statik header + alt nav */
 export function HubStaticChrome({
   locale,
   children,
@@ -47,10 +48,10 @@ export function HubStaticChrome({
             <a href="/list" className="site-header-nav-link">
               <span className="site-header-nav-label">{t.list}</span>
             </a>
-            <a href="/login" className="site-header-nav-link">
+            <a href="/nearby" className="site-header-nav-link">
               <span className="site-header-nav-label">{t.nearby}</span>
             </a>
-            <a href="/login" className="site-header-nav-link">
+            <a href="/route" className="site-header-nav-link">
               <span className="site-header-nav-label">{t.route}</span>
             </a>
           </nav>
@@ -76,7 +77,7 @@ export function HubStaticChrome({
           <div className="site-header-actions hub-static-lang">
             <details className="hub-lang-dropdown">
               <summary className="hub-lang-trigger">
-                {locale.toUpperCase()} <span aria-hidden>▾</span>
+                {locale.toUpperCase()} <span aria-hidden>â–¾</span>
               </summary>
               <ul className="hub-lang-menu">
                 {LOCALES.map((code) => (
@@ -92,12 +93,7 @@ export function HubStaticChrome({
                 ))}
               </ul>
             </details>
-            <a href="/login" className="btn btn-secondary btn-sm site-header-login">
-              {t.login}
-            </a>
-            <a href="/register" className="btn btn-primary btn-sm site-header-register">
-              {t.register}
-            </a>
+            <HubAuthActions login={t.login} register={t.register} myAccount={t.myAccount} />
           </div>
         </div>
       </header>

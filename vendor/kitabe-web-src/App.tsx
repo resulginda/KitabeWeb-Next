@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { AuthProvider } from './contexts/AuthContext';
 import { LanguageProvider } from './contexts/LanguageContext';
@@ -28,7 +28,6 @@ import './styles/page-ads.css';
 import './styles/member-pages.css';
 import { AuthRequired } from './components/AuthRequired';
 
-import HomePage from './pages/HomePage';
 import DetailPage from './pages/DetailPage';
 import ListPage from './pages/ListPage';
 import NearbyPage from './pages/NearbyPage';
@@ -78,8 +77,9 @@ function AppContent() {
       <Routes>
         <Route path="/app" element={<LandingPage />} />
         <Route path="/" element={<SeoHubRedirect />} />
+        <Route path="/home" element={<SeoHubRedirect />} />
+        <Route path="*" element={<SeoHubRedirect />} />
         <Route element={<MainLayout />}>
-          <Route path="/home" element={<HomePage />} />
           <Route path="/list" element={<ListPage />} />
           <Route path="/nearby" element={<AuthRequired><NearbyPage /></AuthRequired>} />
           <Route path="/detail/:id" element={<DetailPage />} />
@@ -116,7 +116,6 @@ function AppContent() {
           <Route path="/rating-approval" element={<RatingApprovalPage />} />
           <Route path="/profile" element={<UserProfilePage />} />
           <Route path="/language-selection" element={<LanguageSelectionPage />} />
-          <Route path="*" element={<Navigate to="/home" replace />} />
         </Route>
       </Routes>
     </>

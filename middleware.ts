@@ -94,7 +94,7 @@ export function middleware(request: NextRequest) {
   logRequest(request, pathname);
   const segments = pathname.split('/').filter(Boolean);
 
-  if (segments.length === 0) {
+  if (segments.length === 0 || pathname === '/home') {
     const url = request.nextUrl.clone();
     url.pathname = `/${preferredLocale(request.headers.get('accept-language'))}`;
     const response = NextResponse.redirect(url, 307);
