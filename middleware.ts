@@ -65,8 +65,33 @@ function preferredLocale(acceptLanguage: string | null): string {
   return ranked.find((r) => LOCALES.includes(r.lang))?.lang ?? 'en';
 }
 
+/** Görsel/font/js gibi dosyalar kaydı boğmasın; sitemap ve robots botlar için ilginç. */
+const UNLOGGED_ASSET = /\.(webp|png|jpe?g|gif|svg|ico|avif|woff2?|ttf|css|js|map|json|webmanifest)$/i;
+
+function clientIp(request: NextRequest): string {
+  return (
+    request.headers.get('cf-connecting-ip') ||
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip') ||
+    '-'
+  );
+}
+
+/** Eski nginx access log'unun yerine: IP, istek, referer ve user-agent stdout'a. */
+function logRequest(request: NextRequest, pathname: string) {
+  if (UNLOGGED_ASSET.test(pathname)) return;
+  if (request.headers.has('next-router-prefetch')) return;
+  const { search } = request.nextUrl;
+  const referer = request.headers.get('referer') || '-';
+  const ua = request.headers.get('user-agent') || '-';
+  console.log(
+    `[req] ${clientIp(request)} ${request.method} ${pathname}${search} "${referer}" "${ua}"`
+  );
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  logRequest(request, pathname);
   const segments = pathname.split('/').filter(Boolean);
 
   if (segments.length === 0) {
