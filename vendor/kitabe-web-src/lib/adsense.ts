@@ -26,26 +26,15 @@ export function getAdSlotId(position: AdPosition): string | null {
   return fromEnv || DEFAULT_SLOTS[position] || null;
 }
 
-/** Reklam gösterilmeyecek sayfalar */
-const NO_AD_EXACT = new Set([
-  '/',
-  '/login',
-  '/register',
-  '/reset-password',
-  '/language-selection',
-  '/delete-account',
-  '/hesap-silme',
-]);
-
-const NO_AD_PREFIXES = [
-  '/admin',
-  '/editor-panel',
-  '/user-management',
-  '/photo-approval',
-  '/rating-approval',
-];
+/**
+ * Reklam (Auto Ads dahil) yalnız yayıncı içeriği olan sayfalarda. İzin listesi: hesap, favori,
+ * rota, form ve panel ekranları AdSense politikasına göre "içeriksiz ekran" sayılır; yeni bir
+ * sayfa eklendiğinde varsayılan olarak reklamsız kalır.
+ */
+const AD_EXACT = new Set(['/list', '/stats', '/blog']);
+const AD_PREFIXES = ['/blog/', '/detail/'];
 
 export function shouldShowPageAds(pathname: string): boolean {
-  if (NO_AD_EXACT.has(pathname)) return false;
-  return !NO_AD_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+  if (AD_EXACT.has(pathname)) return true;
+  return AD_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }

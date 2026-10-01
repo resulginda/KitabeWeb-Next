@@ -11,6 +11,24 @@ import {
   type LegalPageContent,
 } from '@/lib/legal/types';
 
+const URL_PATTERN = /(https?:\/\/[^\s,;)]+)/g;
+
+function Linkified({ text }: { text: string }) {
+  return (
+    <>
+      {text.split(URL_PATTERN).map((part, i) =>
+        i % 2 === 1 ? (
+          <a key={i} href={part} target="_blank" rel="noopener noreferrer">
+            {part.replace(/^https?:\/\//, '')}
+          </a>
+        ) : (
+          part
+        )
+      )}
+    </>
+  );
+}
+
 export function LegalPageView({
   locale,
   doc,
@@ -56,12 +74,16 @@ export function LegalPageView({
           <section key={section.title || 'intro'} className="legal-section">
             {section.title ? <h2>{section.title}</h2> : null}
             {section.paragraphs?.map((p) => (
-              <p key={p.slice(0, 40)}>{p}</p>
+              <p key={p.slice(0, 40)}>
+                <Linkified text={p} />
+              </p>
             ))}
             {section.list ? (
               <ul>
                 {section.list.map((item) => (
-                  <li key={item.slice(0, 40)}>{item}</li>
+                  <li key={item.slice(0, 40)}>
+                    <Linkified text={item} />
+                  </li>
                 ))}
               </ul>
             ) : null}

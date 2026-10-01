@@ -119,3 +119,11 @@
 }
 
 
+
+/* Reklamsiz sayfalar (shouldShowPageAds=false): SPA gecisinde kalan Auto Ads yerlesimlerini gizle */
+body.kitabe-no-ads .google-auto-placed,
+body.kitabe-no-ads ins.adsbygoogle-noablate,
+body.kitabe-no-ads ins.adsbygoogle[data-anchor-status] {
+  display: none !important;
+}
+

@@ -7,7 +7,9 @@ export function AdSenseLoader() {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (!shouldShowPageAds(pathname)) return;
+    const showAds = shouldShowPageAds(pathname);
+    document.body.classList.toggle('kitabe-no-ads', !showAds);
+    if (!showAds) return;
 
     const clientId = getAdClientId();
     if (!clientId) return;

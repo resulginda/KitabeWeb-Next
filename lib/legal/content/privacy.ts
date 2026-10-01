@@ -37,13 +37,19 @@ export const PRIVACY_CONTENT: LegalContentMap = {
       {
         title: 'Üçüncü Taraf Hizmetler',
         paragraphs: [
-          'Hizmet sunumu için Google Firebase (kimlik doğrulama, veritabanı), Google AdMob ve Google AdSense (reklam), Google Analytics (anonim kullanım istatistikleri) kullanılabilir. Bu hizmetler kendi gizlilik politikalarına tabidir.',
+          'Hizmet sunumu için Google Firebase (kimlik doğrulama, bildirimler), Google AdMob (mobil uygulamada reklam), Google AdSense (web sitesinde reklam), Google Analytics (kullanım istatistikleri) ve Meta Pixel (reklam ölçümü) kullanılabilir. Bu hizmetler kendi gizlilik politikalarına tabidir: https://policies.google.com/privacy ve https://www.facebook.com/privacy/policy',
         ],
       },
       {
         title: 'Çerezler ve Reklam',
         paragraphs: [
-          'Web sitemizde kullanıcı deneyimini iyileştirmek ve reklam göstermek için çerezler kullanılabilir. Tarayıcı ayarlarınızdan çerezleri yönetebilirsiniz. Reklam kişiselleştirmesi için Google reklam ayarlarını kullanabilirsiniz.',
+          'Web sitemizdeki reklamlar Google AdSense aracılığıyla gösterilir. Google dahil üçüncü taraf satıcılar, bu siteye veya diğer sitelere yaptığınız önceki ziyaretlere dayalı reklamlar sunmak için çerezler kullanır.',
+          'Google\'ın reklam çerezlerini kullanması, Google\'ın ve iş ortaklarının bu siteye ve/veya internetteki diğer sitelere yaptığınız ziyaretlere dayalı olarak size reklam sunmasını sağlar.',
+          'Kişiselleştirilmiş reklamları Google Reklam Ayarları sayfasından kapatabilirsiniz: https://adssettings.google.com — Diğer üçüncü taraf satıcıların kişiselleştirilmiş reklam çerezlerini ise https://www.aboutads.info/choices adresinden devre dışı bırakabilirsiniz.',
+          'Google\'ın, hizmetlerini kullanan sitelerden gelen bilgileri nasıl kullandığını şu sayfada okuyabilirsiniz: https://policies.google.com/technologies/partner-sites',
+          'Avrupa Ekonomik Alanı, Birleşik Krallık ve İsviçre\'den gelen ziyaretçilere, reklam ve ölçüm çerezleri yerleştirilmeden önce Google sertifikalı bir onay yönetim platformu üzerinden onay sorulur. Verdiğiniz tercihi onay penceresinden istediğiniz zaman değiştirebilirsiniz.',
+          'Google Analytics ve Meta Pixel, sitenin nasıl kullanıldığını ölçmek için çerez kullanır. Şifre sıfırlama ve e-posta doğrulama sayfalarında bu araçlar çalıştırılmaz.',
+          'Çerezleri tarayıcı ayarlarınızdan silebilir veya engelleyebilirsiniz; bu durumda sitenin bazı özellikleri beklendiği gibi çalışmayabilir.',
         ],
       },
       {
@@ -110,13 +116,19 @@ export const PRIVACY_CONTENT: LegalContentMap = {
       {
         title: 'Third-Party Services',
         paragraphs: [
-          'We may use Google Firebase (auth, database), Google AdMob and Google AdSense (advertising), and Google Analytics (aggregated usage). Each provider has its own privacy policy.',
+          'We may use Google Firebase (authentication, notifications), Google AdMob (ads in the mobile app), Google AdSense (ads on the website), Google Analytics (usage statistics) and Meta Pixel (ad measurement). Each provider has its own privacy policy: https://policies.google.com/privacy and https://www.facebook.com/privacy/policy',
         ],
       },
       {
         title: 'Cookies and Advertising',
         paragraphs: [
-          'We use cookies to improve experience and display ads. You can manage cookies in your browser and ad personalisation in Google ad settings.',
+          'Ads on this website are served by Google AdSense. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites.',
+          'Google\'s use of advertising cookies enables it and its partners to serve ads to you based on your visits to this site and/or other sites on the Internet.',
+          'You may opt out of personalised advertising in Google Ads Settings: https://adssettings.google.com — You can also opt out of other third-party vendors\' use of cookies for personalised advertising at https://www.aboutads.info/choices',
+          'Learn how Google uses information from sites that use its services: https://policies.google.com/technologies/partner-sites',
+          'Visitors from the European Economic Area, the United Kingdom and Switzerland are asked for consent through a Google-certified consent management platform before advertising and measurement cookies are set. You can change your choice at any time from the consent dialog.',
+          'Google Analytics and Meta Pixel use cookies to measure how the site is used. These tools do not run on password reset or email verification pages.',
+          'You can delete or block cookies in your browser settings; some features of the site may then not work as expected.',
         ],
       },
       {
@@ -182,13 +194,19 @@ export const PRIVACY_CONTENT: LegalContentMap = {
       {
         title: 'Сторонние сервисы',
         paragraphs: [
-          'Могут использоваться Google Firebase, AdMob, AdSense и Analytics. Действуют политики конфиденциальности соответствующих провайдеров.',
+          'Могут использоваться Google Firebase (аутентификация, уведомления), Google AdMob (реклама в мобильном приложении), Google AdSense (реклама на сайте), Google Analytics (статистика использования) и Meta Pixel (измерение эффективности рекламы). Действуют политики конфиденциальности этих провайдеров: https://policies.google.com/privacy и https://www.facebook.com/privacy/policy',
         ],
       },
       {
         title: 'Cookie и реклама',
         paragraphs: [
-          'Cookie используются для улучшения опыта и показа рекламы. Управление — в настройках браузера.',
+          'Реклама на сайте показывается через Google AdSense. Сторонние поставщики, в том числе Google, используют файлы cookie для показа рекламы на основе ваших предыдущих посещений этого и других сайтов.',
+          'Рекламные файлы cookie позволяют Google и его партнёрам показывать вам рекламу на основе посещений этого сайта и/или других сайтов в интернете.',
+          'Отключить персонализированную рекламу можно в настройках рекламы Google: https://adssettings.google.com — Отказаться от использования файлов cookie другими сторонними поставщиками для персонализированной рекламы можно на странице https://www.aboutads.info/choices',
+          'Как Google использует данные сайтов, которые пользуются его сервисами: https://policies.google.com/technologies/partner-sites',
+          'Посетителей из Европейской экономической зоны, Великобритании и Швейцарии мы просим дать согласие через сертифицированную Google платформу управления согласием до установки рекламных и аналитических файлов cookie. Изменить выбор можно в любой момент в окне согласия.',
+          'Google Analytics и Meta Pixel используют файлы cookie для измерения посещаемости. На страницах сброса пароля и подтверждения e-mail эти инструменты не запускаются.',
+          'Файлы cookie можно удалить или заблокировать в настройках браузера; в этом случае некоторые функции сайта могут работать некорректно.',
         ],
       },
       {
@@ -250,13 +268,19 @@ export const PRIVACY_CONTENT: LegalContentMap = {
       {
         title: 'خدمات الطرف الثالث',
         paragraphs: [
-          'قد نستخدم Google Firebase وAdMob وAdSense وAnalytics. تنطبق سياسات الخصوصية الخاصة بكل مزود.',
+          'قد نستخدم Google Firebase (المصادقة والإشعارات) وGoogle AdMob (الإعلانات في التطبيق) وGoogle AdSense (الإعلانات على الموقع) وGoogle Analytics (إحصاءات الاستخدام) وMeta Pixel (قياس الإعلانات). تخضع هذه الخدمات لسياسات الخصوصية الخاصة بمزوديها: https://policies.google.com/privacy و https://www.facebook.com/privacy/policy',
         ],
       },
       {
         title: 'ملفات تعريف الارتباط والإعلانات',
         paragraphs: [
-          'نستخدم ملفات تعريف الارتباط لتحسين التجربة وعرض الإعلانات. يمكنك إدارتها من إعدادات المتصفح.',
+          'تُعرض الإعلانات على هذا الموقع عبر Google AdSense. يستخدم مورّدو الجهات الخارجية، ومنهم Google، ملفات تعريف الارتباط لعرض إعلانات استنادًا إلى زياراتك السابقة لهذا الموقع أو لمواقع أخرى.',
+          'يتيح استخدام Google لملفات تعريف الارتباط الإعلانية لها ولشركائها عرض إعلانات لك استنادًا إلى زياراتك لهذا الموقع و/أو لمواقع أخرى على الإنترنت.',
+          'يمكنك إيقاف الإعلانات المخصّصة من إعدادات إعلانات Google: https://adssettings.google.com — كما يمكنك إيقاف استخدام مورّدي الجهات الخارجية الآخرين لملفات تعريف الارتباط للإعلانات المخصّصة عبر https://www.aboutads.info/choices',
+          'لمعرفة كيفية استخدام Google للمعلومات الواردة من المواقع التي تستخدم خدماتها: https://policies.google.com/technologies/partner-sites',
+          'يُطلب من زوار المنطقة الاقتصادية الأوروبية والمملكة المتحدة وسويسرا الموافقة عبر منصة لإدارة الموافقة معتمدة من Google قبل وضع ملفات تعريف الارتباط الخاصة بالإعلانات والقياس، ويمكنك تغيير اختيارك في أي وقت من نافذة الموافقة.',
+          'تستخدم Google Analytics وMeta Pixel ملفات تعريف الارتباط لقياس كيفية استخدام الموقع، ولا تعمل هذه الأدوات في صفحات إعادة تعيين كلمة المرور وتأكيد البريد الإلكتروني.',
+          'يمكنك حذف ملفات تعريف الارتباط أو حظرها من إعدادات المتصفح، وقد لا تعمل بعض ميزات الموقع كما ينبغي عندئذٍ.',
         ],
       },
       {
