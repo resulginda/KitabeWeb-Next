@@ -43,6 +43,8 @@ export type ListingFilterResult = {
   citySlug: string;
   hubSlug: string;
   filter: string[];
+  /** Dilden bağımsız sayfa kimliği (TR şehir | TR ilçe | kategori id); eski backend'de yok */
+  groupKey?: string;
   labels: {
     city: string;
     district: string | null;
@@ -58,6 +60,7 @@ export type TaxonomyCombination = {
   citySlug: string;
   hubSlug: string;
   filter: string[];
+  groupKey?: string;
   filterTypes: string[];
   districtSlug: string | null;
   categorySlug: string | null;
@@ -86,6 +89,7 @@ function normalizeTaxonomyCombination(raw: RawTaxonomyCombination): TaxonomyComb
     citySlug: raw.citySlug,
     hubSlug: raw.hubSlug,
     filter,
+    groupKey: raw.groupKey,
     filterTypes: raw.filterTypes ?? [],
     districtSlug: raw.districtSlug ?? null,
     categorySlug: raw.categorySlug ?? null,
@@ -190,6 +194,44 @@ export const getTaxonomyIndex = cache(async (): Promise<TaxonomyCombination[]> =
   }
   return all;
 });
+
+/**
+ * Aynı liste sayfasının dildeki eşdeğeri. Slug'lar dile göre değiştiği için groupKey ile
+ * eşlenir; groupKey yoksa (eski backend) yalnızca birebir aynı slug'la var olan sayfa kabul edilir.
+ * Bir dilde aynı kimlikle birden çok sayfa varsa en çok yer içeren (index sırası) seçilir.
+ */
+export function findListingEquivalent(
+  source: Pick<ListingFilterResult, 'citySlug' | 'filter' | 'groupKey'>,
+  targetLocale: Locale,
+  index: TaxonomyCombination[]
+): TaxonomyCombination | undefined {
+  if (source.groupKey) {
+    return index.find((c) => c.locale === targetLocale && c.groupKey === source.groupKey);
+  }
+  const filterKey = source.filter.join('/');
+  return index.find(
+    (c) =>
+      c.locale === targetLocale &&
+      c.citySlug === source.citySlug &&
+      c.filter.join('/') === filterKey
+  );
+}
+
+/** hreflang için: yalnızca gerçekten var olan dil eşdeğerlerinin path'leri */
+export async function getListingAlternatePaths(
+  data: ListingFilterResult
+): Promise<Partial<Record<Locale, string>>> {
+  const index = await getTaxonomyIndex();
+  const paths: Partial<Record<Locale, string>> = {
+    [data.locale]: buildListingPath(data.locale, data.citySlug, data.filter),
+  };
+  for (const loc of LOCALES) {
+    if (loc === data.locale) continue;
+    const match = findListingEquivalent(data, loc, index);
+    if (match) paths[loc] = buildListingPath(loc, match.citySlug, match.filter);
+  }
+  return paths;
+}
 
 export function listingTitle(data: ListingFilterResult, locale: Locale): string {
   const { labels, total } = data;

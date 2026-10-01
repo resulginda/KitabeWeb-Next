@@ -77,21 +77,25 @@ export default async function sitemap({
     const listings = (await getTaxonomyIndex()).filter(shouldIndexTaxonomy);
     const listingAlternates = new Map<string, Record<string, string>>();
 
+    const groupOf = (combo: (typeof listings)[number]) =>
+      combo.groupKey ?? `${combo.citySlug}::${(combo.filter || []).join('/')}`;
+    const urlOf = (combo: (typeof listings)[number]) =>
+      `${SITE}${encodePathSegments(buildListingPath(combo.locale, combo.citySlug, combo.filter || []))}`;
+
     for (const combo of listings) {
-      const groupKey = `${combo.citySlug}::${(combo.filter || []).join('/')}`;
-      if (!listingAlternates.has(groupKey)) listingAlternates.set(groupKey, {});
-      const path = buildListingPath(combo.locale, combo.citySlug, combo.filter || []);
-      listingAlternates.get(groupKey)![combo.locale] =
-        `${SITE}${encodePathSegments(path)}`;
+      const key = groupOf(combo);
+      if (!listingAlternates.has(key)) listingAlternates.set(key, {});
+      const group = listingAlternates.get(key)!;
+      // Bir dilde aynı kimlikle iki slug varsa ilk gelen (en çok yer içeren) kalır
+      if (!group[combo.locale]) group[combo.locale] = urlOf(combo);
     }
 
     return listings.map((combo) => {
-      const groupKey = `${combo.citySlug}::${(combo.filter || []).join('/')}`;
-      const languages = { ...listingAlternates.get(groupKey) };
+      const url = urlOf(combo);
+      const languages = { ...listingAlternates.get(groupOf(combo)), [combo.locale]: url };
       if (languages.tr) languages['x-default'] = languages.tr;
-      const path = buildListingPath(combo.locale, combo.citySlug, combo.filter || []);
       return {
-        url: `${SITE}${encodePathSegments(path)}`,
+        url,
         lastModified: new Date(combo.lastModified || Date.now()),
         changeFrequency: 'weekly' as const,
         priority: combo.filter?.length ? 0.75 : 0.8,

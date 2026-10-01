@@ -3,6 +3,7 @@ import { LEGAL_DOCS } from '@/lib/legal/types';
 import { encodePathSegments } from './detectLocale';
 import {
   buildListingPath,
+  findListingEquivalent,
   getListingByFilter,
   getTaxonomyIndex,
   HUB_SLUGS,
@@ -52,6 +53,7 @@ function matchTaxonomy(
   targetLocale: Locale,
   index: TaxonomyCombination[]
 ): TaxonomyCombination | undefined {
+  if (source.groupKey) return findListingEquivalent(source, targetLocale, index);
   return index.find((row) => {
     if (row.locale !== targetLocale || row.citySlug !== source.citySlug) return false;
     if (source.kind === 'city') return row.filter.length === 0;

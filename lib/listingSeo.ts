@@ -6,7 +6,6 @@ import {
   listingTitle,
   type ListingFilterResult,
   type Locale,
-  HUB_SLUGS,
 } from './listings';
 import { shouldIndexListing } from './listingQuality';
 import { LOCALES } from './places';
@@ -16,7 +15,8 @@ const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
 
 export function buildListingMetadata(
   data: ListingFilterResult,
-  locale: Locale
+  locale: Locale,
+  alternatePaths: Partial<Record<Locale, string>>
 ): Metadata {
   const title = listingTitle(data, locale);
   const description = listingDescription(data, locale);
@@ -24,10 +24,10 @@ export function buildListingMetadata(
 
   const languages: Record<string, string> = {};
   for (const loc of LOCALES) {
-    const hub = HUB_SLUGS[loc];
-    const path = buildListingPath(loc, data.citySlug, data.filter);
-    languages[loc] = `${SITE}${encodePathSegments(path)}`;
+    const path = alternatePaths[loc];
+    if (path) languages[loc] = `${SITE}${encodePathSegments(path)}`;
   }
+  languages[locale] = canonical;
   languages['x-default'] = languages.tr || canonical;
 
   const ogImage = cityOgImage(data.citySlug);

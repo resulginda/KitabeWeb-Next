@@ -15,6 +15,7 @@ import {
 import { buildListingJsonLd, buildListingMetadata } from '@/lib/listingSeo';
 import { listingIntroParagraphs } from '@/lib/listingIntro';
 import {
+  getListingAlternatePaths,
   getListingByFilter,
   isHubSegment,
   isHubDashSegment,
@@ -224,13 +225,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (segs.length > 0 && isHubSegment(loc, segs[0])) {
     const data = await getListingByFilter(loc, city, segs.slice(1));
     if (!data) return { title: 'Kitabe' };
-    return buildListingMetadata(data, loc);
+    return buildListingMetadata(data, loc, await getListingAlternatePaths(data));
   }
 
   if (segs.length === 1 && isHubDashSegment(loc, segs[0])) {
     const data = await getListingByFilter(loc, city, [segs[0]]);
     if (!data) return { title: 'Kitabe' };
-    return buildListingMetadata(data, loc);
+    return buildListingMetadata(data, loc, await getListingAlternatePaths(data));
   }
 
   if (segs.length > 0) {
