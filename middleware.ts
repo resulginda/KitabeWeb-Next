@@ -41,6 +41,48 @@ function hasFileExtension(pathname: string): boolean {
 const PROBE_EXTENSION =
   /\.(php\d?|phtml|asp|aspx|ashx|jsp|jspx|cgi|pl|env|ini|sql|bak|old|orig|swp|log|sh|conf|cfg)$/i;
 
+/**
+ * SPA'nın (vendor App.tsx) ilk segmentleri. Liste dışındaki adresler (eski kitap sitesinin
+ * /roman/... URL'leri gibi) SPA'ya verilirse 200 + ana sayfa dönüp soft 404 oluyordu.
+ */
+const SPA_FIRST = new Set([
+  'app',
+  'list',
+  'nearby',
+  'route',
+  'account',
+  'favorites',
+  'suggestion',
+  'edit-suggestion',
+  'my-suggestions',
+  'editor-panel',
+  'admin-panel',
+  'admin-hub',
+  'admin-push',
+  'admin-push-logs',
+  'admin-contact-forms',
+  'user-management',
+  'account-settings',
+  'login',
+  'register',
+  'stats',
+  'hakkimizda',
+  'gizlilik-politikasi',
+  'kullanim-sartlari',
+  'iletisim',
+  'blog',
+  'delete-account',
+  'hesap-silme',
+  'reset-password',
+  'verify-email',
+  'notifications',
+  'notification-settings',
+  'photo-approval',
+  'rating-approval',
+  'profile',
+  'language-selection',
+]);
+
 /** App (giriş, hesap, admin, liste, blog...) path'leri → SPA adası */
 function isSpaPath(pathname: string): boolean {
   const segments = pathname.split('/').filter(Boolean);
@@ -48,7 +90,7 @@ function isSpaPath(pathname: string): boolean {
   const first = segments[0];
   if (NEXT_OWNED_FIRST.has(first)) return false;
   if (hasFileExtension(pathname)) return false;
-  return true;
+  return SPA_FIRST.has(first);
 }
 
 /** Başlıksız istekler (Googlebot, AdSense tarayıcısı) x-default olan /tr'ye gider. */
