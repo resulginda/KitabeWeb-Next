@@ -1,6 +1,7 @@
 import type { ListingFilterResult, Locale } from './listings';
 import { shouldUseExtendedIntro } from './listingQuality';
 import { cityGuideParagraphs } from './cityGuideOverrides';
+import { listingGuideParagraphs } from './listingGuides';
 import { trGen, trLoc } from './trSuffix';
 
 type IntroCtx = {
@@ -145,12 +146,17 @@ function extendedIntroExtras(ctx: IntroCtx, locale: Locale, scope: ListingFilter
   return [];
 }
 
-function withExtended(base: string[], ctx: IntroCtx, locale: Locale, scope: ListingFilterResult['kind'], citySlug?: string): string[] {
-  const manual =
-    scope === 'city' && citySlug ? cityGuideParagraphs(citySlug, locale) : [];
-  // El yazımı rehber varsa şablon paragraflar tekrar gibi durur; yalnız giriş cümlesi kalır.
-  if (manual.length > 0) return [...base.slice(0, 1), ...manual];
-  return [...base, ...extendedIntroExtras(ctx, locale, scope)];
+function withExtended(
+  base: string[],
+  ctx: IntroCtx,
+  locale: Locale,
+  data: ListingFilterResult
+): string[] {
+  const manual = data.kind === 'city' ? cityGuideParagraphs(data.citySlug, locale) : [];
+  const guide = manual.length > 0 ? manual : listingGuideParagraphs(data.groupKey, locale);
+  // Rehber varsa şablon paragraflar tekrar gibi durur; yalnız giriş cümlesi kalır.
+  if (guide.length > 0) return [...base.slice(0, 1), ...guide];
+  return [...base, ...extendedIntroExtras(ctx, locale, data.kind)];
 }
 
 function cityIntro(ctx: IntroCtx, locale: Locale): string[] {
@@ -303,7 +309,7 @@ export function listingIntroParagraphs(
     default:
       base = cityIntro(ctx, locale);
   }
-  return withExtended(base, ctx, locale, data.kind, data.citySlug);
+  return withExtended(base, ctx, locale, data);
 }
 
 export function listingIntroText(data: ListingFilterResult, locale: Locale): string {
