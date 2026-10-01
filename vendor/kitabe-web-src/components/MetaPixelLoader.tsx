@@ -11,6 +11,8 @@ const PIXEL_ID =
 export function MetaPixelLoader() {
   useEffect(() => {
     if (!PIXEL_ID || document.getElementById('meta-pixel')) return;
+    // Sıfırlama/doğrulama token'ı URL'de: Meta'ya gitmesin.
+    if (/^\/(reset-password|verify-email)/.test(window.location.pathname)) return;
 
     const inject = () => {
       if (document.getElementById('meta-pixel')) return;

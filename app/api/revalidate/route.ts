@@ -1,21 +1,44 @@
+import { timingSafeEqual } from 'crypto';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { secret, paths, tag, purgeSitemap } = body as {
-    secret?: string;
-    paths?: string[];
-    tag?: string;
-    purgeSitemap?: boolean;
-  };
+function secretMatches(given: unknown, expected: string): boolean {
+  if (typeof given !== 'string') return false;
+  const a = Buffer.from(given);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
 
-  if (secret !== process.env.REVALIDATE_SECRET) {
+export async function POST(req: NextRequest) {
+  const expected = process.env.REVALIDATE_SECRET;
+  if (!expected) {
+    return NextResponse.json({ message: 'Revalidation disabled' }, { status: 503 });
+  }
+
+  let body: {
+    secret?: unknown;
+    paths?: unknown;
+    tag?: unknown;
+    purgeSitemap?: unknown;
+  };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ message: 'Invalid body' }, { status: 400 });
+  }
+
+  if (!secretMatches(body.secret, expected)) {
     return NextResponse.json({ message: 'Invalid secret' }, { status: 401 });
   }
 
+  const tag = typeof body.tag === 'string' ? body.tag : undefined;
+  const paths = Array.isArray(body.paths)
+    ? body.paths.filter((p): p is string => typeof p === 'string' && p.startsWith('/'))
+    : undefined;
+  const purgeSitemap = body.purgeSitemap === true;
+
   if (tag) revalidateTag(tag);
-  if (Array.isArray(paths)) {
+  if (paths) {
     for (const p of paths) {
       revalidatePath(p);
     }
@@ -27,5 +50,5 @@ export async function POST(req: NextRequest) {
     revalidatePath('/sitemap.xml');
   }
 
-  return NextResponse.json({ revalidated: true, paths, tag, purgeSitemap: !!purgeSitemap });
+  return NextResponse.json({ revalidated: true, paths, tag, purgeSitemap });
 }

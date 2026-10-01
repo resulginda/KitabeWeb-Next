@@ -21,7 +21,7 @@ import {
   isHubDashSegment,
   listingTitle,
 } from '@/lib/listings';
-import { buildPlaceJsonLd, buildPlaceMetadata } from '@/lib/seo';
+import { buildPlaceJsonLd, buildPlaceMetadata, serializeJsonLd } from '@/lib/seo';
 import { PlaceDetailLayout } from '@/components/PlaceDetailLayout';
 import { getPlaceRelated } from '@/lib/placeRelated';
 import {
@@ -124,7 +124,7 @@ async function renderListing(
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <div className="listing-page-shell">
         <div className="listing-page-layout">
@@ -209,7 +209,7 @@ async function renderDetail(locale: Locale, city: string, placeSlugParts: string
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <PlaceDetailLayout place={place} locale={locale} related={related} />
     </>

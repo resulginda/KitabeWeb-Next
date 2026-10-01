@@ -65,6 +65,11 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
   };
 }
 
+/** <script type="application/ld+json"> içeriği: API metnindeki "</script>" etiketi kıramasın. */
+export function serializeJsonLd(data: unknown): string {
+  return JSON.stringify(data).replace(/</g, '\\u003c');
+}
+
 export function buildPlaceJsonLd(
   place: SeoPlace,
   locale: Locale,

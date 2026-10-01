@@ -14,10 +14,12 @@ export function GoogleAnalytics() {
       />
       <Script id="google-analytics" strategy="lazyOnload">
         {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${GA_ID}');
+          if (!/^\\/(reset-password|verify-email)/.test(location.pathname)) {
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}', { page_location: location.origin + location.pathname });
+          }
         `}
       </Script>
     </>

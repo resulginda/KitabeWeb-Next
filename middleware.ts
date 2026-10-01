@@ -77,15 +77,32 @@ function clientIp(request: NextRequest): string {
   );
 }
 
+const SENSITIVE_PARAM = /token|code|pass|secret|key|email|auth/i;
+
+/** Şifre sıfırlama / doğrulama bağlantıları log'a düşmesin. */
+function redactedSearch(params: URLSearchParams): string {
+  if ([...params.keys()].length === 0) return '';
+  const out = new URLSearchParams();
+  for (const [k, v] of params) out.append(k, SENSITIVE_PARAM.test(k) ? '***' : v);
+  return `?${out.toString()}`;
+}
+
+function redactPathToken(pathname: string): string {
+  return pathname.replace(/^\/(reset-password|verify-email)\/[^/]+/, '/$1/***');
+}
+
 /** Eski nginx access log'unun yerine: IP, istek, referer ve user-agent stdout'a. */
 function logRequest(request: NextRequest, pathname: string) {
   if (UNLOGGED_ASSET.test(pathname)) return;
   if (request.headers.has('next-router-prefetch')) return;
-  const { search } = request.nextUrl;
-  const referer = request.headers.get('referer') || '-';
+  const search = redactedSearch(request.nextUrl.searchParams);
+  const referer = (request.headers.get('referer') || '-').replace(
+    /([?&][^=&]*(?:token|code|pass|secret|key|email|auth)[^=&]*=)[^&]*/gi,
+    '$1***'
+  );
   const ua = request.headers.get('user-agent') || '-';
   console.log(
-    `[req] ${clientIp(request)} ${request.method} ${pathname}${search} "${referer}" "${ua}"`
+    `[req] ${clientIp(request)} ${request.method} ${redactPathToken(pathname)}${search} "${referer}" "${ua}"`
   );
 }
 

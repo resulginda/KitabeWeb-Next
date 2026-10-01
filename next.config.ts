@@ -23,11 +23,22 @@ function publicAssetHeaders(): { source: string; headers: { key: string; value: 
   return [...sources].map((source) => ({ source, headers: header }));
 }
 
+const securityHeaders = [
+  { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  // Yakınımdaki yerler / rota konum ister; kamera ve mikrofon hiç kullanılmıyor.
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self)' },
+];
+
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
   async headers() {
     const longCache = 'public, max-age=31536000, immutable';
     const cacheHeader = [{ key: 'Cache-Control', value: longCache }];
     return [
+      { source: '/:path*', headers: securityHeaders },
       ...publicAssetHeaders(),
       { source: '/cities/:path*', headers: cacheHeader },
       { source: '/fonts/:path*', headers: cacheHeader },
