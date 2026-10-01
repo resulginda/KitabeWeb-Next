@@ -1,8 +1,11 @@
 import { cache } from 'react';
 import { getCityLabel } from './citySlugLabel';
 import {
+  ApiUnavailableError,
+  fetchApi,
   LOCALES,
   pickText,
+  tolerateDuringBuild,
   type Locale,
   type MultilingualText,
 } from './places';
@@ -11,8 +14,6 @@ export type { Locale };
 export { LOCALES };
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.kitabe.org';
-const SERVER_KEY = process.env.SERVER_API_KEY || process.env.REVALIDATE_SECRET;
-
 export const HUB_SLUGS: Record<Locale, string> = {
   tr: 'kesfet',
   en: 'explore',
@@ -98,11 +99,6 @@ function normalizeTaxonomyCombination(raw: RawTaxonomyCombination): TaxonomyComb
   };
 }
 
-function apiHeaders(): HeadersInit {
-  if (!SERVER_KEY) return {};
-  return { 'X-Kitabe-Internal-Key': SERVER_KEY };
-}
-
 export function isHubSegment(locale: Locale, segment: string): boolean {
   const expected = HUB_SLUGS[locale];
   return segment.trim().toLowerCase() === expected.toLowerCase();
@@ -144,34 +140,17 @@ export const getListingByFilter = cache(async (
     qs.set('filter', filterSegments.join('/'));
   }
 
-  const maxAttempts = 3;
-  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
-    try {
-      const res = await fetch(`${API}/api/places/seo/filter?${qs}`, {
-        headers: apiHeaders(),
-        next: { tags: ['listings-index'], revalidate: 3600 },
-      });
-      if (res.status === 404) return null;
-      if (res.ok) {
-        const json = await res.json();
-        return json.data ?? null;
-      }
-      if (!RETRYABLE_STATUS.has(res.status) || attempt === maxAttempts) {
-        console.warn(`[listings] filter HTTP ${res.status}`);
-        return null;
-      }
-    } catch (err) {
-      if (attempt === maxAttempts) {
-        console.warn('[listings] filter fetch failed:', err);
-        return null;
-      }
-    }
-    await new Promise((r) => setTimeout(r, 500 * attempt));
+  const res = await fetchApi(`${API}/api/places/seo/filter?${qs}`, {
+    next: { tags: ['listings-index'], revalidate: 3600 },
+  }).catch((err) => tolerateDuringBuild(err, null));
+  if (!res || res.status === 404) return null;
+  if (!res.ok) {
+    console.warn(`[listings] filter HTTP ${res.status}`);
+    return null;
   }
-  return null;
+  const json = await res.json();
+  return json.data ?? null;
 });
-
-const RETRYABLE_STATUS = new Set([429, 502, 503, 504]);
 
 /** Backend'i aynı anda onlarca büyük şehir isteğiyle boğmamak için. */
 export async function mapWithConcurrency<T, R>(
@@ -193,23 +172,21 @@ export async function mapWithConcurrency<T, R>(
 
 export const getTaxonomyIndex = cache(async (): Promise<TaxonomyCombination[]> => {
   const all: TaxonomyCombination[] = [];
-  for (const locale of LOCALES) {
-    try {
+  try {
+    for (const locale of LOCALES) {
       const qs = new URLSearchParams({ locale, minimal: '1' });
-      const res = await fetch(`${API}/api/places/seo/taxonomy-index?${qs}`, {
-        headers: apiHeaders(),
+      const res = await fetchApi(`${API}/api/places/seo/taxonomy-index?${qs}`, {
         next: { tags: ['listings-index'], revalidate: 3600 },
       });
       if (!res.ok) {
-        console.warn(`[listings] taxonomy-index HTTP ${res.status} (${locale})`);
-        continue;
+        throw new ApiUnavailableError(`[listings] taxonomy-index HTTP ${res.status} (${locale})`);
       }
       const json = await res.json();
       const batch: RawTaxonomyCombination[] = json.data?.combinations ?? [];
       all.push(...batch.map(normalizeTaxonomyCombination));
-    } catch (err) {
-      console.warn(`[listings] taxonomy-index fetch failed (${locale}):`, err);
     }
+  } catch (err) {
+    return tolerateDuringBuild(err, all);
   }
   return all;
 });

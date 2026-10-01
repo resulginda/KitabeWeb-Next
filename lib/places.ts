@@ -51,19 +51,49 @@ function apiHeaders(): HeadersInit {
   return { 'X-Kitabe-Internal-Key': SERVER_KEY };
 }
 
-async function fetchApi(url: string, init?: RequestInit): Promise<Response> {
-  const maxRetries = 4;
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
-    const res = await fetch(url, {
-      ...init,
-      headers: { ...apiHeaders(), ...(init?.headers ?? {}) },
-    });
-    if (res.status !== 429 || attempt === maxRetries - 1) return res;
-    const waitMs = 1000 * 2 ** attempt;
-    console.warn(`[places] HTTP 429, retry ${attempt + 1}/${maxRetries - 1} in ${waitMs}ms`);
-    await new Promise((r) => setTimeout(r, waitMs));
+/**
+ * API geçici olarak erişilemez (DNS, ağ, 5xx, 429). null yerine fırlatılır ki
+ * ISR yenilemesi sağlam sayfayı 404 ile ezmesin; Next eski sayfayı sunmaya devam eder.
+ */
+export class ApiUnavailableError extends Error {
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options);
+    this.name = 'ApiUnavailableError';
   }
-  throw new Error('fetchApi: unreachable');
+}
+
+export const RETRYABLE_STATUS = new Set([429, 500, 502, 503, 504]);
+
+const IS_BUILD = process.env.NEXT_PHASE === 'phase-production-build';
+
+/** Build'de tek bir ağ hatası tüm deploy'u düşürmesin; çalışırken fırlat. */
+export function tolerateDuringBuild<T>(err: unknown, fallback: T): T {
+  if (IS_BUILD) {
+    console.warn('[api] build fallback:', err);
+    return fallback;
+  }
+  throw err;
+}
+
+export async function fetchApi(url: string, init?: RequestInit): Promise<Response> {
+  const maxAttempts = 4;
+  let lastError: unknown;
+  for (let attempt = 0; attempt < maxAttempts; attempt++) {
+    try {
+      const res = await fetch(url, {
+        ...init,
+        headers: { ...apiHeaders(), ...(init?.headers ?? {}) },
+      });
+      if (!RETRYABLE_STATUS.has(res.status)) return res;
+      lastError = new Error(`HTTP ${res.status}`);
+    } catch (err) {
+      lastError = err;
+    }
+    if (attempt < maxAttempts - 1) {
+      await new Promise((r) => setTimeout(r, 1000 * 2 ** attempt));
+    }
+  }
+  throw new ApiUnavailableError(`[places] API unavailable: ${url}`, { cause: lastError });
 }
 
 export function pickText(
@@ -81,10 +111,7 @@ export const getPlaceIndex = cache(async (): Promise<PlaceIndexEntry[]> => {
     const res = await fetchApi(`${API}/api/places/seo/index`, {
       next: { tags: ['places-index'], revalidate: 3600 },
     });
-    if (!res.ok) {
-      console.warn(`[places] SEO index HTTP ${res.status}`);
-      return [];
-    }
+    if (!res.ok) throw new ApiUnavailableError(`[places] SEO index HTTP ${res.status}`);
     const json = await res.json();
     return (json.data ?? []).map((row: { id: string; slug: Record<string, string>; city: MultilingualText; updatedAt: string }) => ({
       id: row.id,
@@ -93,8 +120,7 @@ export const getPlaceIndex = cache(async (): Promise<PlaceIndexEntry[]> => {
       updatedAt: row.updatedAt,
     }));
   } catch (err) {
-    console.warn('[places] SEO index fetch failed:', err);
-    return [];
+    return tolerateDuringBuild(err, []);
   }
 });
 
@@ -117,40 +143,32 @@ export const getPlaceBySlug = cache(async (
   const city = normalizeSlugSegment(citySlug);
   const slug = normalizeSlugSegment(placeSlug);
 
-  try {
-    const url = `${API}/api/places/by-slug/${locale}/${encodeURIComponent(city)}/${encodeURIComponent(slug)}`;
-    const res = await fetchApi(url, { next: { revalidate: 86400 } });
-    if (res.status === 404) return null;
-    if (!res.ok) {
-      console.warn(
-        `[places] by-slug HTTP ${res.status}: ${locale}/${city}/${slug} → ${url}`
-      );
-      return null;
-    }
-    const json = await res.json();
-    return json.data ?? null;
-  } catch (err) {
-    console.warn(`[places] by-slug fetch failed: ${locale}/${citySlug}/${placeSlug}`, err);
+  const url = `${API}/api/places/by-slug/${locale}/${encodeURIComponent(city)}/${encodeURIComponent(slug)}`;
+  const res = await fetchApi(url, { next: { revalidate: 86400 } }).catch((err) =>
+    tolerateDuringBuild(err, null)
+  );
+  if (!res || res.status === 404) return null;
+  if (!res.ok) {
+    console.warn(
+      `[places] by-slug HTTP ${res.status}: ${locale}/${city}/${slug} → ${url}`
+    );
     return null;
   }
+  const json = await res.json();
+  return json.data ?? null;
 });
 
 export const getPlaceById = cache(async (id: string): Promise<SeoPlace | null> => {
-  try {
-    const res = await fetchApi(`${API}/api/places/${id}`, {
-      next: { revalidate: 86400 },
-    });
-    if (res.status === 404) return null;
-    if (!res.ok) {
-      console.warn(`[places] by-id HTTP ${res.status}: ${id}`);
-      return null;
-    }
-    const json = await res.json();
-    return json.data ?? null;
-  } catch (err) {
-    console.warn(`[places] by-id fetch failed: ${id}`, err);
+  const res = await fetchApi(`${API}/api/places/${id}`, {
+    next: { revalidate: 86400 },
+  }).catch((err) => tolerateDuringBuild(err, null));
+  if (!res || res.status === 404) return null;
+  if (!res.ok) {
+    console.warn(`[places] by-id HTTP ${res.status}: ${id}`);
     return null;
   }
+  const json = await res.json();
+  return json.data ?? null;
 });
 
 /** Kiril/Arap slug API eşleşmezse SEO index + id ile yedek çözüm */
