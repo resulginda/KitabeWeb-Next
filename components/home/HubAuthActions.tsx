@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { AUTH_TOKEN_KEY } from '@kitabe/utils/authToken';
+import { persistLanguageChoice } from '@kitabe/utils/detectLocale';
+import type { Locale } from '@/lib/places';
 
 type Props = {
+  locale: Locale;
   login: string;
   register: string;
   myAccount: string;
@@ -25,16 +28,17 @@ function readSession(): { initial: string } | null {
 }
 
 /** Hub başlığı statik; oturum localStorage'da olduğu için giriş durumu istemcide okunur. */
-export function HubAuthActions({ login, register, myAccount }: Props) {
+export function HubAuthActions({ locale, login, register, myAccount }: Props) {
   const [session, setSession] = useState<{ initial: string } | null>(null);
 
   useEffect(() => {
     try {
+      persistLanguageChoice(locale, true);
       setSession(readSession());
     } catch {
       setSession(null);
     }
-  }, []);
+  }, [locale]);
 
   if (session) {
     return (

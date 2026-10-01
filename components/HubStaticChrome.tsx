@@ -93,7 +93,7 @@ export function HubStaticChrome({
                 ))}
               </ul>
             </details>
-            <HubAuthActions login={t.login} register={t.register} myAccount={t.myAccount} />
+            <HubAuthActions locale={locale} login={t.login} register={t.register} myAccount={t.myAccount} />
           </div>
         </div>
       </header>
