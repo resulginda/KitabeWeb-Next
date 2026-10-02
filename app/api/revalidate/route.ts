@@ -9,6 +9,22 @@ function secretMatches(given: unknown, expected: string): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
+/** Next önbellek etiketleri URL'nin yüzde-kodlu pathname'inden üretilir; Kiril/Arap yollar ancak kodlu hâliyle eşleşir. */
+function pathVariants(path: string): string[] {
+  let decoded = path;
+  try {
+    decoded = decodeURI(path);
+  } catch {
+    // geçersiz % dizisi: olduğu gibi kullan
+  }
+  const variants = new Set<string>([path]);
+  for (const form of [decoded.normalize('NFC'), decoded.normalize('NFD')]) {
+    variants.add(form);
+    variants.add(encodeURI(form));
+  }
+  return [...variants];
+}
+
 export async function POST(req: NextRequest) {
   const expected = process.env.REVALIDATE_SECRET;
   if (!expected) {
@@ -40,7 +56,7 @@ export async function POST(req: NextRequest) {
   if (tag) revalidateTag(tag);
   if (paths) {
     for (const p of paths) {
-      revalidatePath(p);
+      for (const variant of pathVariants(p)) revalidatePath(variant);
     }
   }
 
