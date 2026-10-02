@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import { getCityLabel } from './citySlugLabel';
+import { fitMetaDescription } from './metaDescription';
 import {
   ApiUnavailableError,
   fetchApi,
@@ -310,7 +311,31 @@ export function listingDescription(data: ListingFilterResult, locale: Locale): s
   };
 
   const text = parts[locale] || parts.en;
-  return text.length > 165 ? `${text.slice(0, 162)}...` : text;
+  const highlights = text.length < 120 ? listingHighlights(data.places, locale, 160 - text.length - 1) : '';
+  return fitMetaDescription(highlights ? `${text} ${highlights}` : text);
+}
+
+const HIGHLIGHTS_LABEL: Record<Locale, string> = {
+  tr: 'Öne çıkanlar:',
+  en: 'Highlights:',
+  ru: 'Популярные места:',
+  ar: 'أبرز الأماكن:',
+};
+
+/** "Öne çıkanlar: A, B, C." — `budget` karakteri aşmayacak kadar yer adı. */
+function listingHighlights(places: ListingPlace[], locale: Locale, budget: number): string {
+  const sep = locale === 'ar' ? '، ' : ', ';
+  const names: string[] = [];
+  let line = '';
+  for (const place of places) {
+    const name = pickText(place.name, locale).trim();
+    if (!name || names.includes(name)) continue;
+    const next = `${HIGHLIGHTS_LABEL[locale]} ${[...names, name].join(sep)}.`;
+    if (next.length > budget) break;
+    names.push(name);
+    line = next;
+  }
+  return line;
 }
 
 export function pickListingText(

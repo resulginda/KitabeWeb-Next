@@ -17,17 +17,17 @@ const META: Record<Locale, { title: string; description: string }> = {
   en: {
     title: 'Things to Do in Turkey | Kitabe',
     description:
-      'Travel guide to cultural heritage across Turkey — museums, ancient sites, castles and natural wonders in every city.',
+      'Travel guide to cultural heritage across Turkey — museums, ancient cities, castles and natural wonders in all 81 provinces, with maps and stories.',
   },
   ru: {
     title: 'Достопримечательности Турции | Kitabe',
     description:
-      'Путеводитель по культурному наследию Турции — музеи, античные города и природные красоты в каждом регионе.',
+      'Путеводитель по культурному наследию Турции — музеи, античные города, крепости и природные красоты во всех 81 провинциях, с картами и историями.',
   },
   ar: {
     title: 'أماكن للزيارة في تركيا | Kitabe',
     description:
-      'دليل التراث الثقافي في تركيا — متاحف ومواقع أثرية وقلاع وعجائب طبيعية في كل مدينة.',
+      'دليل التراث الثقافي في تركيا — متاحف ومدن أثرية وقلاع وعجائب طبيعية في جميع الولايات الـ81، مع الخرائط والقصص ونصائح الزيارة.',
   },
 };
 

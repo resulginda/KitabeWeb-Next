@@ -10,7 +10,8 @@ import { HUB_CRITICAL_CSS } from '@/lib/hubCriticalCss';
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: 'Kitabe — Kültürel Miras Rehberi', template: '%s' },
-  description: 'Türkiye\'nin tarihi ve kültürel yerlerini keşfedin.',
+  description:
+    'Kitabe ile Türkiye\'nin tarihi ve kültürel yerlerini keşfedin: 81 ilde müzeler, antik kentler, kaleler ve doğal güzellikler, harita ve hikâyeleriyle.',
   icons: {
     icon: [
       { url: '/favicon.ico', sizes: 'any' },

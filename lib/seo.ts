@@ -3,12 +3,45 @@ import { pickText, type Locale, type SeoPlace, LOCALES } from './places';
 import { encodePathSegments } from './detectLocale';
 import { absoluteOgImage, DEFAULT_OG } from './og';
 import { HUB_SLUGS } from './listings';
+import { fitMetaDescription } from './metaDescription';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
 
 function absolutePlaceUrl(locale: Locale, citySlug: string, placeSlugParts: string[]): string {
   const path = encodePathSegments(`/${locale}/${citySlug}/${placeSlugParts.join('/')}`);
   return `${SITE}${path}`;
+}
+
+/** Uzundan kısaya: fitMetaDescription sığan ilkini kullanır. */
+function placeMetaSuffixes(locale: Locale, city: string, district: string): string[] {
+  const where =
+    district && district !== city && !/^merkez$/i.test(district) ? `${district}, ${city}` : city;
+  if (locale === 'tr') {
+    return [
+      `${where} gezisi için tarihçe, ziyaret ipuçları ve harita Kitabe'de.`,
+      'Tarihçe, ziyaret ipuçları ve harita Kitabe\'de.',
+      'Harita ve ipuçları Kitabe\'de.',
+    ];
+  }
+  if (locale === 'en') {
+    return [
+      `Plan your visit to ${where}: history, visiting tips and map on Kitabe.`,
+      'History, visiting tips and map on Kitabe.',
+      'Map and tips on Kitabe.',
+    ];
+  }
+  if (locale === 'ru') {
+    return [
+      `${where}: история, советы для посещения и карта на Kitabe.`,
+      'История, советы и карта на Kitabe.',
+      'Карта и советы на Kitabe.',
+    ];
+  }
+  return [
+    `${where}: التاريخ ونصائح الزيارة والخريطة على Kitabe.`,
+    'التاريخ ونصائح الزيارة والخريطة على Kitabe.',
+    'الخريطة والنصائح على Kitabe.',
+  ];
 }
 
 export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
@@ -22,8 +55,8 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
     pickText(place.metaTitle, locale) ||
     `${name} - ${city}${district ? `, ${district}` : ''} | Kitabe`;
 
-  const metaDesc =
-    description.length > 160 ? `${description.slice(0, 157)}...` : description;
+  const story = pickText(place.story as never, locale).replace(/[#*_>]+/g, ' ');
+  const metaDesc = fitMetaDescription(description, [story], placeMetaSuffixes(locale, city, district));
 
   const fullSlug = place.slug?.[locale] ?? '';
   const [citySlug, ...rest] = fullSlug.split('/');

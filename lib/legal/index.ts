@@ -30,7 +30,7 @@ export const CONTACT_UI: Record<
 > = {
   tr: {
     title: 'İletişim',
-    metaDescription: 'Kitabe ile iletişime geçin. Sorularınız, önerileriniz ve iş birlikleri için info@kitabe.org.',
+    metaDescription: 'Kitabe ile iletişime geçin: sorularınız, önerileriniz, hata bildirimleri ve iş birliği teklifleri için formu doldurun veya info@kitabe.org adresine yazın.',
     intro: 'Sorularınız, geri bildirimleriniz veya iş birliği teklifleriniz için formu doldurun veya doğrudan info@kitabe.org adresine yazın.',
     firstName: 'Ad',
     lastName: 'Soyad',
@@ -45,7 +45,7 @@ export const CONTACT_UI: Record<
   },
   en: {
     title: 'Contact',
-    metaDescription: 'Contact Kitabe for questions, feedback and partnerships. info@kitabe.org',
+    metaDescription: 'Contact Kitabe: send your questions, feedback, bug reports or partnership proposals through the form, or email us directly at info@kitabe.org.',
     intro: 'Fill in the form below or email us at info@kitabe.org.',
     firstName: 'First name',
     lastName: 'Last name',
@@ -60,7 +60,7 @@ export const CONTACT_UI: Record<
   },
   ru: {
     title: 'Контакты',
-    metaDescription: 'Связаться с Kitabe: вопросы, отзывы, сотрудничество. info@kitabe.org',
+    metaDescription: 'Связаться с Kitabe: вопросы, отзывы, сообщения об ошибках и предложения о сотрудничестве — через форму или по адресу info@kitabe.org.',
     intro: 'Заполните форму или напишите на info@kitabe.org.',
     firstName: 'Имя',
     lastName: 'Фамилия',
@@ -75,7 +75,7 @@ export const CONTACT_UI: Record<
   },
   ar: {
     title: 'اتصل بنا',
-    metaDescription: 'تواصل مع Kitabe للأسئلة والملاحظات والشراكات. info@kitabe.org',
+    metaDescription: 'تواصل مع Kitabe: أرسل أسئلتك وملاحظاتك وبلاغات الأخطاء وعروض الشراكة عبر النموذج، أو راسلنا مباشرة على البريد info@kitabe.org.',
     intro: 'املأ النموذج أو راسلنا على info@kitabe.org.',
     firstName: 'الاسم',
     lastName: 'اللقب',
