@@ -83,6 +83,22 @@ const SPA_FIRST = new Set([
   'language-selection',
 ]);
 
+/**
+ * Eski kitap sitesinin adresleri (/yazar/..., /hikaye-oyku/..., /category/..., /roman/...):
+ * hiçbir rotaya ait olmayan ilk segment kalıcı olarak kaldırıldı (410) → arama motorları
+ * 404'e göre çok daha hızlı dizinden düşürür.
+ */
+function isRetiredPath(first: string, pathname: string): boolean {
+  return (
+    !LOCALES.includes(first) &&
+    !NEXT_OWNED_FIRST.has(first) &&
+    !SPA_FIRST.has(first) &&
+    !hasFileExtension(pathname)
+  );
+}
+
+const GONE_HTML = `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>410 — Kitabe</title></head><body style="font-family:system-ui,sans-serif;max-width:36rem;margin:4rem auto;padding:0 1rem"><h1>Bu sayfa kaldırıldı</h1><p>Aradığınız içerik artık Kitabe'de yayında değil.</p><p><a href="/tr">Türkiye'nin kültürel miras rehberine git →</a></p></body></html>`;
+
 /** App (giriş, hesap, admin, liste, blog...) path'leri → SPA adası */
 function isSpaPath(pathname: string): boolean {
   const segments = pathname.split('/').filter(Boolean);
@@ -175,6 +191,17 @@ export function middleware(request: NextRequest) {
   }
 
   const first = segments[0];
+
+  if (isRetiredPath(first, pathname)) {
+    return new NextResponse(GONE_HTML, {
+      status: 410,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'X-Robots-Tag': 'noindex',
+        'Cache-Control': 'public, max-age=86400',
+      },
+    });
+  }
 
   // /legal tek başına [locale]=legal olurdu; yasal ana sayfaya al
   if (first === 'legal' && segments.length < 3) {
