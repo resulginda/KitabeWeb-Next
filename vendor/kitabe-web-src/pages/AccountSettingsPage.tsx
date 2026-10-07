@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth, type DeleteAccountProof } from '../contexts/AuthContext';
 import GoogleSignInButton from '../components/GoogleSignInButton';
+import AvatarContent from '../components/AvatarContent';
 import { useLanguage } from '../contexts/LanguageContext';
 import { PageShell, PageSection, PageLoginRequired } from '../components/PageShell';
 
@@ -182,7 +183,9 @@ const AccountSettingsPage = () => {
       {successMessage ? <div className="kb-page-alert is-success">{successMessage}</div> : null}
 
       <div className="kb-settings-user-strip">
-        <div className="kb-member-avatar">{initials}</div>
+        <div className="kb-member-avatar">
+          <AvatarContent url={kullanici.avatarUrl} fallback={initials} />
+        </div>
         <div>
           <strong>
             {kullanici.isim} {kullanici.soyad}

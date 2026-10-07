@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import AvatarContent from './AvatarContent';
 import { useLanguage } from '../contexts/LanguageContext';
 import { HEADER_LINKS } from '../config/headerLinks';
 import type { ExploreCityLocale } from '../data/featuredExploreCities';
@@ -48,7 +49,7 @@ const DesktopHeader = () => {
         </Link>
         <Link to="/account" className="desktop-header-account">
           <span className="desktop-header-account-avatar" aria-hidden>
-            {kullanici?.isim?.charAt(0)?.toUpperCase() || 'K'}
+            <AvatarContent url={kullanici?.avatarUrl} fallback={kullanici?.isim?.charAt(0)?.toUpperCase() || 'K'} />
           </span>
           <span className="desktop-header-account-label">
             {kullanici ? t('account.myAccount') : t('navigation.loginRegister')}

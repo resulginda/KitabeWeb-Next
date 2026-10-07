@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import AvatarContent from '../components/AvatarContent';
 import { useLanguage } from '../contexts/LanguageContext';
 import { useNotifications } from '../contexts/NotificationContext';
 import { useRatings } from '../contexts/RatingContext';
@@ -202,7 +203,7 @@ const AccountPage = () => {
         <header className="kb-account-hero">
           <div className="kb-account-hero-main">
             <div className="kb-account-avatar" aria-hidden>
-              {initials}
+              <AvatarContent url={kullanici.avatarUrl} fallback={initials} />
             </div>
             <div className="kb-account-hero-text">
               <p className="kb-account-eyebrow">{t('account.myAccount')}</p>

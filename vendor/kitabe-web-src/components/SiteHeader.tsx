@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import AvatarContent from './AvatarContent';
 import { useLanguage } from '../contexts/LanguageContext';
 import { HEADER_NAV_ITEMS, isNavItemActive, localeHomePath, navItemHref } from '../config/navItems';
 import { HEADER_LINKS } from '../config/headerLinks';
@@ -92,7 +93,7 @@ export function SiteHeader() {
           {kullanici ? (
             <Link to="/account" className="site-header-account-pill">
               <span className="site-header-account-avatar" aria-hidden>
-                {kullanici.isim?.charAt(0)?.toUpperCase() || 'K'}
+                <AvatarContent url={kullanici.avatarUrl} fallback={kullanici.isim?.charAt(0)?.toUpperCase() || 'K'} />
               </span>
               <span className="site-header-account-label">{t('account.myAccount')}</span>
             </Link>
