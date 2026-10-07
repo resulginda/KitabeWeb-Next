@@ -109,7 +109,7 @@ export function pickText(
 export const getPlaceIndex = cache(async (): Promise<PlaceIndexEntry[]> => {
   try {
     const res = await fetchApi(`${API}/api/places/seo/index`, {
-      next: { tags: ['places-index'], revalidate: 3600 },
+      next: { tags: ['places-index'], revalidate: 86400 },
     });
     if (!res.ok) throw new ApiUnavailableError(`[places] SEO index HTTP ${res.status}`);
     const json = await res.json();

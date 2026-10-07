@@ -172,7 +172,7 @@ export const getListingByFilter = cache(async (
   }
 
   const res = await fetchApi(`${API}/api/places/seo/filter?${qs}`, {
-    next: { tags: ['listings-index'], revalidate: 3600 },
+    next: { tags: ['listings-index'], revalidate: 86400 },
   }).catch((err) => tolerateDuringBuild(err, null));
   if (!res || res.status === 404) return null;
   if (!res.ok) {
@@ -207,7 +207,7 @@ export const getTaxonomyIndex = cache(async (): Promise<TaxonomyCombination[]> =
     for (const locale of LOCALES) {
       const qs = new URLSearchParams({ locale, minimal: '1' });
       const res = await fetchApi(`${API}/api/places/seo/taxonomy-index?${qs}`, {
-        next: { tags: ['listings-index'], revalidate: 3600 },
+        next: { tags: ['listings-index'], revalidate: 86400 },
       });
       if (!res.ok) {
         throw new ApiUnavailableError(`[listings] taxonomy-index HTTP ${res.status} (${locale})`);

@@ -34,7 +34,7 @@ import {
 } from '@/lib/places';
 import { encodePathSegments } from '@/lib/detectLocale';
 
-export const revalidate = 3600;
+export const revalidate = 86400;
 export const dynamicParams = true;
 
 type PageProps = {

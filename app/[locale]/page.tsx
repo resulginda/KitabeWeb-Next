@@ -42,7 +42,7 @@ export function generateStaticParams() {
 export const dynamicParams = true;
 export const dynamic = 'force-static';
 /** "Ekim'de nereye gidilir?" bölümü aya göre değiştiği için saatlik yenilenir. */
-export const revalidate = 3600;
+export const revalidate = 86400;
 
 export async function generateMetadata({
   params,
