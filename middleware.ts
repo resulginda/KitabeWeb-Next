@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { LEGACY_LEGAL_REDIRECTS } from '@/lib/legal/types';
+import { isBlockedBot } from '@/lib/blockedBots';
 
 const LONG_CACHE = 'public, max-age=31536000, immutable';
 const LOCALES = ['tr', 'en', 'ru', 'ar'];
@@ -167,6 +168,12 @@ function logRequest(request: NextRequest, pathname: string) {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   logRequest(request, pathname);
+
+  // robots.txt açık kalır ki botlar yasağı okuyabilsin
+  if (pathname !== '/robots.txt' && isBlockedBot(request.headers.get('user-agent'))) {
+    return new NextResponse(null, { status: 403, headers: { 'Cache-Control': 'no-store' } });
+  }
+
   const segments = pathname.split('/').filter(Boolean);
 
   if (segments.length === 0 || pathname === '/home') {
