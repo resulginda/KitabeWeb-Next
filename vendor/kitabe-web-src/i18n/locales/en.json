@@ -870,6 +870,14 @@
       "tourism": "Tourism",
       "museums": "Museums"
     }
+  },
+  "socialLogin": {
+    "or": "or",
+    "consent": "By continuing, you agree to the Terms of Use and Privacy Policy.",
+    "error": "Sign-in failed. Please try again.",
+    "noPasswordGoogle": "You sign in with Google, so you don’t need a password.",
+    "noPasswordApple": "You sign in with Apple, so you don’t need a password.",
+    "confirmDeleteGoogle": "To confirm, press the Google button and choose your account.",
+    "appleDeleteOnIphone": "This account was created with Apple. To delete it, sign in on your iPhone or email info@kitabe.org."
   }
 }
-

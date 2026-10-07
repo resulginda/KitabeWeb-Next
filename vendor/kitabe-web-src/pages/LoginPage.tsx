@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 import './LoginPage.css';
 
 const LoginPage = () => {
@@ -9,7 +10,7 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as { from?: string } | null)?.from || '/home';
-  const { girisYap, resetPassword } = useAuth();
+  const { girisYap, googleIleGiris, resetPassword } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -38,6 +39,18 @@ const LoginPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleGoogle = async (idToken: string) => {
+    setError('');
+    setLoading(true);
+    const result = await googleIleGiris(idToken);
+    setLoading(false);
+    if (result.success) {
+      navigate(from, { replace: true });
+      return;
+    }
+    setError(result.msg || t('socialLogin.error'));
   };
 
   const handleResetPassword = async () => {
@@ -122,6 +135,12 @@ const LoginPage = () => {
               {t('legal.legalDocuments')}
             </button>
           </form>
+
+          <div className="kb-social-divider">
+            <span>{t('socialLogin.or')}</span>
+          </div>
+          <GoogleSignInButton onCredential={handleGoogle} />
+          <p className="kb-social-consent">{t('socialLogin.consent')}</p>
 
           <p className="login-footer-text">
             {t('login.noAccount')}{' '}

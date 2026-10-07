@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth, type DeleteAccountProof } from '../contexts/AuthContext';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 import { useLanguage } from '../contexts/LanguageContext';
 import { PageShell, PageSection, PageLoginRequired } from '../components/PageShell';
 
@@ -114,24 +115,30 @@ const AccountSettingsPage = () => {
     }
   };
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = async (googleIdToken?: string) => {
     if (!kullanici) return;
-    if (!deletePassword) {
-      alert(t('account.enterPasswordToDelete', 'Şifrenizi girin'));
-      return;
-    }
-    if (!kullanici.hasPassword) {
-      alert(
-        t(
-          'account.noPasswordDeleteHint',
-          'Şifre tanımlı değil. Hesabınızı silebilmek için önce şifrenizi belirleyin.'
-        )
-      );
-      return;
+    let proof: DeleteAccountProof;
+    if (googleIdToken) {
+      proof = { googleIdToken };
+    } else {
+      if (!deletePassword) {
+        alert(t('account.enterPasswordToDelete', 'Şifrenizi girin'));
+        return;
+      }
+      if (!kullanici.hasPassword) {
+        alert(
+          t(
+            'account.noPasswordDeleteHint',
+            'Şifre tanımlı değil. Hesabınızı silebilmek için önce şifrenizi belirleyin.'
+          )
+        );
+        return;
+      }
+      proof = { password: deletePassword };
     }
     setDeleting(true);
     try {
-      const result = await deleteAccount(deletePassword);
+      const result = await deleteAccount(proof);
       if (result.success) {
         alert(t('account.accountDeletedMessage', 'Hesabınız başarıyla silindi.'));
         cikisYap();
@@ -150,6 +157,10 @@ const AccountSettingsPage = () => {
   if (!kullanici) {
     return <PageLoginRequired message={t('account.loginRequired', 'Giriş yapmanız gerekiyor')} />;
   }
+
+  const socialOnly = !kullanici.hasPassword && (kullanici.googleLinked || kullanici.appleLinked);
+  const googleDelete = !kullanici.hasPassword && !!kullanici.googleLinked;
+  const appleOnlyDelete = !kullanici.hasPassword && !kullanici.googleLinked && !!kullanici.appleLinked;
 
   const initials =
     `${kullanici.isim?.charAt(0) ?? ''}${kullanici.soyad?.charAt(0) ?? ''}`.toUpperCase() || 'K';
@@ -241,42 +252,50 @@ const AccountSettingsPage = () => {
               <span className="material-icons">lock</span>
               {t('account.passwordUpdate', 'Şifre Güncelleme')}
             </h2>
-            <div className="kb-form-field">
-              <label htmlFor="settings-old-pw">{t('account.oldPassword', 'Eski Şifre')}</label>
-              <input
-                id="settings-old-pw"
-                type="password"
-                value={oldPassword}
-                onChange={(e) => setOldPassword(e.target.value)}
-                autoComplete="current-password"
-              />
-            </div>
-            <div className="kb-form-row">
-              <div className="kb-form-field">
-                <label htmlFor="settings-new-pw">{t('account.newPassword', 'Yeni Şifre')}</label>
-                <input
-                  id="settings-new-pw"
-                  type="password"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                  autoComplete="new-password"
-                />
-              </div>
-              <div className="kb-form-field">
-                <label htmlFor="settings-confirm-pw">{t('account.confirmPassword', 'Yeni Şifre (Tekrar)')}</label>
-                <input
-                  id="settings-confirm-pw"
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  autoComplete="new-password"
-                />
-              </div>
-            </div>
-            <button type="button" className="kb-btn-save" onClick={handleUpdatePassword} disabled={saving}>
-              <span className="material-icons">lock_reset</span>
-              {saving ? t('common.loading') : t('account.updatePassword', 'Şifremi Güncelle')}
-            </button>
+            {socialOnly ? (
+              <p className="kb-social-hint">
+                {kullanici.googleLinked ? t('socialLogin.noPasswordGoogle') : t('socialLogin.noPasswordApple')}
+              </p>
+            ) : (
+              <>
+                <div className="kb-form-field">
+                  <label htmlFor="settings-old-pw">{t('account.oldPassword', 'Eski Şifre')}</label>
+                  <input
+                    id="settings-old-pw"
+                    type="password"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                    autoComplete="current-password"
+                  />
+                </div>
+                <div className="kb-form-row">
+                  <div className="kb-form-field">
+                    <label htmlFor="settings-new-pw">{t('account.newPassword', 'Yeni Şifre')}</label>
+                    <input
+                      id="settings-new-pw"
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      autoComplete="new-password"
+                    />
+                  </div>
+                  <div className="kb-form-field">
+                    <label htmlFor="settings-confirm-pw">{t('account.confirmPassword', 'Yeni Şifre (Tekrar)')}</label>
+                    <input
+                      id="settings-confirm-pw"
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      autoComplete="new-password"
+                    />
+                  </div>
+                </div>
+                <button type="button" className="kb-btn-save" onClick={handleUpdatePassword} disabled={saving}>
+                  <span className="material-icons">lock_reset</span>
+                  {saving ? t('common.loading') : t('account.updatePassword', 'Şifremi Güncelle')}
+                </button>
+              </>
+            )}
           </PageSection>
 
           <PageSection className="kb-settings-panel" ref={languageRef}>
@@ -323,24 +342,35 @@ const AccountSettingsPage = () => {
                 'Bu işlem geri alınamaz. Hesabınız ve tüm verileriniz kalıcı olarak silinecektir.'
               )}
             </p>
-            <div className="kb-form-field">
-              <label htmlFor="delete-pw">{t('account.enterPasswordToDelete', 'Şifrenizi girin')}</label>
-              <input
-                id="delete-pw"
-                type="password"
-                value={deletePassword}
-                onChange={(e) => setDeletePassword(e.target.value)}
-                placeholder={t('account.enterPassword', 'Şifrenizi girin')}
-                autoComplete="current-password"
-              />
-            </div>
+            {googleDelete ? (
+              <>
+                <p className="kb-social-hint">{t('socialLogin.confirmDeleteGoogle')}</p>
+                {deleting ? <p>{t('common.loading')}</p> : <GoogleSignInButton onCredential={(token) => handleDeleteAccount(token)} />}
+              </>
+            ) : appleOnlyDelete ? (
+              <p className="kb-social-hint">{t('socialLogin.appleDeleteOnIphone')}</p>
+            ) : (
+              <div className="kb-form-field">
+                <label htmlFor="delete-pw">{t('account.enterPasswordToDelete', 'Şifrenizi girin')}</label>
+                <input
+                  id="delete-pw"
+                  type="password"
+                  value={deletePassword}
+                  onChange={(e) => setDeletePassword(e.target.value)}
+                  placeholder={t('account.enterPassword', 'Şifrenizi girin')}
+                  autoComplete="current-password"
+                />
+              </div>
+            )}
             <div className="kb-settings-modal-actions">
               <button type="button" className="btn-secondary" onClick={() => setShowDeleteModal(false)}>
                 {t('common.cancel')}
               </button>
-              <button type="button" className="kb-danger-btn" onClick={handleDeleteAccount} disabled={deleting}>
-                {deleting ? t('common.loading') : t('common.delete')}
-              </button>
+              {!googleDelete && !appleOnlyDelete && (
+                <button type="button" className="kb-danger-btn" onClick={() => handleDeleteAccount()} disabled={deleting}>
+                  {deleting ? t('common.loading') : t('common.delete')}
+                </button>
+              )}
             </div>
           </div>
         </div>

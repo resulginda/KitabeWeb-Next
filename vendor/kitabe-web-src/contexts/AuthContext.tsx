@@ -10,12 +10,46 @@ export type Kullanici = {
   rol: string;
   kayitTarihi: number;
   hasPassword?: boolean;
+  avatarUrl?: string | null;
+  googleLinked?: boolean;
+  appleLinked?: boolean;
 };
+
+export type DeleteAccountProof = { password: string } | { googleIdToken: string };
+
+type ApiUser = {
+  id: string;
+  isim?: string;
+  soyad?: string;
+  email?: string;
+  rol?: string;
+  kayitTarihi?: string | number;
+  hasPassword?: boolean;
+  avatarUrl?: string | null;
+  googleLinked?: boolean;
+  appleLinked?: boolean;
+};
+
+function toKullanici(u: ApiUser, hasPasswordFallback?: boolean): Kullanici {
+  return {
+    id: u.id,
+    isim: u.isim ?? '',
+    soyad: u.soyad ?? '',
+    email: u.email ?? '',
+    rol: u.rol ?? 'user',
+    kayitTarihi: u.kayitTarihi ? new Date(u.kayitTarihi).getTime() : Date.now(),
+    hasPassword: u.hasPassword ?? hasPasswordFallback,
+    avatarUrl: u.avatarUrl ?? null,
+    googleLinked: !!u.googleLinked,
+    appleLinked: !!u.appleLinked,
+  };
+}
 
 type AuthContextTipi = {
   kullanici: Kullanici | null;
   getToken: () => Promise<string | null>;
   girisYap: (email: string, sifre: string) => Promise<{ success: boolean; msg?: string }>;
+  googleIleGiris: (idToken: string) => Promise<{ success: boolean; msg?: string }>;
   cikisYap: () => void;
   yukleniyor: boolean;
   kayitOl: (email: string, sifre: string, extra: { isim?: string; soyad?: string }) => Promise<{ success: boolean; msg?: string; requiresEmailVerification?: boolean }>;
@@ -27,7 +61,7 @@ type AuthContextTipi = {
   resetPassword: (email: string) => Promise<{ success: boolean; msg?: string }>;
   resetPasswordWithToken: (token: string, newPassword: string) => Promise<{ success: boolean; msg?: string }>;
   changePassword: (oldPassword: string, newPassword: string) => Promise<{ success: boolean; msg?: string }>;
-  deleteAccount: (password: string) => Promise<{ success: boolean; msg?: string }>;
+  deleteAccount: (proof: string | DeleteAccountProof) => Promise<{ success: boolean; msg?: string }>;
 };
 
 const AuthContext = createContext<AuthContextTipi | undefined>(undefined);
@@ -89,16 +123,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         });
         const json = await res.json();
         if (json.success && json.user) {
-          const u = json.user;
-          setKullanici({
-            id: u.id,
-            isim: u.isim ?? '',
-            soyad: u.soyad ?? '',
-            email: u.email ?? '',
-            rol: u.rol ?? 'user',
-            kayitTarihi: u.kayitTarihi ? new Date(u.kayitTarihi).getTime() : Date.now(),
-            hasPassword: u.hasPassword,
-          });
+          setKullanici(toKullanici(json.user));
         } else {
           clearStoredToken();
         }
@@ -137,16 +162,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       if (apiJson.success) {
         setStoredToken(apiJson.token);
-        const u = apiJson.user;
-        setKullanici({
-          id: u.id,
-          isim: u.isim ?? '',
-          soyad: u.soyad ?? '',
-          email: u.email ?? '',
-          rol: u.rol ?? 'user',
-          kayitTarihi: u.kayitTarihi ? new Date(u.kayitTarihi).getTime() : Date.now(),
-          hasPassword: u.hasPassword ?? true,
-        });
+        setKullanici(toKullanici(apiJson.user, true));
         return { success: true };
       }
 
@@ -157,6 +173,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'İnternet bağlantınızı kontrol edin.';
       return { success: false, msg };
+    }
+  };
+
+  const googleIleGiris = async (idToken: string): Promise<{ success: boolean; msg?: string }> => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken }),
+      });
+      const text = await res.text();
+      const json = text?.trim().startsWith('{') ? JSON.parse(text) : null;
+      if (json?.success && json.token && json.user) {
+        setStoredToken(json.token);
+        setKullanici(toKullanici(json.user));
+        return { success: true };
+      }
+      return { success: false, msg: json?.message };
+    } catch (e: unknown) {
+      return { success: false, msg: e instanceof Error ? e.message : undefined };
     }
   };
 
@@ -355,7 +391,7 @@ if (json?.success) return { success: true, msg: json.message ?? 'Şifreniz günc
     }
   };
 
-  const deleteAccount = async (password: string): Promise<{ success: boolean; msg?: string }> => {
+  const deleteAccount = async (proof: string | DeleteAccountProof): Promise<{ success: boolean; msg?: string }> => {
     const token = await getToken();
     if (!token) return { success: false, msg: 'Oturum bulunamadı.' };
     try {
@@ -365,7 +401,7 @@ if (json?.success) return { success: true, msg: json.message ?? 'Şifreniz günc
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify(typeof proof === 'string' ? { password: proof } : proof),
       });
       const text = await res.text();
       let json: { success?: boolean; message?: string } | null = null;
@@ -391,6 +427,7 @@ if (json?.success) return { success: true, msg: json.message ?? 'Şifreniz günc
         kullanici,
         getToken,
         girisYap,
+        googleIleGiris,
         cikisYap,
         yukleniyor,
         kayitOl,

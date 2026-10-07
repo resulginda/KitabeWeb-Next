@@ -872,6 +872,14 @@
       "tourism": "Turizm",
       "museums": "Müzeler"
     }
+  },
+  "socialLogin": {
+    "or": "veya",
+    "consent": "Devam ederek Kullanım Şartları ve Gizlilik Politikası’nı kabul etmiş olursunuz.",
+    "error": "Giriş yapılamadı. Lütfen tekrar deneyin.",
+    "noPasswordGoogle": "Google ile giriş yapıyorsunuz, bu yüzden şifreye ihtiyacınız yok.",
+    "noPasswordApple": "Apple ile giriş yapıyorsunuz, bu yüzden şifreye ihtiyacınız yok.",
+    "confirmDeleteGoogle": "Onaylamak için Google butonuna basıp hesabınızı seçin.",
+    "appleDeleteOnIphone": "Bu hesap Apple ile açıldı. Silmek için iPhone’unuzdan giriş yapın ya da info@kitabe.org adresine yazın."
   }
 }
-

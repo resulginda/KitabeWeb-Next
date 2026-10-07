@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { PageShell, PageSection } from '../components/PageShell';
+import GoogleSignInButton from '../components/GoogleSignInButton';
 import './DeleteAccountPage.css';
 
 const DeleteAccountPage = () => {
@@ -28,12 +29,12 @@ const DeleteAccountPage = () => {
 
   const requiredConfirmText = getRequiredConfirmText();
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteAccount = async (googleIdToken?: string) => {
     if (!kullanici) {
       setError(t('account.mustLogin') || 'Hesap silmek için giriş yapmanız gerekiyor.');
       return;
     }
-    if (!password) {
+    if (!googleIdToken && !password) {
       setError(t('account.enterPasswordToDelete') || 'Devam etmek için şifrenizi girin.');
       return;
     }
@@ -48,7 +49,7 @@ const DeleteAccountPage = () => {
     setDeleting(true);
     setError(null);
     try {
-      const result = await deleteAccount(password);
+      const result = await deleteAccount(googleIdToken ? { googleIdToken } : { password });
       if (result.success) {
         cikisYap();
         navigate('/', { replace: true });
@@ -86,6 +87,9 @@ const DeleteAccountPage = () => {
     );
   }
 
+  const googleDelete = !kullanici.hasPassword && !!kullanici.googleLinked;
+  const appleOnlyDelete = !kullanici.hasPassword && !kullanici.googleLinked && !!kullanici.appleLinked;
+
   return (
     <>
       <Helmet>
@@ -113,47 +117,66 @@ const DeleteAccountPage = () => {
             </ul>
           </PageSection>
 
-          <PageSection className="delete-account-form">
-            <label>
-              {t('account.enterPasswordToDelete') || 'Devam etmek için şifrenizi girin:'}
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder={t('account.enterPassword') || 'Şifreniz'}
-                disabled={deleting}
-              />
-            </label>
-            <label>
-              {t('account.typeConfirm') || `Onaylamak için "${requiredConfirmText}" yazın:`}
-              <input
-                type="text"
-                value={confirmText}
-                onChange={(e) => setConfirmText(e.target.value)}
-                placeholder={requiredConfirmText}
-                disabled={deleting}
-              />
-            </label>
+          {appleOnlyDelete ? (
+            <PageSection className="delete-account-form">
+              <p className="kb-social-hint">{t('socialLogin.appleDeleteOnIphone')}</p>
+            </PageSection>
+          ) : (
+            <PageSection className="delete-account-form">
+              {!googleDelete && (
+                <label>
+                  {t('account.enterPasswordToDelete') || 'Devam etmek için şifrenizi girin:'}
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={t('account.enterPassword') || 'Şifreniz'}
+                    disabled={deleting}
+                  />
+                </label>
+              )}
+              <label>
+                {t('account.typeConfirm') || `Onaylamak için "${requiredConfirmText}" yazın:`}
+                <input
+                  type="text"
+                  value={confirmText}
+                  onChange={(e) => setConfirmText(e.target.value)}
+                  placeholder={requiredConfirmText}
+                  disabled={deleting}
+                />
+              </label>
 
-            {error && <div className="error-message">{error}</div>}
+              {googleDelete && (
+                <>
+                  <p className="kb-social-hint">{t('socialLogin.confirmDeleteGoogle')}</p>
+                  {confirmText === requiredConfirmText && !deleting && (
+                    <GoogleSignInButton onCredential={(token) => handleDeleteAccount(token)} />
+                  )}
+                </>
+              )}
 
-            <div className="delete-account-actions">
-              <button
-                className="cancel-btn"
-                onClick={() => navigate('/account-settings')}
-                disabled={deleting}
-              >
-                {t('common.cancel') || 'İptal'}
-              </button>
-              <button
-                className="delete-btn"
-                onClick={handleDeleteAccount}
-                disabled={deleting || confirmText !== requiredConfirmText || !password}
-              >
-                {deleting ? (t('account.deleting') || 'Siliniyor...') : (t('account.deleteAccount') || 'Hesabımı Sil')}
-              </button>
-            </div>
-          </PageSection>
+              {error && <div className="error-message">{error}</div>}
+
+              <div className="delete-account-actions">
+                <button
+                  className="cancel-btn"
+                  onClick={() => navigate('/account-settings')}
+                  disabled={deleting}
+                >
+                  {t('common.cancel') || 'İptal'}
+                </button>
+                {!googleDelete && (
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDeleteAccount()}
+                    disabled={deleting || confirmText !== requiredConfirmText || !password}
+                  >
+                    {deleting ? (t('account.deleting') || 'Siliniyor...') : (t('account.deleteAccount') || 'Hesabımı Sil')}
+                  </button>
+                )}
+              </div>
+            </PageSection>
+          )}
         </div>
       </PageShell>
     </>
