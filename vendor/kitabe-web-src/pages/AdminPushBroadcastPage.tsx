@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { API_BASE_URL } from '../config/api';
 import { PageShell } from '../components/PageShell';
+import AdminPlacePicker from '../components/AdminPlacePicker';
 import './AdminPanelPage.css';
 
 const DRAFT_KEY = 'kitabe_admin_push_draft_v1';
@@ -61,6 +62,7 @@ const AdminPushBroadcastPage = () => {
   const [translating, setTranslating] = useState(false);
   const [deepLink, setDeepLink] = useState<'notifications' | 'place'>('notifications');
   const [placeId, setPlaceId] = useState('');
+  const [placeName, setPlaceName] = useState('');
   /** Boş = sadece “dakika sonra”; dolu = tam tarih/saat (öncelikli) */
   const [scheduleAtLocal, setScheduleAtLocal] = useState('');
   const [scheduleMinutes, setScheduleMinutes] = useState('');
@@ -112,6 +114,7 @@ const AdminPushBroadcastPage = () => {
       if (typeof d.translatedSource === 'string') setTranslatedSource(d.translatedSource);
       if (d.deepLink === 'place' || d.deepLink === 'notifications') setDeepLink(d.deepLink);
       if (typeof d.placeId === 'string') setPlaceId(d.placeId);
+      if (typeof d.placeName === 'string') setPlaceName(d.placeName);
       if (typeof d.scheduleAtLocal === 'string' && d.scheduleAtLocal) setScheduleAtLocal(d.scheduleAtLocal);
     } catch {
       /* ignore */
@@ -135,6 +138,7 @@ const AdminPushBroadcastPage = () => {
             translatedSource,
             deepLink,
             placeId,
+            placeName,
             scheduleAtLocal,
           })
         );
@@ -155,6 +159,7 @@ const AdminPushBroadcastPage = () => {
     translatedSource,
     deepLink,
     placeId,
+    placeName,
     scheduleAtLocal,
   ]);
 
@@ -358,7 +363,7 @@ const AdminPushBroadcastPage = () => {
       return null;
     }
     if (deepLink === 'place' && !placeId.trim()) {
-      setResult({ ok: false, text: 'Yer detayı için placeId girin.' });
+      setResult({ ok: false, text: 'Yer detayı için bir yer seçin.' });
       return null;
     }
     const payload: Record<string, unknown> = {
@@ -810,17 +815,16 @@ const AdminPushBroadcastPage = () => {
             </label>
           </div>
           {deepLink === 'place' && (
-            <input
-              type="text"
-              value={placeId}
-              onChange={(e) => setPlaceId(e.target.value)}
-              placeholder="placeId"
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                borderRadius: 12,
-                border: '1px solid var(--border-light)',
-                marginBottom: 16,
+            <AdminPlacePicker
+              placeId={placeId}
+              placeName={placeName}
+              onSelect={(p) => {
+                setPlaceId(p.id);
+                setPlaceName(p.name);
+              }}
+              onClear={() => {
+                setPlaceId('');
+                setPlaceName('');
               }}
             />
           )}
