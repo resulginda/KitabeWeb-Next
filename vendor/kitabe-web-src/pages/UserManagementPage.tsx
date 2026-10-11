@@ -73,6 +73,7 @@ const UserManagementPage = () => {
     switch (rol) {
       case 'admin': return '#f59e42';
       case 'editor': return '#6074f8';
+      case 'vip': return '#b0569c';
       case 'user': return '#5ab596';
       default: return '#999';
     }
@@ -91,6 +92,8 @@ const UserManagementPage = () => {
                   ? (t('userManagement.role.admin') || 'Admin')
                   : user.rol === 'editor' 
                   ? (t('userManagement.role.editor') || 'Editör')
+                  : user.rol === 'vip'
+                  ? (t('userManagement.role.vip') || 'Reklamsız Üye')
                   : (t('userManagement.role.user') || 'Kullanıcı')}
               </span>
             </div>
@@ -122,6 +125,13 @@ const UserManagementPage = () => {
                 className={roleModal.user.rol === 'user' ? 'is-active' : ''}
               >
                 {t('userManagement.role.user') || 'Kullanıcı'}
+              </button>
+              <button
+                type="button"
+                onClick={() => handleChangeRole(roleModal.user.id, 'vip')}
+                className={roleModal.user.rol === 'vip' ? 'is-active' : ''}
+              >
+                {t('userManagement.role.vip') || 'Reklamsız Üye'}
               </button>
               <button
                 type="button"

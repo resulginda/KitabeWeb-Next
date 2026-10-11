@@ -723,7 +723,8 @@
     "role": {
       "admin": "Admin",
       "editor": "Editor",
-      "user": "User"
+      "user": "User",
+      "vip": "Ad-free Member"
     }
   },
   "footer": {

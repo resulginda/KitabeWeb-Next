@@ -8,9 +8,17 @@ import './AdminPanelPage.css';
 
 const DRAFT_KEY = 'kitabe_admin_push_draft_v1';
 
+const TRANSLATION_LANGS = [
+  { code: 'en', label: 'İngilizce' },
+  { code: 'ru', label: 'Rusça' },
+  { code: 'ar', label: 'Arapça' },
+] as const;
+type TranslationLang = (typeof TRANSLATION_LANGS)[number]['code'];
+type PushTranslations = Partial<Record<TranslationLang, { title: string; body: string }>>;
+
 type Counts = { all: number; users: number; editors: number; admins: number };
 type TargetMode = 'all' | 'roles' | 'users';
-type UserRole = 'user' | 'editor' | 'admin';
+type UserRole = 'user' | 'vip' | 'editor' | 'admin';
 type PushUser = {
   id: string;
   email: string;
@@ -47,6 +55,10 @@ const AdminPushBroadcastPage = () => {
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [translations, setTranslations] = useState<PushTranslations>({});
+  /** Çevirinin yapıldığı Türkçe başlık+metin; değişirse çeviri eskimiş sayılır */
+  const [translatedSource, setTranslatedSource] = useState('');
+  const [translating, setTranslating] = useState(false);
   const [deepLink, setDeepLink] = useState<'notifications' | 'place'>('notifications');
   const [placeId, setPlaceId] = useState('');
   /** Boş = sadece “dakika sonra”; dolu = tam tarih/saat (öncelikli) */
@@ -67,10 +79,11 @@ const AdminPushBroadcastPage = () => {
     roleAdmin && 'admin',
   ].filter(Boolean) as string[];
 
+  // Reklamsız Üye (vip) hedeflemede «Kullanıcılar» ile birlikte gelir
   const effectiveRoleFilter: UserRole[] =
     selectedRoles.length > 0
-      ? (selectedRoles as UserRole[])
-      : ['admin', 'editor', 'user'];
+      ? ([...selectedRoles, ...(roleUser ? ['vip'] : [])] as UserRole[])
+      : ['admin', 'editor', 'user', 'vip'];
 
   useEffect(() => {
     try {
@@ -95,6 +108,8 @@ const AdminPushBroadcastPage = () => {
       }
       if (typeof d.title === 'string') setTitle(d.title);
       if (typeof d.body === 'string') setBody(d.body);
+      if (d.translations && typeof d.translations === 'object') setTranslations(d.translations);
+      if (typeof d.translatedSource === 'string') setTranslatedSource(d.translatedSource);
       if (d.deepLink === 'place' || d.deepLink === 'notifications') setDeepLink(d.deepLink);
       if (typeof d.placeId === 'string') setPlaceId(d.placeId);
       if (typeof d.scheduleAtLocal === 'string' && d.scheduleAtLocal) setScheduleAtLocal(d.scheduleAtLocal);
@@ -116,6 +131,8 @@ const AdminPushBroadcastPage = () => {
             selectedUserIds,
             title,
             body,
+            translations,
+            translatedSource,
             deepLink,
             placeId,
             scheduleAtLocal,
@@ -134,6 +151,8 @@ const AdminPushBroadcastPage = () => {
     selectedUserIds,
     title,
     body,
+    translations,
+    translatedSource,
     deepLink,
     placeId,
     scheduleAtLocal,
@@ -201,7 +220,7 @@ const AdminPushBroadcastPage = () => {
           isim: u.isim ? String(u.isim) : '',
           soyad: u.soyad ? String(u.soyad) : '',
           rol:
-            u.rol === 'admin' || u.rol === 'editor' || u.rol === 'user'
+            u.rol === 'admin' || u.rol === 'editor' || u.rol === 'user' || u.rol === 'vip'
               ? (u.rol as UserRole)
               : 'user',
         }))
@@ -274,6 +293,64 @@ const AdminPushBroadcastPage = () => {
     setSelectedUserIds((prev) => prev.filter((id) => !filteredSet.has(id)));
   };
 
+  const sourceKey = `${title.trim()}\n${body.trim()}`;
+  const filledTranslations = TRANSLATION_LANGS.filter((l) => translations[l.code]?.body.trim());
+  const translationsStale = filledTranslations.length > 0 && translatedSource !== sourceKey;
+
+  const translationSummary = () => {
+    const parts = [
+      filledTranslations.length > 0
+        ? `Diller: Türkçe + ${filledTranslations.map((l) => l.label).join(', ')}`
+        : 'Çeviri yok: herkese Türkçe gider',
+    ];
+    if (translationsStale) parts.push('⚠️ Türkçe metin çeviriden sonra değişti');
+    return parts.join('\n');
+  };
+
+  const translateNow = async () => {
+    if (!body.trim()) {
+      setResult({ ok: false, text: 'Önce Türkçe metni yazın.' });
+      return;
+    }
+    setResult(null);
+    setTranslating(true);
+    try {
+      const token = await getToken();
+      if (!token) {
+        setResult({ ok: false, text: 'Oturum bulunamadı.' });
+        return;
+      }
+      const res = await fetch(`${API_BASE_URL}/api/admin/push-translate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ title: title.trim(), body: body.trim() }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok || !data.success || !data.translations) {
+        setResult({ ok: false, text: `Çeviri: ${data.message || `Hata ${res.status}`}` });
+        return;
+      }
+      setTranslations(data.translations as PushTranslations);
+      setTranslatedSource(sourceKey);
+    } catch (err) {
+      setResult({ ok: false, text: err instanceof Error ? err.message : 'Ağ hatası' });
+    } finally {
+      setTranslating(false);
+    }
+  };
+
+  const updateTranslation = (lang: TranslationLang, field: 'title' | 'body', value: string) => {
+    setTranslations((prev) => ({
+      ...prev,
+      [lang]: { title: prev[lang]?.title ?? '', body: prev[lang]?.body ?? '', [field]: value },
+    }));
+  };
+
+  const clearTranslations = () => {
+    setTranslations({});
+    setTranslatedSource('');
+  };
+
   const buildPayload = (): Record<string, unknown> | null => {
     const trimmed = body.trim();
     if (!trimmed) {
@@ -290,6 +367,14 @@ const AdminPushBroadcastPage = () => {
       deepLink,
       placeId: deepLink === 'place' ? placeId.trim() : undefined,
     };
+    if (filledTranslations.length > 0) {
+      payload.translations = Object.fromEntries(
+        filledTranslations.map((l) => [
+          l.code,
+          { title: translations[l.code]?.title.trim() ?? '', body: translations[l.code]?.body.trim() ?? '' },
+        ])
+      );
+    }
     if (targetMode === 'all') {
       payload.audience = 'all';
     } else if (targetMode === 'roles') {
@@ -326,6 +411,7 @@ const AdminPushBroadcastPage = () => {
             ? `Kitle: roller — ${selectedRoles.join(', ')}`
             : `Kitle: kullanıcılar — ${selectedUserIds.length} kişi`,
         `Kayıtlı alıcı: ${displayCount ?? '—'}`,
+        translationSummary(),
         '',
         `${title.trim() || 'Kitabe'} — ${body.trim().slice(0, 100)}${body.trim().length > 100 ? '…' : ''}`,
       ].join('\n')
@@ -353,9 +439,20 @@ const AdminPushBroadcastPage = () => {
         setResult({ ok: false, text: data.message || data.error || `Hata ${res.status}` });
         return;
       }
+      const langs =
+        data.byLanguage && typeof data.byLanguage === 'object'
+          ? Object.entries(data.byLanguage as Record<string, number>)
+              .map(([lang, count]) => `${lang.toUpperCase()} ${count}`)
+              .join(' · ')
+          : '';
       setResult({
         ok: true,
-        text: `${data.message} · Alıcı: ${data.recipientCount ?? 0} · Expo hata: ${data.errors ?? 0}`,
+        text: [
+          `${data.message} · Alıcı: ${data.recipientCount ?? 0} · Expo hata: ${data.errors ?? 0}`,
+          langs && `Dillere göre: ${langs}`,
+        ]
+          .filter(Boolean)
+          .join('\n'),
       });
       loadRecipientCounts();
       loadLogs();
@@ -370,6 +467,12 @@ const AdminPushBroadcastPage = () => {
     setResult(null);
     const payload = buildPayload();
     if (!payload) return;
+    if (
+      translationsStale &&
+      !window.confirm('Türkçe metin çeviriden sonra değişti. Yine de planlansın mı?')
+    ) {
+      return;
+    }
 
     let scheduleBody: Record<string, unknown> = { ...payload };
 
@@ -485,7 +588,7 @@ const AdminPushBroadcastPage = () => {
           <div style={{ marginBottom: 20, paddingLeft: 8 }}>
             <div style={{ fontWeight: 600, marginBottom: 8 }}>Rol filtreleri (birden fazla seçilebilir)</div>
             {[
-              ['roleUser', 'Kullanıcılar', roleUser, setRoleUser],
+              ['roleUser', 'Kullanıcılar (Reklamsız Üyeler dahil)', roleUser, setRoleUser],
               ['roleEditor', 'Editörler', roleEditor, setRoleEditor],
               ['roleAdmin', 'Adminler', roleAdmin, setRoleAdmin],
             ].map(([key, label, val, setVal]) => (
@@ -607,6 +710,83 @@ const AdminPushBroadcastPage = () => {
               resize: 'vertical',
             }}
           />
+
+          <div
+            style={{
+              marginBottom: 20,
+              padding: 12,
+              border: '1px solid var(--border-light)',
+              borderRadius: 12,
+            }}
+          >
+            <div style={{ fontWeight: 600, marginBottom: 4 }}>Diğer diller</div>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', margin: '0 0 10px' }}>
+              Her cihaza uygulamayı kullandığı dilde gider. Çeviri boş bırakılan dildeki ve dili bilinmeyen (eski
+              sürüm) cihazlara Türkçe metin gider.
+            </p>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+              <button type="button" onClick={translateNow} disabled={translating}>
+                {translating ? 'Çevriliyor…' : filledTranslations.length > 0 ? 'Yeniden çevir' : 'Otomatik çevir'}
+              </button>
+              {filledTranslations.length > 0 && (
+                <button type="button" onClick={clearTranslations} disabled={translating}>
+                  Çevirileri temizle
+                </button>
+              )}
+            </div>
+            {translationsStale && (
+              <p
+                style={{
+                  fontSize: '0.85rem',
+                  color: '#b45309',
+                  background: 'rgba(245, 158, 11, 0.12)',
+                  padding: '0.5rem 0.75rem',
+                  borderRadius: 8,
+                  margin: '0 0 10px',
+                }}
+              >
+                Türkçe metin çeviriden sonra değişti; «Yeniden çevir»e basabilir ya da aşağıdan elle düzeltebilirsin.
+              </p>
+            )}
+            {TRANSLATION_LANGS.map((l) => {
+              const dir = l.code === 'ar' ? 'rtl' : 'ltr';
+              return (
+                <div key={l.code} style={{ marginBottom: 12 }}>
+                  <div style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: 4 }}>{l.label}</div>
+                  <input
+                    type="text"
+                    dir={dir}
+                    value={translations[l.code]?.title ?? ''}
+                    onChange={(e) => updateTranslation(l.code, 'title', e.target.value)}
+                    placeholder="Başlık (boşsa Kitabe)"
+                    maxLength={100}
+                    style={{
+                      width: '100%',
+                      padding: '0.6rem 0.9rem',
+                      borderRadius: 10,
+                      border: '1px solid var(--border-light)',
+                      marginBottom: 6,
+                    }}
+                  />
+                  <textarea
+                    dir={dir}
+                    value={translations[l.code]?.body ?? ''}
+                    onChange={(e) => updateTranslation(l.code, 'body', e.target.value)}
+                    placeholder="Metin (boşsa Türkçe gider)"
+                    maxLength={200}
+                    rows={3}
+                    style={{
+                      width: '100%',
+                      padding: '0.6rem 0.9rem',
+                      borderRadius: 10,
+                      border: '1px solid var(--border-light)',
+                      resize: 'vertical',
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
 
           <div style={{ marginBottom: 12 }}>
             <span style={{ fontWeight: 600, marginRight: 12 }}>Tıklanınca:</span>
@@ -748,6 +928,7 @@ const AdminPushBroadcastPage = () => {
               marginTop: '1rem',
               padding: '1rem',
               borderRadius: 12,
+              whiteSpace: 'pre-line',
               background: result.ok ? 'rgba(34, 197, 94, 0.12)' : 'rgba(239, 68, 68, 0.12)',
               color: result.ok ? 'rgb(22, 101, 52)' : 'rgb(127, 29, 29)',
             }}
@@ -925,12 +1106,48 @@ const AdminPushBroadcastPage = () => {
           onClick={() => setPreviewOpen(false)}
         >
           <div
-            style={{ background: '#fff', borderRadius: 16, padding: 24, maxWidth: 400, width: '100%' }}
+            style={{
+              background: '#fff',
+              borderRadius: 16,
+              padding: 24,
+              maxWidth: 440,
+              width: '100%',
+              maxHeight: '85vh',
+              overflow: 'auto',
+            }}
             onClick={(e) => e.stopPropagation()}
           >
             <h3 style={{ marginTop: 0 }}>Önizleme</h3>
-            <p style={{ fontWeight: 700 }}>{title.trim() || 'Kitabe'}</p>
-            <p style={{ whiteSpace: 'pre-wrap' }}>{body.trim() || '—'}</p>
+            {[
+              { code: 'tr', label: 'Türkçe', title: title.trim(), body: body.trim() },
+              ...TRANSLATION_LANGS.map((l) => {
+                const tr = translations[l.code];
+                const filled = !!tr?.body.trim();
+                return {
+                  code: l.code,
+                  label: filled ? l.label : `${l.label} (çeviri yok → Türkçe gider)`,
+                  title: filled ? tr!.title.trim() : title.trim(),
+                  body: filled ? tr!.body.trim() : body.trim(),
+                };
+              }),
+            ].map((p) => (
+              <div
+                key={p.code}
+                dir={p.code === 'ar' && translations.ar?.body.trim() ? 'rtl' : 'ltr'}
+                style={{
+                  border: '1px solid var(--border-light)',
+                  borderRadius: 12,
+                  padding: '0.6rem 0.8rem',
+                  marginBottom: 10,
+                }}
+              >
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginBottom: 4 }} dir="ltr">
+                  {p.label}
+                </div>
+                <div style={{ fontWeight: 700 }}>{p.title || 'Kitabe'}</div>
+                <div style={{ whiteSpace: 'pre-wrap' }}>{p.body || '—'}</div>
+              </div>
+            ))}
             <button type="button" onClick={() => setPreviewOpen(false)} style={{ marginTop: 16 }}>
               Kapat
             </button>

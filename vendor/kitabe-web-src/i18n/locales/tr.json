@@ -725,7 +725,8 @@
     "role": {
       "admin": "Admin",
       "editor": "Editör",
-      "user": "Kullanıcı"
+      "user": "Kullanıcı",
+      "vip": "Reklamsız Üye"
     }
   },
   "footer": {

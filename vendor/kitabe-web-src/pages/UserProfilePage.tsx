@@ -146,7 +146,9 @@ const UserProfilePage = () => {
       ? t('profile.role.admin', 'Admin')
       : selectedUser?.rol === 'editor'
         ? t('profile.role.editor', 'Editör')
-        : t('profile.role.user', 'Kullanıcı');
+        : selectedUser?.rol === 'vip'
+          ? t('userManagement.role.vip', 'Reklamsız Üye')
+          : t('profile.role.user', 'Kullanıcı');
 
   const initials = selectedUser
     ? `${selectedUser.isim?.charAt(0) ?? ''}${selectedUser.soyad?.charAt(0) ?? ''}`.toUpperCase() || 'K'

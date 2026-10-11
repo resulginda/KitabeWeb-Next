@@ -246,7 +246,7 @@ const AccountPage = () => {
           <div className="kb-account-stat">
             <span className="material-icons">badge</span>
             <div>
-              <strong>{kullanici.rol || 'user'}</strong>
+              <strong>{t(`userManagement.role.${kullanici.rol || 'user'}`, kullanici.rol || 'user')}</strong>
               <span>{t('account.role')}</span>
             </div>
           </div>
