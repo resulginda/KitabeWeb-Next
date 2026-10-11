@@ -46,6 +46,7 @@
   --font-display: var(--font-outfit, 'Outfit'), system-ui, sans-serif;
   --font-sans: var(--font-outfit, 'Outfit'), system-ui, -apple-system, sans-serif;
   --font-body: var(--font-inter, 'Inter'), system-ui, -apple-system, sans-serif;
+  --font-ja: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', 'Noto Sans JP';
 
   --container-max: 1440px;
   --gutter: clamp(16px, 3vw, 40px);
@@ -64,6 +65,13 @@
   --gap-md: 20px;
   --gap-lg: 32px;
   --gap-xl: 48px;
+}
+
+/* Latin yazı tipleri Japonca glif içermez; Japonca sayfalarda sistem Japonca yazı tipleri öne alınır. */
+:root:lang(ja) {
+  --font-display: var(--font-outfit, 'Outfit'), var(--font-ja), system-ui, sans-serif;
+  --font-sans: var(--font-outfit, 'Outfit'), var(--font-ja), system-ui, -apple-system, sans-serif;
+  --font-body: var(--font-inter, 'Inter'), var(--font-ja), system-ui, -apple-system, sans-serif;
 }
 
 [data-theme='dark'] {

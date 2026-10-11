@@ -197,4 +197,146 @@ export const ABOUT_CONTENT: LegalContentMap = {
       },
     ],
   },
+  de: {
+    title: 'Über uns',
+    metaDescription: 'Was ist Kitabe? Ein Kulturerbe-Führer zu den historischen Stätten, Museen und Naturdenkmälern der Türkei — Karten, Geschichten und Reisetipps in vier Sprachen.',
+    sections: [
+      {
+        title: 'Wer wir sind',
+        paragraphs: [
+          'Kitabe ist eine Kulturerbe-Plattform, die historische Stätten, Museen, antike Städte, religiöse und zivile Architektur sowie Naturdenkmäler in der ganzen Türkei in einem digitalen Guide vereint. Wir helfen Reisenden, Studierenden und lokalen Gemeinschaften, das reiche Erbe des Landes mit genauen und aktuellen Informationen zu entdecken.',
+          'Kitabe ist im Web unter kitabe.org sowie als native Apps für iOS und Android verfügbar. Jeder Ort enthält Standortdaten, Fotos, Beschreibungen, Geschichten und praktische Besuchertipps. Die Inhalte werden auf Türkisch, Englisch, Russisch und Arabisch bereitgestellt.',
+        ],
+      },
+      {
+        title: 'Unsere Mission',
+        paragraphs: [
+          'Wir glauben, dass das kulturelle Erbe bewahrt, präzise geteilt und für jeden zugänglich gemacht werden sollte. Kitabe nutzt Technologie, um die Geschichte der Türkei in einem zuverlässigen, modernen Format zu präsentieren, das auf Mobilgeräten und Desktops funktioniert.',
+        ],
+      },
+      {
+        title: 'Unsere Vision',
+        paragraphs: [
+          'Der umfassendste offene Erbe-Guide der Türkei zu werden – und Städte, Bezirke sowie Themen zu sinnvollen Reiserouten zu verknüpfen. Wir verbessern die Plattform kontinuierlich durch redaktionelle Arbeit, Vorschläge aus der Community und Nutzerbeiträge.',
+        ],
+      },
+      {
+        title: 'Was wir bieten',
+        list: [
+          'Tausende von Kulturerbestätten in der gesamten Türkei mit detaillierten Seiten',
+          'Entdeckungsseiten für Städte, Bezirke und Kategorien (SEO-freundliche Reiseführer)',
+          'Interaktives Kartennavigieren und Orte in der Nähe',
+          'Favoriten, Reiserouten und Teilen',
+          'Von Redakteuren geprüfte Ortshilfevorschläge der Community',
+          'Benutzeroberfläche und Inhalte in vier Sprachen (TR, EN, RU, AR)',
+        ],
+      },
+      {
+        title: 'Redaktionelle Standards',
+        paragraphs: [
+          'Die Informationen auf Kitabe werden von unserem Team und Community-Mitwirkenden erstellt und überprüft. Wir sind bestrebt, die Daten genau und aktuell zu halten. Fotos aus Google Maps werden mit entsprechender Namensnennung angezeigt. Bitte melden Sie Fehler über unsere Kontaktseite oder an info@kitabe.org.',
+        ],
+      },
+      {
+        title: 'Kontakt',
+        paragraphs: [
+          'Für Fragen, Partnerschaften oder Feedback senden Sie bitte eine E-Mail an info@kitabe.org oder nutzen Sie unser Kontaktformular.',
+        ],
+      },
+    ],
+  },
+  es: {
+    title: 'Sobre nosotros',
+    metaDescription: '¿Qué es Kitabe? Una guía de patrimonio cultural de los sitios históricos, museos y monumentos naturales de Turquía: mapas, historias y consejos de viaje en cuatro idiomas.',
+    sections: [
+      {
+        title: 'Quiénes somos',
+        paragraphs: [
+          'Kitabe es una plataforma de patrimonio cultural que reúne sitios históricos, museos, ciudades antiguas, arquitectura religiosa y civil, y monumentos naturales de toda Turquía en una sola guía digital. Ayudamos a los viajeros, estudiantes y comunidades locales a descubrir el rico patrimonio del país con información precisa y actualizada.',
+          'Kitabe está disponible en la web en kitabe.org y como aplicaciones nativas para iOS y Android. Cada lugar incluye datos de ubicación, fotos, descripciones, historias y consejos prácticos de visita. El contenido está disponible en turco, inglés, ruso y árabe.',
+        ],
+      },
+      {
+        title: 'Nuestra misión',
+        paragraphs: [
+          'Creemos que el patrimonio cultural debe conservarse, compartirse con precisión y hacerse accesible para todos. Kitabe utiliza la tecnología para presentar la historia de Turquía en un formato confiable y moderno que funciona en dispositivos móviles y de escritorio.',
+        ],
+      },
+      {
+        title: 'Nuestra visión',
+        paragraphs: [
+          'Convertirnos en la guía de patrimonio abierto más completa de Turquía, conectando ciudades, distritos y temas en rutas de viaje significativas. Mejoramos continuamente la plataforma mediante el trabajo editorial, sugerencias de la comunidad y contribuciones de los usuarios.',
+        ],
+      },
+      {
+        title: 'Qué ofrecemos',
+        list: [
+          'Miles de sitios patrimoniales en toda Turquía con páginas detalladas',
+          'Páginas de descubrimiento por ciudad, distrito y categoría (guías de viaje optimizadas para SEO)',
+          'Navegación en mapas interactivos y lugares cercanos',
+          'Favoritos, rutas de viaje y opciones para compartir',
+          'Sugerencias de lugares de la comunidad revisadas por editores',
+          'Interfaz y contenido en cuatro idiomas (TR, EN, RU, AR)',
+        ],
+      },
+      {
+        title: 'Normas editoriales',
+        paragraphs: [
+          'La información en Kitabe es creada y revisada por nuestro equipo y colaboradores de la comunidad. Nuestro objetivo es mantener los datos precisos y actualizados. Las fotos obtenidas de Google Maps se muestran con la atribución correspondiente. Informe de errores a través de nuestra página de contacto o info@kitabe.org.',
+        ],
+      },
+      {
+        title: 'Contacto',
+        paragraphs: [
+          'Para preguntas, colaboraciones o comentarios, envíe un correo electrónico a info@kitabe.org o utilice nuestro formulario de contacto.',
+        ],
+      },
+    ],
+  },
+  ja: {
+    title: '私たちについて',
+    metaDescription: 'Kitabeとは？トルコの歴史的スポット、美術館、自然のランドマークを紹介する文化遺産ガイド。マップ、ストーリー、旅のヒントを4つの言語で提供しています。',
+    sections: [
+      {
+        title: '私たちについて',
+        paragraphs: [
+          'Kitabeは、トルコ全土の歴史的スポット、美術館、古代都市、宗教・民間建築、自然のランドマークを1つのデジタルガイドにまとめた文化遺産プラットフォームです。正確で最新の情報を通じて、旅行者、学生、地域住民が国の豊かな遺産を発見できるようサポートします。',
+          'Kitabeはウェブ（kitabe.org）のほか、iOSおよびAndroid用のネイティブアプリとしてもご利用いただけます。各スポットには、位置情報、写真、解説、ストーリー、実用的な訪問のヒントが掲載されています。コンテンツはトルコ語、英語、ロシア語、アラビア語の4言語で提供されています。',
+        ],
+      },
+      {
+        title: '私たちのミッション',
+        paragraphs: [
+          '私たちは、文化遺産が保護され、正確に共有され、誰もがアクセスできるものであるべきだと信じています。Kitabeはテクノロジーを活用し、トルコの歴史を信頼できる現代的なフォーマットでモバイルとデスクトップの両方にお届けします。',
+        ],
+      },
+      {
+        title: '私たちのビジョン',
+        paragraphs: [
+          '都市、地区、テーマをつなぎ合わせて意味のある旅行ルートを構築する、トルコで最も包括的なオープン遺産ガイドになること。編集作業、コミュニティからの提案、ユーザーからの投稿を通じて、プラットフォームの改善を継続的に行っています。',
+        ],
+      },
+      {
+        title: '提供する機能',
+        list: [
+          '詳細ページを備えたトルコ全土の数千に及ぶ遺産スポット',
+          '都市、地区、カテゴリ別の発見ページ（SEOに最適化されたトラベルガイド）',
+          'インタラクティブなマップ閲覧と周辺スポットの検索',
+          'お気に入り、旅行ルート、共有機能',
+          '編集者によって審査されるコミュニティからのスポット提案',
+          '4言語（トルコ語、英語、ロシア語、アラビア語）によるインターフェースとコンテンツ',
+        ],
+      },
+      {
+        title: '編集基準',
+        paragraphs: [
+          'Kitabeの情報は、私たちのチームとコミュニティの貢献者によって作成・審査されています。データの正確性と最新性の維持に努めています。Google Mapsから取得した写真には適切なクレジットが表示されます。誤りを発見された場合は、お問い合わせページまたは info@kitabe.org までご連絡ください。',
+        ],
+      },
+      {
+        title: 'お問い合わせ',
+        paragraphs: ['ご質問、パートナーシップ、フィードバックについては、info@kitabe.org までメールをお送りいただくか、お問い合わせフォームをご利用ください。'],
+      },
+    ],
+  },
 };

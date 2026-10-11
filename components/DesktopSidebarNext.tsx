@@ -40,6 +40,23 @@ const LABELS: Record<
     account: 'حسابي',
     login: 'تسجيل الدخول',
   },
+  de: {
+    home: 'Startseite',
+    list: 'Liste',
+    nearby: 'In der Nähe',
+    route: 'Route',
+    account: 'Konto',
+    login: 'Anmelden / Registrieren',
+  },
+  es: {
+    home: 'Inicio',
+    list: 'Lista',
+    nearby: 'Cercano',
+    route: 'Ruta',
+    account: 'Cuenta',
+    login: 'Iniciar sesión / Registrarse',
+  },
+  ja: { home: 'ホーム', list: 'リスト', nearby: '周辺', route: 'ルート', account: 'アカウント', login: 'ログイン / 登録' },
 };
 
 type Props = {

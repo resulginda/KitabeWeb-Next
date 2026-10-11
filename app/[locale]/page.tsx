@@ -29,6 +29,18 @@ const META: Record<Locale, { title: string; description: string }> = {
     description:
       'دليل التراث الثقافي في تركيا — متاحف ومدن أثرية وقلاع وعجائب طبيعية في جميع الولايات الـ81، مع الخرائط والقصص ونصائح الزيارة.',
   },
+  de: {
+    title: 'Sehenswürdigkeiten in der Türkei | Kitabe',
+    description: 'Reiseführer für das kulturelle Erbe der Türkei – Museen, antike Städte, Burgen und Naturwunder in allen 81 Provinzen, mit Karten und Geschichten.',
+  },
+  es: {
+    title: 'Qué hacer en Turquía | Kitabe',
+    description: 'Guía de viaje del patrimonio cultural en toda Turquía: museos, ciudades antiguas, castillos y maravillas naturales en las 81 provincias, con mapas e historias.',
+  },
+  ja: {
+    title: 'トルコでやるべきこと | Kitabe',
+    description: 'トルコ全81県の文化的遺産を巡る旅行ガイド。美術館、古代都市、城、自然の驚異を地図やストーリーとともに紹介。',
+  },
 };
 
 export function generateStaticParams() {

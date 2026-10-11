@@ -1,16 +1,13 @@
-import { LOCALES, type Locale } from '@/lib/places';
+import { LOCALES, isEnabledLocale, type Locale } from '@/lib/locales';
 
 export { LOCALES, type Locale };
 export const DEFAULT_LOCALE: Locale = 'tr';
 export const LOCALE_COOKIE = 'kitabe_locale';
 
-/** tr/en/ru/ar veya null (desteklenmiyor → caller en kullanır) */
+/** Yayındaki bir dil veya null (desteklenmiyor → caller en kullanır) */
 export function resolveLocaleFromLanguageTag(tag: string): Locale | null {
   const base = tag.toLowerCase().split('-')[0];
-  if (base === 'tr' || base === 'en' || base === 'ru' || base === 'ar') {
-    return base;
-  }
-  return null;
+  return isEnabledLocale(base) ? base : null;
 }
 
 /** Accept-Language başlığından en uygun dili seç; desteklenmeyenler → en */
@@ -36,7 +33,7 @@ export function detectLocaleFromAcceptLanguage(acceptLanguage: string | null | u
 }
 
 export function isSupportedLocale(value: string): value is Locale {
-  return (LOCALES as readonly string[]).includes(value);
+  return isEnabledLocale(value);
 }
 
 /**

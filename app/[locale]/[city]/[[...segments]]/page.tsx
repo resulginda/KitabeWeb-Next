@@ -87,8 +87,21 @@ function listingGuideTitle(
   if (locale === 'tr') return category ? `${name} Rehberi` : `${name} Gezi Rehberi`;
   if (locale === 'en') return category ? `${name} Guide` : `${name} Travel Guide`;
   if (locale === 'ru') return `Путеводитель: ${name}`;
+  if (locale === 'de') return category ? `${name}: Reiseführer` : `${name} Reiseführer`;
+  if (locale === 'es') return `Guía de ${name}`;
+  if (locale === 'ja') return `${name}ガイド`;
   return `دليل ${name}`;
 }
+
+const COUNT_LABEL: Record<Locale, string> = {
+  tr: 'yer',
+  en: 'places',
+  ru: 'мест',
+  ar: 'مكان',
+  de: 'Orte',
+  es: 'lugares',
+  ja: '件',
+};
 
 async function renderListing(
   locale: Locale,
@@ -117,8 +130,7 @@ async function renderListing(
     chipCategories = await getDistrictCategoryChips(locale, data.citySlug, data.filter[0]);
   }
 
-  const countLabel =
-    locale === 'tr' ? 'yer' : locale === 'en' ? 'places' : locale === 'ru' ? 'мест' : 'مكان';
+  const countLabel = COUNT_LABEL[locale];
 
   const [lead, ...guideParagraphs] = introParagraphs;
   const guideTitle = listingGuideTitle(data, locale);

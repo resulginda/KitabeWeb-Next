@@ -213,4 +213,160 @@ export const HOME_GUIDE: Record<Locale, HomeGuide> = {
       },
     ],
   },
+  de: {
+    title: 'Kulturelles Erbe in der Türkei: Ein praktischer Reiseführer',
+    sections: [
+      {
+        heading: 'Wo Sie anfangen sollten',
+        paragraphs: [
+          'Die Türkei lässt sich nicht in einer Woche „erledigen“: Die Entfernungen sind groß und jede Region hat ihre eigene Geschichte. Am meisten von einer Reise haben Sie, wenn Sie ein oder zwei Regionen auswählen und diese ohne Eile erkunden. Für einen Erstbesuch sind Istanbul und Kappadokien der klassische Einstieg. Wenn Sie antike Städte lieben, entscheiden Sie sich für die Ägäis und die lykische Küste; wenn Sie die ältesten Schichten der Menschheitsgeschichte neugierig machen, sind Şanlıurfa und Mardin die bessere Wahl.',
+          'Jede Stadtseite auf Kitabe kann nach Stadtteilen und Kategorien gefiltert werden. Sie können beispielsweise nur die antiken Stätten in Antalya oder nur die Museen in Istanbul auflisten lassen und darauf basierend Ihre Route zusammenstellen.',
+        ],
+      },
+      {
+        heading: 'Wann Sie wohin reisen sollten',
+        paragraphs: [
+          'Der Frühling (April–Mai) und der Herbst (September–Oktober) sind die besten Monate für die Ägäis, das Mittelmeer und den Südosten. Im Juli und August ist eine Besichtigung in Şanlıurfa oder Ephesus zur Mittagszeit bei Temperaturen, die 40 °C übersteigen können, wirklich beschwerlich. Um im Sommer einen kühlen Kopf zu bewahren, zieht es Sie am besten in das schwarzmeerische Hochland oder in die Hochlagen Ostanatoliens.',
+          'Der Winter eignet sich gut für Museen und Städtereisen. Die großen Museen in Istanbul, Ankara, Konya und Gaziantep funktionieren bei jedem Wetter, und Kappadokien sowie Kars unter Schnee sind für sich genommen eine Reise wert.',
+        ],
+      },
+      {
+        heading: 'Museumspässe und Eintrittskarten',
+        paragraphs: [
+          'Museen und archäologische Stätten des Ministeriums für Kultur und Tourismus können mit einem Museumspass besucht werden. Für internationale Besucher werden Regionalpässe und ein landesweiter Pass angeboten, während in der Türkei ansässige Personen die jährliche Müzekart erwerben können. Wenn Sie planen, mehrere bedeutende Stätten zu besuchen, ist ein Pass in der Regel günstiger als Einzeltickets.',
+          'Preise und Öffnungszeiten ändern sich im Laufe des Jahres, zudem unterscheiden sich Sommer- und Winteröffnungszeiten. Bitte prüfen Sie daher vor Ihrer Reise die offiziellen Quellen. Private Museen und Stiftungsmuseen sind möglicherweise nicht enthalten.',
+        ],
+      },
+      {
+        heading: 'UNESCO-Weltkulturerbestätten',
+        paragraphs: [
+          'Die Türkei verfügt über mehr als 20 Stätten auf der UNESCO-Welterbeliste, darunter Göreme und Kappadokien, die historischen Bereiche von Istanbul, die Große Moschee und das Hospital von Divriği, Hattusa, der Nemrut-Dag, Hierapolis-Pamukkale, Xanthos-Letoon, Safranbolu, Troja, die Selimiye-Moschee, Çatalhöyük, Bursa und Cumalıkızık, Pergamon, Ephesus, Ani, Aphrodisias, die Festung von Diyarbakır und die Hevsel-Gärten, Göbeklitepe, Arslantepe und Gordion. Dutzende weitere befinden sich auf der Tentativliste.',
+        ],
+      },
+      {
+        heading: 'Unterwegs vor Ort',
+        paragraphs: [
+          'Fernbusse erreichen fast jede Stadt, und Nachtbusse sparen bei langen Strecken wertvolle Zeit. Hochgeschwindigkeitszüge verbinden Istanbul, Ankara, Eskişehir und Konya. Die nächstgelegenen Flughäfen sind Kayseri oder Nevşehir für Kappadokien, Şanlıurfa für Göbeklitepe sowie Dalaman oder Antalya für die lykische Küste.',
+          'Auf weitläufigen Routen wie der lykischen Küste oder dem schwarzmeerischen Hochland erleichtert das Mieten eines Autos die Dinge erheblich. Es gibt zwar öffentliche Verkehrsmittel, jedoch fahren diese selten.',
+        ],
+      },
+      {
+        heading: 'Ihr Besuch',
+        paragraphs: [
+          'Moscheen sind außerhalb der Gebetszeiten für Besucher geöffnet. Bedecken Sie Ihre Schultern und Knie, und Frauen sollten zudem ihr Haar bedecken; die meisten großen Moscheen verleihen am Eingang Tücher. An archäologischen Stätten gibt es kaum Schatten, bringen Sie daher unbedingt eine Kopfbedeckung, Wasser und bequeme Schuhe mit.',
+          'Wenn Sie große Stätten wie Ephesos, Hierapolis oder Ani zur Öffnungszeit oder kurz vor der Schließung besuchen, ersparen Sie sich sowohl die Hitze als auch die Menschenmassen. Klettern Sie nicht auf Ruinen und berühren Sie keine Mosaike. Holen Sie vor dem Flug einer Drohne unbedingt eine Genehmigung ein.',
+        ],
+      },
+      {
+        heading: 'So verwenden Sie Kitabe',
+        paragraphs: [
+          'Kitabe ist ein Reiseführer, der das kulturelle Erbe der Türkei an einem Ort vereint. Jeder Eintrag enthält einen Standort, Fotos, eine kurze Geschichte sowie Besuchertipps. Geben Sie einfach eine Stadt, einen Bezirk oder einen Ort in das Suchfeld oben auf dieser Seite ein und grenzen Sie die Liste anschließend auf den jeweiligen Stadtseiten mithilfe von Bezirks- und Kategoriefiltern ein. Die mobile App zeigt dieselben Inhalte auf einer Karte an, sodass Sie sehen können, was sich in Ihrer Nähe befindet, und eine Route planen können.',
+        ],
+      },
+    ],
+  },
+  es: {
+    title: 'Viajes de patrimonio cultural en Turquía: una guía práctica',
+    sections: [
+      {
+        heading: 'Por dónde empezar',
+        paragraphs: [
+          'No es posible «hacer» Turquía en una semana: las distancias son largas y cada región tiene su propia historia. Aprovechará mejor su viaje si elige una o dos regiones y las explora sin prisas. Para una primera visita, Estambul y Capadocia son el punto de partida clásico. Si le encantan las ciudades antiguas, opte por la costa del Egeo y Licia; si siente curiosidad por las capas más antiguas de la historia humana, Şanlıurfa y Mardin son la mejor opción.',
+          'Cada página de ciudad en Kitabe se puede filtrar por distrito y categoría. Puede, por ejemplo, listar solo los sitios antiguos en Antalya o solo los museos en Estambul y armar su itinerario a partir de ahí.',
+        ],
+      },
+      {
+        heading: 'Cuándo ir a cada lugar',
+        paragraphs: [
+          'La primavera (abril-mayo) y el otoño (septiembre-octubre) son los mejores meses para el Egeo, el Mediterráneo y el sureste. En julio y agosto, hacer turismo al mediodía en Şanlıurfa o Éfeso es verdaderamente difícil, con temperaturas que pueden superar los 40 °C. Para mantenerse fresco en verano, diríjase a las tierras altas del mar Negro o a las zonas elevadas de Anatolia Oriental.',
+          'El invierno es ideal para museos y escapadas urbanas. Los grandes museos de Estambul, Ankara, Konya y Gaziantep funcionan con cualquier clima, y Capadocia y Kars bajo la nieve merecen ser visitados por derecho propio.',
+        ],
+      },
+      {
+        heading: 'Pases de museos y entradas',
+        paragraphs: [
+          'Los museos y yacimientos arqueológicos gestionados por el Ministerio de Cultura y Turismo se pueden visitar con un pase de museos (Museum Pass). Se venden pases regionales y un pase nacional a los visitantes extranjeros, mientras que los residentes en Turquía pueden comprar la Müzekart anual. Si planea visitar varios sitios importantes, un pase suele ser más económico que comprar entradas individuales.',
+          'Los precios y los horarios de apertura cambian durante el año, y los horarios de verano e invierno difieren, por lo que debe consultar las fuentes oficiales antes de ir. Es posible que los museos privados y de fundaciones no estén incluidos.',
+        ],
+      },
+      {
+        heading: 'Patrimonio de la Humanidad por la UNESCO',
+        paragraphs: [
+          'Turquía cuenta con más de 20 sitios en la Lista del Patrimonio Mundial de la UNESCO, incluidos Göreme y Capadocia, las zonas históricas de Estambul, la Gran Mezquita y Hospital de Divriği, Hattusa, el monte Nemrut, Hierápolis-Pamukkale, Janto-Letooün, Safranbolu, Troya, la mezquita de Selimiye, Çatalhöyük, Bursa y Cumalıkızık, Pérgamo, Éfeso, Ani, Afrodisias, la fortaleza de Diyarbakır y los jardines de Hevsel, Göbeklitepe, Arslantepe y Gordion. Docenas más figuran en la lista indicativa.',
+        ],
+      },
+      {
+        heading: 'Cómo moverse',
+        paragraphs: [
+          'Los autobuses interurbanos llegan a casi todas las localidades, y los autobuses nocturnos ahorran tiempo en trayectos largos. Los trenes de alta velocidad conectan Estambul, Ankara, Eskişehir y Konya. Los aeropuertos más cercanos son Kayseri o Nevşehir para Capadocia, Şanlıurfa para Göbeklitepe, y Dalaman o Antalya para la costa de Licia.',
+          'En rutas extensas como la costa de Licia o las tierras altas del mar Negro, alquilar un coche facilita mucho las cosas. El transporte público existe, pero la frecuencia es baja.',
+        ],
+      },
+      {
+        heading: 'Durante su visita',
+        paragraphs: [
+          'Las mezquitas están abiertas a los visitantes fuera de las horas de oración. Cubra sus hombros y rodillas, y las mujeres deben cubrirse el cabello; la mayoría de las mezquitas grandes prestan pañuelos en la entrada. La sombra es escasa en los yacimientos arqueológicos, así que lleve sombrero, agua y calzado cómodo.',
+          'Visitar sitios grandes como Éfeso, Hierápolis o Ani a la hora de apertura o cerca del cierre le evita tanto el calor como las aglomeraciones. No se suba a las ruinas ni toque los mosaicos, y obtenga permiso antes de volar un dron.',
+        ],
+      },
+      {
+        heading: 'Cómo usar Kitabe',
+        paragraphs: [
+          'Kitabe es una guía de viaje que reúne los sitios del patrimonio cultural de Turquía en un solo lugar. Cada entrada cuenta con ubicación, fotos, una breve historia y consejos de visita. Comience escribiendo el nombre de una ciudad, distrito o lugar en el cuadro de búsqueda en la parte superior de esta página, luego filtre la lista con los filtros de distrito y categoría en la página de cada ciudad. La aplicación móvil muestra el mismo contenido en un mapa, para que pueda ver qué hay cerca de usted y planificar una ruta.',
+        ],
+      },
+    ],
+  },
+  ja: {
+    title: 'トルコの文化遺産旅行：実用ガイド',
+    sections: [
+      {
+        heading: 'どこから始めるか',
+        paragraphs: [
+          '1週間でトルコをすべて見て回ることはできません。移動距離が長く、すべての地域に独自の歴史があるからです。旅行を最大限に楽しむには、1〜2つの地域を選び、急がずに探索することです。初めての訪問なら、イスタンブールとカッパドキアが王道のスタートです。古代都市が好きならエーゲ海やリュキア地方へ、人類の歴史の最も古い層に興味があるならシャンルウルファやマルディンがおすすめです。',
+          'Kitabeの各都市ページでは、地区やカテゴリで絞り込みができます。たとえば、アンタルヤの古代遺跡だけ、あるいはイスタンブールの美術館だけを表示して、そこからルートを組み立てることができます。',
+        ],
+      },
+      {
+        heading: 'いつどこに行くべきか',
+        paragraphs: [
+          '春（4月〜5月）と秋（9月〜10月）は、エーゲ海、地中海、南東部を訪れるのに最適な月です。7月と8月には、シャンルウルファやエフェソスでの昼間の観光は気温が40°Cを超えることもあり、非常に過酷です。夏の暑さを避けるには、黒海地方の高地や東アナトリアの高原に向かいましょう。',
+          '冬は美術館やシティブレイクに適しています。イスタンブール、アンカラ、コンヤ、ガズィアンテプの主要な美術館は天候に関係なく楽しめ、雪に覆われたカッパドキアやカルスはそれ自体が見る価値があります。',
+        ],
+      },
+      {
+        heading: 'ミュージアムパスとチケット',
+        paragraphs: [
+          '文化観光省が運営する美術館や遺跡は、ミュージアムパス（Museum Pass）を利用して見学できます。外国人観光客向けには地域パスや全国共通パスが販売されており、トルコ居住者は年間パスであるミュゼカルト（Müzekart）を購入できます。いくつかの主要な遺跡を見学する予定であれば、パスを購入するほうが通常は個別のチケットよりもお得です。',
+          '料金や開館時間は年間を通じて変動し、夏季と冬季で時間が異なるため、お出かけ前に公式情報をご確認ください。私立や財団運営の美術館は対象外となる場合があります。',
+        ],
+      },
+      {
+        heading: 'ユネスコ世界遺産',
+        paragraphs: [
+          'トルコには、ギョレメとカッパドキア、イスタンブールの歴史地区、ディヴリーイの大モスクと病院、ハットゥシャ、ネムルート山、ヒエラポリス・パムッカレ、サントス・レトーン、サフランボル、トロイ、セリミエ・モスク、チャタルヒュユク、ブルサとジュマルクズク、ペルガモン、エフェソス、アニ、アフロディシアス、ディヤルバクル要塞とヘヴセル庭園、ギョベクリテペ、アースランテペ、ゴルディオンなど、20件以上のユネスコ世界遺産があります。さらに数十件が暫定リストに登録されています。',
+        ],
+      },
+      {
+        heading: '移動手段',
+        paragraphs: [
+          '都市間バスはほぼすべての町に網羅しており、夜行バスを利用すれば長距離移動の時間を節約できます。高速鉄道がイスタンブール、アンカラ、エスキシェヒール、コンヤを結んでいます。最寄りの空港は、カッパドキアならカイセリまたはネヴシェヒル、ギョベクリテペならシャンルウルファ、リュキア海岸ならダラマンまたはアンタルヤです。',
+          'リュキア海岸や黒海高地などの広がりのあるルートでは、レンタカーを利用すると移動がはるかに楽になります。公共交通機関もありますが、運行本数は多くありません。',
+        ],
+      },
+      {
+        heading: '訪問時の注意点',
+        paragraphs: [
+          'モスクは礼拝時間外であれば見学者に開放されています。肩と膝を隠し、女性は髪を覆うようにしてください。ほとんどの大きなモスクでは入口でスカーフの貸出を行っています。遺跡では日陰が少ないため、帽子、水、歩きやすい靴をご持参ください。',
+          'エフェソス、ヒエラポリス、アニなどの大きな遺跡を朝の開門時や閉門間際に訪れると、暑さや混雑を避けることができます。遺跡に登ったりモザイク画に触れたりしないでください。また、ドローンを飛ばす前には必ず許可を得てください。',
+        ],
+      },
+      {
+        heading: 'Kitabeの使い方',
+        paragraphs: [
+          'Kitabeは、トルコの文化遺産スポットを1か所に集めたトラベルガイドです。各スポットには、位置情報、写真、簡単な歴史、見学のヒントが掲載されています。まずはこのページの上部にある検索ボックスに都市名、地区名、またはスポット名を入力し、各都市ページにある地区やカテゴリのフィルターでリストを絞り込んでください。モバイルアプリでは同じコンテンツを地図上で確認できるため、近くにあるスポットを見つけてルートを計画することができます。',
+        ],
+      },
+    ],
+  },
 };

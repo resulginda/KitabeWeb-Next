@@ -52,6 +52,33 @@ const LABELS: Record<
     account: 'حسابي',
     login: 'تسجيل الدخول',
   },
+  de: {
+    cities: 'Städte',
+    blog: 'Blog',
+    about: 'Über uns',
+    contact: 'Kontakt',
+    suggest: 'Ort vorschlagen',
+    account: 'Konto',
+    login: 'Anmelden / Registrieren',
+  },
+  es: {
+    cities: 'Ciudades',
+    blog: 'Blog',
+    about: 'Acerca de',
+    contact: 'Contacto',
+    suggest: 'Sugerir un lugar',
+    account: 'Cuenta',
+    login: 'Iniciar sesión / Registrarse',
+  },
+  ja: {
+    cities: '都市',
+    blog: 'ブログ',
+    about: 'Kitabeについて',
+    contact: 'お問い合わせ',
+    suggest: '場所を提案する',
+    account: 'アカウント',
+    login: 'ログイン / 登録',
+  },
 };
 
 type Props = {

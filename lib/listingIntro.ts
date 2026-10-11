@@ -182,6 +182,27 @@ function cityIntro(ctx: IntroCtx, locale: Locale): string[] {
       `Планируя поездку в ${city}, сочетайте музеи, прогулки по старому городу и природные остановки. Kitabe помогает открыть наследие ${city} в удобном формате.`,
     ]);
   }
+  if (locale === 'de') {
+    return joinParagraphs([
+      `${city} gehört zu den Regionen der Türkei mit dem reichsten kulturellen Erbe. Auf Kitabe finden Sie ${total} Sehenswürdigkeiten in ${city} – Museen, historische Bauwerke, Naturgebiete und archäologische Stätten in einem Reiseführer.`,
+      `Sehen Sie sich oben die Höhepunkte an und grenzen Sie Ihre Route nach Bezirk oder Kategorie ein. Jeder Eintrag enthält Lage, Fotos und praktische Tipps; über die Karte entdecken Sie Orte in Ihrer Nähe.`,
+      `Kombinieren Sie bei der Planung Ihrer Reise nach ${city} Museumsbesuche, Altstadtspaziergänge und Ausflüge in die Natur. Kitabe hält das Kulturerbe von ${city} aktuell und leicht zugänglich.`,
+    ]);
+  }
+  if (locale === 'es') {
+    return joinParagraphs([
+      `${city} es uno de los destinos de Turquía con mayor patrimonio cultural. En Kitabe encontrará ${total} lugares para visitar en ${city}: museos, edificios históricos, espacios naturales y sitios arqueológicos en una sola guía.`,
+      `Consulte los lugares destacados arriba y acote su ruta por distrito o categoría. Cada ficha incluye ubicación, fotos y consejos prácticos; use el mapa para descubrir sitios cercanos.`,
+      `Al planificar un viaje a ${city}, combine museos, paseos por el casco antiguo y paradas al aire libre. Kitabe mantiene actualizado y accesible el patrimonio de ${city}.`,
+    ]);
+  }
+  if (locale === 'ja') {
+    return joinParagraphs([
+      `${city}はトルコでも特に文化遺産が豊かな地域のひとつです。Kitabeでは${city}の見どころ${total}件を、博物館、歴史的建造物、自然スポット、遺跡までひとつのガイドにまとめています。`,
+      `上の一覧で主なスポットを確認し、地区やカテゴリーで絞り込んでルートを決めましょう。各スポットには位置情報、写真、見学のヒントがあり、地図から近くの見どころも探せます。`,
+      `${city}を旅するなら、博物館、旧市街の散策、自然の中の立ち寄り先を組み合わせるのがおすすめです。Kitabeは${city}の文化遺産を最新の情報でわかりやすく紹介します。`,
+    ]);
+  }
   return joinParagraphs([
     `يُعدّ ${city} من أغنى مدن تركيا من حيث التراث الثقافي. في Kitabe تجد ${total} مكاناً للزيارة: متاحف ومبانٍ تاريخية ومناطق طبيعية ومواقع أثرية.`,
     `استعرض القائمة أعلاه وضيّق البحث حسب الحي أو الفئة. كل مكان يتضمن موقعاً وصوراً ونصائح للزيارة.`,
@@ -211,6 +232,27 @@ function districtIntro(ctx: IntroCtx, locale: Locale): string[] {
       `${district} — один из ключевых районов ${city} для путешественников. Здесь ${total} объектов культурного наследия.`,
       `Исторические кварталы, музеи и природные зоны часто соседствуют в ${district}. Выберите карточки выше для деталей и советов.`,
       `Составляя маршрут по ${district}, группируйте близкие точки — карта Kitabe упростит планирование.`,
+    ]);
+  }
+  if (locale === 'de') {
+    return joinParagraphs([
+      `${district} ist einer der lohnendsten Bezirke in ${city}. Diese Seite listet ${total} Kulturerbestätten in ${district} auf.`,
+      `Historische Viertel, Museen, religiöse Bauten und Grünflächen liegen hier oft dicht beieinander. Wählen Sie oben eine Karte für Fotos, Geschichte und Besuchstipps.`,
+      `Fassen Sie nahe gelegene Orte zusammen, wenn Sie eine Route durch ${district} (${city}) planen – die Kitabe-Karte hilft Ihnen bei der Reihenfolge.`,
+    ]);
+  }
+  if (locale === 'es') {
+    return joinParagraphs([
+      `${district} es uno de los distritos más interesantes de ${city}. Esta página reúne ${total} sitios del patrimonio cultural de ${district}.`,
+      `Barrios históricos, museos, arquitectura religiosa y zonas verdes suelen estar muy cerca entre sí. Elija una tarjeta arriba para ver fotos, historia y consejos de visita.`,
+      `Agrupe las paradas cercanas al planificar una ruta por ${district} (${city}); el mapa de Kitabe le ayuda a ordenarlas.`,
+    ]);
+  }
+  if (locale === 'ja') {
+    return joinParagraphs([
+      `${district}は${city}の中でも見どころの多い地区です。このページでは${district}にある文化遺産${total}件を紹介しています。`,
+      `歴史地区、博物館、宗教建築、緑地が近くに集まっていることも多いエリアです。上のカードから写真、歴史、見学のヒントを確認できます。`,
+      `${city}・${district}のルートを組むときは、近いスポットをまとめると効率的です。Kitabeの地図で順番を決めましょう。`,
     ]);
   }
   return joinParagraphs([
@@ -247,6 +289,27 @@ function categoryIntro(ctx: IntroCtx, locale: Locale): string[] {
       `Составьте маршрут по ${city} с помощью списка или карты Kitabe.`,
     ]);
   }
+  if (locale === 'de') {
+    return joinParagraphs([
+      `In ${city} gibt es ${total} Orte in der Kategorie „${category}“. Diese Seite fasst sie in einem übersichtlichen Reiseführer zusammen.`,
+      hint || `Die Beispiele in ${city} zeigen dieses Thema aus verschiedenen Epochen; jeder Eintrag enthält Lage und Hintergrund.`,
+      `Planen Sie Ihre Route in ${city} mit der Liste oben oder besuchen Sie die Orte über die Karte in sinnvoller Reihenfolge. Kitabe hält diesen Reiseführer aktuell.`,
+    ]);
+  }
+  if (locale === 'es') {
+    return joinParagraphs([
+      `${city} cuenta con ${total} lugares en la categoría «${category}». Esta página los reúne en una sola guía.`,
+      hint || `Los ejemplos de ${city} muestran este tema en distintas épocas; cada ficha incluye ubicación y contexto.`,
+      `Planifique su ruta por ${city} con la lista de arriba o use el mapa para visitar los lugares en un orden lógico. Kitabe mantiene esta guía actualizada.`,
+    ]);
+  }
+  if (locale === 'ja') {
+    return joinParagraphs([
+      `${city}には「${category}」カテゴリーのスポットが${total}件あります。このページではそれらをひとつのガイドにまとめています。`,
+      hint || `${city}では、さまざまな時代のスポットからこのテーマをたどれます。各スポットに位置情報と解説があります。`,
+      `上の一覧や地図を使って、${city}のスポットを効率よく巡るルートを立てましょう。Kitabeはこのガイドを随時更新しています。`,
+    ]);
+  }
   return joinParagraphs([
     `في ${city} ضمن فئة ${category} يوجد ${total} مكاناً. تجمع هذه الصفحة أبرزها في دليل واحد.`,
     hint || `تعرض ${city} نماذج متنوعة لهذا الموضوع مع مواقع وصور.`,
@@ -279,6 +342,27 @@ function districtCategoryIntro(ctx: IntroCtx, locale: Locale): string[] {
       `В районе ${district} (${city}) — ${total} объектов категории «${category}». Узкий список для целенаправленной прогулки.`,
       hint || `В ${district} эта тема раскрывает местную историю; выше — основные точки.`,
       `Объедините близкие остановки в маршрут на день; детали — на страницах объектов и на карте.`,
+    ]);
+  }
+  if (locale === 'de') {
+    return joinParagraphs([
+      `In ${district} (${city}) gibt es ${total} Orte in der Kategorie „${category}“. Diese gezielte Liste hilft Ihnen, ein Thema in einem Bezirk zu erkunden.`,
+      hint || `Die Orte der Kategorie „${category}“ in ${district} spiegeln lokale Geschichte und Architektur wider; oben finden Sie die meistbesuchten Stationen.`,
+      `Verbinden Sie nahe gelegene Orte zu einem Tagesausflug durch ${district}; Geschichten finden Sie auf den Detailseiten, die Lage auf der Karte.`,
+    ]);
+  }
+  if (locale === 'es') {
+    return joinParagraphs([
+      `En ${district} (${city}) hay ${total} lugares en la categoría «${category}». Esta lista le ayuda a explorar un tema concreto en un mismo distrito.`,
+      hint || `Los lugares de «${category}» en ${district} reflejan la historia y la arquitectura locales; arriba encontrará las paradas más visitadas.`,
+      `Combine las paradas cercanas en un paseo de un día por ${district}; lea la historia en cada ficha y consulte la ubicación en el mapa.`,
+    ]);
+  }
+  if (locale === 'ja') {
+    return joinParagraphs([
+      `${city}・${district}には「${category}」カテゴリーのスポットが${total}件あります。ひとつの地区でテーマを絞って巡りたい方に便利な一覧です。`,
+      hint || `${district}の「${category}」スポットからは、地域の歴史や建築を知ることができます。上に人気のスポットを掲載しています。`,
+      `近いスポットを組み合わせれば、${district}を1日で巡るルートが作れます。詳細ページで歴史を読み、地図で場所を確認しましょう。`,
     ]);
   }
   return joinParagraphs([

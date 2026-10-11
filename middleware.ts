@@ -2,16 +2,16 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { LEGACY_LEGAL_REDIRECTS } from '@/lib/legal/types';
 import { isBlockedBot } from '@/lib/blockedBots';
+import { ALL_LOCALES, LOCALES } from '@/lib/locales';
 
 const LONG_CACHE = 'public, max-age=31536000, immutable';
-const LOCALES = ['tr', 'en', 'ru', 'ar'];
 
-/** Next'in kendi sunduğu (SSR/SSG/SEO) veya statik path'ler — SPA'ya gitmez */
-const NEXT_OWNED_FIRST = new Set([
-  'tr',
-  'en',
-  'ru',
-  'ar',
+/**
+ * Next'in kendi sunduğu (SSR/SSG/SEO) veya statik path'ler — SPA'ya gitmez.
+ * Henüz açılmamış diller de burada: sayfa 404 verir (410 değil; ileride açılacak).
+ */
+const NEXT_OWNED_FIRST = new Set<string>([
+  ...ALL_LOCALES,
   'legal',
   'detail',
   'api',
@@ -91,7 +91,6 @@ const SPA_FIRST = new Set([
  */
 function isRetiredPath(first: string, pathname: string): boolean {
   return (
-    !LOCALES.includes(first) &&
     !NEXT_OWNED_FIRST.has(first) &&
     !SPA_FIRST.has(first) &&
     !hasFileExtension(pathname)
@@ -121,7 +120,7 @@ function preferredLocale(acceptLanguage: string | null): string {
       return { lang: tag.trim().toLowerCase().split('-')[0], q: q ? Number(q.trim().slice(2)) || 0 : 1 };
     })
     .sort((a, b) => b.q - a.q);
-  return ranked.find((r) => LOCALES.includes(r.lang))?.lang ?? 'en';
+  return ranked.find((r) => (LOCALES as readonly string[]).includes(r.lang))?.lang ?? 'en';
 }
 
 /** Görsel/font/js gibi dosyalar kaydı boğmasın; sitemap ve robots botlar için ilginç. */
@@ -212,7 +211,7 @@ export function middleware(request: NextRequest) {
 
   // /legal tek başına [locale]=legal olurdu; yasal ana sayfaya al
   if (first === 'legal' && segments.length < 3) {
-    const loc = LOCALES.includes(segments[1] ?? '') ? segments[1] : 'tr';
+    const loc = (LOCALES as readonly string[]).includes(segments[1] ?? '') ? segments[1] : 'tr';
     return NextResponse.redirect(new URL(`/legal/${loc}/about`, request.url), 308);
   }
 

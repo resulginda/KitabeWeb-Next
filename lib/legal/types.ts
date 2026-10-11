@@ -23,6 +23,19 @@ export const LEGAL_DOC_LABELS: Record<Locale, Record<LegalDoc, string>> = {
   en: { about: 'About Us', privacy: 'Privacy Policy', terms: 'Terms of Use', contact: 'Contact' },
   ru: { about: 'О нас', privacy: 'Политика конфиденциальности', terms: 'Условия использования', contact: 'Контакты' },
   ar: { about: 'من نحن', privacy: 'سياسة الخصوصية', terms: 'شروط الاستخدام', contact: 'اتصل بنا' },
+  de: {
+    about: 'Über uns',
+    privacy: 'Datenschutzbestimmungen',
+    terms: 'Nutzungsbedingungen',
+    contact: 'Kontakt',
+  },
+  es: {
+    about: 'Sobre nosotros',
+    privacy: 'Política de Privacidad',
+    terms: 'Términos de Uso',
+    contact: 'Contacto',
+  },
+  ja: { about: '私たちについて', privacy: 'プライバシーポリシー', terms: '利用規約', contact: 'お問い合わせ' },
 };
 
 /** Eski Türkçe URL → yeni kanonik yol */

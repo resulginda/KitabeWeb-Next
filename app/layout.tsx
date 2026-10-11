@@ -6,6 +6,7 @@ import AppBanner from '@/components/AppBanner';
 import { DEFAULT_OG, SITE_URL } from '@/lib/og';
 import { siteFontClassName } from '@/lib/siteFonts';
 import { HUB_CRITICAL_CSS } from '@/lib/hubCriticalCss';
+import { LOCALES, RTL_LOCALES } from '@/lib/locales';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -43,7 +44,7 @@ export const metadata: Metadata = {
  * `lang`/`dir` istemcide URL'in ilk segmentinden düzeltilir; içerik dili zaten
  * `[locale]` rotasından ve sayfa metadata'sından doğru şekilde gelir.
  */
-const LANG_DIR_SCRIPT = `(function(){try{var s=location.pathname.split('/')[1];if(['tr','en','ru','ar'].indexOf(s)>-1){var d=document.documentElement;d.lang=s;d.dir=s==='ar'?'rtl':'ltr';}}catch(e){}})();`;
+const LANG_DIR_SCRIPT = `(function(){try{var s=location.pathname.split('/')[1];if(${JSON.stringify(LOCALES)}.indexOf(s)>-1){var d=document.documentElement;d.lang=s;d.dir=${JSON.stringify(RTL_LOCALES)}.indexOf(s)>-1?'rtl':'ltr';}}catch(e){}})();`;
 
 // Eski Vite PWA'nın bıraktığı service worker'ları iptal et.
 // Vite'tan Next.js'e geçişte kalan SW'lar CSS chunk'larını yanlış cache'leyip

@@ -1,6 +1,9 @@
 import type { Locale } from './places';
 import ar from '@/content/listing-guides/ar.json';
+import de from '@/content/listing-guides/de.json';
 import en from '@/content/listing-guides/en.json';
+import es from '@/content/listing-guides/es.json';
+import ja from '@/content/listing-guides/ja.json';
 import ru from '@/content/listing-guides/ru.json';
 import tr from '@/content/listing-guides/tr.json';
 
@@ -15,6 +18,9 @@ const GUIDES: Record<Locale, GuideMap> = {
   en: en as GuideMap,
   ru: ru as GuideMap,
   ar: ar as GuideMap,
+  de: de as GuideMap,
+  es: es as GuideMap,
+  ja: ja as GuideMap,
 };
 
 export function listingGuideParagraphs(groupKey: string | undefined, locale: Locale): string[] {

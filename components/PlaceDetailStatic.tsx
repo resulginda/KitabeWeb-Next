@@ -5,6 +5,16 @@ import { PhotoGalleryClient } from '@/components/PhotoGalleryClient';
 import { AdSlot } from '@/components/AdSlot';
 import { isGooglePhotoUrl } from '@kitabe/utils/imageUtils';
 
+const KUNYE_LABELS: Record<Locale, { location: string; period: string }> = {
+  tr: { location: 'Konum', period: 'Dönem' },
+  en: { location: 'Location', period: 'Period' },
+  ru: { location: 'Место', period: 'Период' },
+  ar: { location: 'الموقع', period: 'الفترة' },
+  de: { location: 'Lage', period: 'Epoche' },
+  es: { location: 'Ubicación', period: 'Época' },
+  ja: { location: '所在地', period: '時代' },
+};
+
 /** SSR — DetailPage ile aynı kb-detail-layout (flash önleme) */
 export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: Locale }) {
   const labels = DETAIL_LABELS[locale];
@@ -25,6 +35,17 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
     en: { title: 'Kitabe Mobile App', subtitle: 'Explore on the map, read stories', cta: 'Get the App' },
     ru: { title: 'Мобильное приложение Kitabe', subtitle: 'Карта и истории в кармане', cta: 'Скачать' },
     ar: { title: 'تطبيق Kitabe', subtitle: 'استكشف على الخريطة', cta: 'حمّل التطبيق' },
+    de: {
+      title: 'Kitabe Mobile App',
+      subtitle: 'Auf der Karte erkunden, Geschichten lesen',
+      cta: 'App herunterladen',
+    },
+    es: {
+      title: 'Aplicación Móvil Kitabe',
+      subtitle: 'Explore en el mapa, lea historias',
+      cta: 'Obtener la aplicación',
+    },
+    ja: { title: 'Kitabe モバイルアプリ', subtitle: '地図で探索し、物語を読む', cta: 'アプリを入手' },
   };
   const app = appCopy[locale] || appCopy.en;
 
@@ -36,7 +57,7 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
           <ul className="kb-kunye-list">
             {(city || district) && (
               <li>
-                <span className="label">{locale === 'tr' ? 'Konum' : locale === 'en' ? 'Location' : locale === 'ru' ? 'Место' : 'الموقع'}</span>
+                <span className="label">{KUNYE_LABELS[locale].location}</span>
                 <span className="value">
                   {city}
                   {district ? `, ${district}` : ''}
@@ -45,7 +66,7 @@ export function PlaceDetailStatic({ place, locale }: { place: SeoPlace; locale: 
             )}
             {period && (
               <li>
-                <span className="label">{locale === 'tr' ? 'Dönem' : locale === 'en' ? 'Period' : locale === 'ru' ? 'Период' : 'الفترة'}</span>
+                <span className="label">{KUNYE_LABELS[locale].period}</span>
                 <span className="value">{period}</span>
               </li>
             )}

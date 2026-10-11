@@ -7,6 +7,9 @@ const COPY: Record<Locale, { nearby: string; explore: string }> = {
   en: { nearby: 'Nearby places', explore: 'Explore more' },
   ru: { nearby: 'Места поблизости', explore: 'Смотреть ещё' },
   ar: { nearby: 'أماكن قريبة', explore: 'اكتشف المزيد' },
+  de: { nearby: 'Orte in der Nähe', explore: 'Mehr entdecken' },
+  es: { nearby: 'Lugares cercanos', explore: 'Explorar más' },
+  ja: { nearby: '近くのスポット', explore: 'もっと見る' },
 };
 
 export function PlaceRelatedLinks({ related, locale }: { related: PlaceRelated; locale: Locale }) {

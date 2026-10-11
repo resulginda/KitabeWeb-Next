@@ -13,6 +13,9 @@ const CHIP_HEADINGS: Record<Locale, { districts: string; categories: string; mor
   en: { districts: 'Districts', categories: 'Categories', more: 'more' },
   ru: { districts: 'Районы', categories: 'Категории', more: 'ещё' },
   ar: { districts: 'الأحياء', categories: 'الفئات', more: 'المزيد' },
+  de: { districts: 'Bezirke', categories: 'Kategorien', more: 'mehr' },
+  es: { districts: 'Distritos', categories: 'Categorías', more: 'más' },
+  ja: { districts: '地区', categories: 'カテゴリー', more: 'もっと見る' },
 };
 
 function ChipLink({ chip }: { chip: FilterChip }) {
@@ -168,6 +171,17 @@ export function AppPromoBanner({ locale }: { locale: Locale }) {
       body: 'استكشف على الخريطة واقرأ القصص وخطط لمسارك.',
       cta: 'حمّل التطبيق',
     },
+    de: {
+      title: 'Kitabe Mobile App',
+      body: 'Auf der Karte erkunden, Geschichten lesen und Ihre Route planen – das Erbe der Türkei in Ihrer Tasche.',
+      cta: 'App herunterladen',
+    },
+    es: {
+      title: 'Aplicación Móvil Kitabe',
+      body: 'Explora en el mapa, lee historias y planifica tu ruta: el patrimonio de Turquía en tu bolsillo.',
+      cta: 'Obtener la aplicación',
+    },
+    ja: { title: 'Kitabeモバイルアプリ', body: '地図で探索し、ストーリーを読み、ルートを計画する — トルコの遺産をあなたのポケットに。', cta: 'アプリを入手' },
   };
   const t = copy[locale] || copy.en;
 

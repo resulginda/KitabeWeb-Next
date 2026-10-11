@@ -1,19 +1,14 @@
 import { cache } from 'react';
 import { encodePathSegments } from './detectLocale';
+import { ALL_LOCALES, LOCALES, localeFallbacks, type Locale } from './locales';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.kitabe.org';
 /** Sunucu tarafı fetch — backend rate-limit bypass (REVALIDATE_SECRET ile aynı) */
 const SERVER_KEY = process.env.SERVER_API_KEY || process.env.REVALIDATE_SECRET;
 
-export const LOCALES = ['tr', 'en', 'ru', 'ar'] as const;
-export type Locale = (typeof LOCALES)[number];
+export { ALL_LOCALES, LOCALES, type Locale };
 
-export type MultilingualText = {
-  tr?: string;
-  en?: string;
-  ru?: string;
-  ar?: string;
-};
+export type MultilingualText = Partial<Record<Locale, string>>;
 
 export type PlaceIndexEntry = {
   id: string;
@@ -103,7 +98,10 @@ export function pickText(
 ): string {
   if (!field) return fallback;
   if (typeof field === 'string') return field;
-  return field[locale] || field.tr || field.en || fallback;
+  for (const l of localeFallbacks(locale)) {
+    if (field[l]) return field[l] as string;
+  }
+  return fallback;
 }
 
 export const getPlaceIndex = cache(async (): Promise<PlaceIndexEntry[]> => {

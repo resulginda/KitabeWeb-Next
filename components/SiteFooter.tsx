@@ -34,6 +34,21 @@ const COPY: Record<
     contact: 'اتصل بنا',
     tagline: 'دليل التراث الثقافي التركي',
   },
+  de: {
+    about: 'Über uns',
+    privacy: 'Datenschutz',
+    terms: 'AGB',
+    contact: 'Kontakt',
+    tagline: 'Reiseführer für das kulturelle Erbe der Türkei',
+  },
+  es: {
+    about: 'Acerca de',
+    privacy: 'Privacidad',
+    terms: 'Términos',
+    contact: 'Contacto',
+    tagline: 'Guía de patrimonio cultural de Turquía',
+  },
+  ja: { about: 'について', privacy: 'プライバシーポリシー', terms: '利用規約', contact: 'お問い合わせ', tagline: 'トルコ文化遺産ガイド' },
 };
 
 /** SSR SEO sayfalarında ortak footer — AdSense güven sinyali */

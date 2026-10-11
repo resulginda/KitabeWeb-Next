@@ -20,6 +20,9 @@ export const HUB_SLUGS: Record<Locale, string> = {
   en: 'explore',
   ru: 'mesta',
   ar: 'istikshaf',
+  de: 'explore',
+  es: 'explore',
+  ja: 'explore',
 };
 
 export type ListingPlace = {
@@ -291,6 +294,24 @@ export function listingTitle(data: ListingFilterResult, locale: Locale): string 
       category: `${category} في ${city}`,
       district_category: `${category} في ${district}، ${city}`,
     },
+    de: {
+      city: `Sehenswürdigkeiten in ${city}`,
+      district: `Sehenswürdigkeiten in ${district}, ${city}`,
+      category: `${category} in ${city}`,
+      district_category: `${category} in ${district}, ${city}`,
+    },
+    es: {
+      city: `Qué ver en ${city}`,
+      district: `Qué ver en ${district}, ${city}`,
+      category: `${category} en ${city}`,
+      district_category: `${category} en ${district}, ${city}`,
+    },
+    ja: {
+      city: `${city}の観光スポット`,
+      district: `${city}・${district}の観光スポット`,
+      category: `${city}の${category}`,
+      district_category: `${city}・${district}の${category}`,
+    },
   };
 
   const t = templates[locale][data.kind] || templates[locale].city;
@@ -308,6 +329,9 @@ export function listingDescription(data: ListingFilterResult, locale: Locale): s
     en: `Discover ${total} cultural heritage places${category ? ` — ${category}` : ''} in ${city}${district ? `, ${district}` : ''}. Maps, stories and travel tips on Kitabe.`,
     ru: `${total} мест${category ? ` — ${category}` : ''} в ${city}${district ? `, ${district}` : ''}. Карта, истории и советы на Kitabe.`,
     ar: `اكتشف ${total} مكاناً${category ? ` — ${category}` : ''} في ${city}${district ? `، ${district}` : ''}. خرائط وقصص على Kitabe.`,
+    de: `Entdecken Sie ${total} Kulturerbestätten${category ? ` – ${category}` : ''} in ${city}${district ? `, ${district}` : ''}. Karten, Geschichten und Reisetipps auf Kitabe.`,
+    es: `Descubra ${total} lugares del patrimonio cultural${category ? ` — ${category}` : ''} en ${city}${district ? `, ${district}` : ''}. Mapas, historias y consejos de viaje en Kitabe.`,
+    ja: `${city}${district ? `・${district}` : ''}の${category ? `${category}など` : ''}文化遺産${total}件を紹介。地図、歴史、旅のヒントはKitabeで。`,
   };
 
   const text = parts[locale] || parts.en;
@@ -320,11 +344,14 @@ const HIGHLIGHTS_LABEL: Record<Locale, string> = {
   en: 'Highlights:',
   ru: 'Популярные места:',
   ar: 'أبرز الأماكن:',
+  de: 'Highlights:',
+  es: 'Destacados:',
+  ja: 'ハイライト：',
 };
 
 /** "Öne çıkanlar: A, B, C." — `budget` karakteri aşmayacak kadar yer adı. */
 function listingHighlights(places: ListingPlace[], locale: Locale, budget: number): string {
-  const sep = locale === 'ar' ? '، ' : ', ';
+  const sep = locale === 'ar' ? '، ' : locale === 'ja' ? '、' : ', ';
   const names: string[] = [];
   let line = '';
   for (const place of places) {

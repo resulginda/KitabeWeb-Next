@@ -10,6 +10,7 @@ import {
 import { shouldIndexListing } from './listingQuality';
 import { LOCALES } from './places';
 import { cityOgImage, DEFAULT_OG } from './og';
+import { ogLocale } from './seo';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
 
@@ -43,7 +44,7 @@ export function buildListingMetadata(
       title,
       description,
       siteName: DEFAULT_OG.siteName,
-      locale: locale === 'tr' ? 'tr_TR' : locale === 'en' ? 'en_US' : locale,
+      locale: ogLocale(locale),
       images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
     },
     twitter: { card: 'summary_large_image', title, description, images: [ogImage] },

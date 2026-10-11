@@ -40,6 +40,18 @@ export const HOME_ROUTES: HomeRoute[] = [
         summary:
           'ابدأ صباحاً من ميدان السلطان أحمد: آيا صوفيا والجامع الأزرق وصهريج البازيليك على بعد دقائق سيراً. خصّص فترة ما بعد الظهر لقصر طوب قابي، ثم اعبر القرن الذهبي لتنهي يومك عند برج غلطة.',
       },
+      de: {
+        title: 'Die historische Halbinsel Istanbuls',
+        summary: 'Beginnen Sie früh am Sultanahmet-Platz: Hagia Sophia, Blaue Moschee und die Basilika-Zisterne sind nur wenige Gehminuten voneinander entfernt. Widmen Sie den Nachmittag dem Topkapı-Palast, überqueren Sie dann das Goldene Horn und beenden Sie den Tag am Galata-Turm.',
+      },
+      es: {
+        title: 'Península Histórica de Estambul',
+        summary: 'Comience temprano en la Plaza de Sultanahmet: Santa Sofía, la Mezquita Azul y la Cisterna Basílica están a pocos minutos a pie. Dedique la tarde al Palacio de Topkapı, cruce el Cuerno de Oro y termine el día en la Torre de Gálata.',
+      },
+      ja: {
+        title: 'イスタンブールの歴史地区',
+        summary: 'スルタンアフメト広場から早めにスタートしましょう。アヤソフィア、ブルーモスク、地下宮殿は徒歩わずか数分の距離にあります。午後はトプカプ宮殿を訪れ、金角湾を渡ってガラタ塔で一日を締めくくりましょう。',
+      },
     },
   },
   {
@@ -74,6 +86,18 @@ export const HOME_ROUTES: HomeRoute[] = [
         summary:
           'في اليوم الأول ابدأ بالكنائس المنحوتة في متحف غوريمة المفتوح، ثم مداخن الجنيات في باشا باغ وزلفه، وشاهد الغروب من قلعة أوتشحصار. في اليوم الثاني انزل إلى مدينة ديرينكويو تحت الأرض، ثم امشِ بمحاذاة الجدول في وادي إهلارا.',
       },
+      de: {
+        title: 'Zwei Tage in Kappadokien',
+        summary: 'Beginnen Sie am ersten Tag mit den Felsenkirchen des Freilichtmuseums Göreme, gehen Sie weiter zu den Feenkaminen von Paşabağ und Zelve und beobachten Sie den Sonnenuntergang von der Festung Uçhisar. Gehen Sie am zweiten Tag in Derinkuyu unter die Erde und wandern Sie dann am Bach entlang durch das Ihlara-Tal.',
+      },
+      es: {
+        title: 'Dos días en Capadocia',
+        summary: 'El primer día, comience con las iglesias rupestres del Museo al Aire Libre de Göreme, continúe hacia las chimeneas de hadas de Paşabağ y Zelve, y observe la puesta de sol desde el Castillo de Uçhisar. El segundo día, adéntrese bajo tierra en Derinkuyu y camine junto al arroyo por el Valle de Ihlara.',
+      },
+      ja: {
+        title: 'カッパドキア2日間の旅',
+        summary: '1日目はギョレメ野外博物館の岩窟教会群から始まり、パシャババとゼルヴェの奇岩群を巡り、ウチヒサル城から夕日を眺めます。2日目はデリンクユの地下都市に潜り、ウフララ渓谷を川沿いに散策します。',
+      },
     },
   },
   {
@@ -107,6 +131,18 @@ export const HOME_ROUTES: HomeRoute[] = [
         title: 'إيونيا القديمة: من أفسس إلى ديديم',
         summary:
           'زر أفسس في الصباح الباكر قبل وصول الحافلات السياحية؛ معظم المكتشفات معروضة في متحف أفسس في سلجوق. اقضِ المساء في شيرينجه. في اليوم التالي اتجه جنوباً: بريني وميليتوس ومعبد أبولو في ديديم تتسع ليوم واحد.',
+      },
+      de: {
+        title: 'Antikes Ionien: Von Ephesos nach Didyma',
+        summary: 'Besichtigen Sie Ephesos früh am Morgen, bevor die Reisebusse ankommen; die meisten Funde befinden sich im Ephesos-Museum in Selçuk. Verbringen Sie den Abend in Şirince. Fahren Sie am nächsten Tag nach Süden: Priene, Milet und der Apollon-Tempel in Didyma lassen sich an einem einzigen Tag besuchen.',
+      },
+      es: {
+        title: 'Jonia Antigua: de Éfeso a Dídima',
+        summary: 'Visite Éfeso temprano por la mañana antes de que lleguen los autobuses turísticos; la mayoría de los hallazgos se encuentran en el Museo de Éfeso en Selçuk. Pase la tarde en Şirince. Al día siguiente, diríjase al sur: Priene, Mileto y el Templo de Apolo en Dídima se pueden visitar en un solo día.',
+      },
+      ja: {
+        title: '古代イオニア：エフェソスからディディマへ',
+        summary: '観光バスが到着する前の早朝にエフェソスを見学しましょう。出土品の多くはセルチュクのエフェソス考古学博物館にあります。夕方はシリンジェで過ごします。翌日は南下し、プリエネ、ミレトス、ディディマのアポロン神殿を1日で巡ります。',
       },
     },
   },
@@ -144,6 +180,18 @@ export const HOME_ROUTES: HomeRoute[] = [
         summary:
           'يمرّ الطريق الساحلي من فتحية إلى أنطاليا بالمدن الليقية واحدة تلو الأخرى. بعد مقابر تلوس الصخرية زر ليتون وزانثوس، ثم تابع إلى باتارا وشاطئها البالغ طوله 18 كيلومتراً. شاهد ميرا في دمره، واركب قارباً إلى أطلال كيكوفا الغارقة، واختم رحلتك في أوليمبوس.',
       },
+      de: {
+        title: 'Entlang der lykischen Küste',
+        summary: 'Die Küstenstraße von Fethiye nach Antalya führt an den lykischen Städten vorbei. Besuchen Sie nach den Felsgräbern von Tlos Letoon und Xanthos, fahren Sie weiter nach Patara mit seinem 18 Kilometer langen Strand. Sehen Sie Myra in Demre, nehmen Sie ein Boot zu den versunkenen Ruinen von Kekova und beenden Sie die Reise in Olympos.',
+      },
+      es: {
+        title: 'A lo largo de la costa de Licia',
+        summary: 'La carretera costera de Fethiye a Antalya pasa por las ciudades licias una tras otra. Después de las tumbas excavadas en la roca de Tlos, visite Letoon y Janto, y continúe hacia Patara y su playa de 18 kilómetros. Vea Myra en Demre, tome un barco hacia las ruinas sumergidas de Kekova y termine en Olympos.',
+      },
+      ja: {
+        title: 'リキア海岸に沿って',
+        summary: 'フェティエからアンタルヤへと続く海岸線は、リュキアの都市遺跡が次々と現れます。トロスの岩窟墓を見学した後は、レトーンとクサントスを訪れ、パタラとその18キロに及ぶビーチへ進みます。デムレのミラを見学し、ケコバの沈没遺跡へのボートツアーに参加して、オリンポスで旅を終えます。',
+      },
     },
   },
   {
@@ -179,6 +227,18 @@ export const HOME_ROUTES: HomeRoute[] = [
         summary:
           'ابدأ في شانلي أورفا بزيارة غوبكلي تبه، ثم تجوّل بعد الظهر في السوق المحيط ببركة إبراهيم. في صباح اليوم التالي زر بيوت حرّان ذات القباب وتابع إلى ماردين، حيث مدرسة الزنجيرية ودير الزعفران. وفي اليوم الأخير زر مدينة دارا الأثرية ودير مار كبرئيل قرب مديات.',
       },
+      de: {
+        title: 'Von Göbeklitepe nach Mardin',
+        summary: 'Beginnen Sie in Şanlıurfa mit Göbeklitepe und schlendern Sie am Nachmittag durch den Basar rund um Balıklıgöl. Besuchen Sie am nächsten Morgen die Bienenkorbhäuser von Harran und fahren Sie weiter nach Mardin. Sehen Sie dort die Zinciriye-Medrese und das Kloster Deyrulzafaran; besuchen Sie am letzten Tag das antike Dara und das Kloster Mor Gabriel in der Nähe von Midyat.',
+      },
+      es: {
+        title: 'De Göbeklitepe a Mardin',
+        summary: 'Comience en Şanlıurfa con Göbeklitepe y luego recorra el bazar alrededor de Balıklıgöl por la tarde. A la mañana siguiente, visite las casas colmena de Harran y conduzca hasta Mardin. Allí, vea la Madrasa Zinciriye y el Monasterio de Deyrulzafaran; el último día, visite la antigua Dara y el Monasterio de Mor Gabriel, cerca de Midyat.',
+      },
+      ja: {
+        title: 'ギョベクリテペからマルディンへ',
+        summary: 'シャンルウルファのギョベクリテペから始め、午後はバルクリゴル周辺のバザールを散策します。翌朝はハランの蜂の巣状の家々を見学し、マルディンへ車で向かいます。そこではジンジリイェ・メドレセとデイルルザファラン修道院を見学し、最終日にはミディヤト近郊の古代都市ダラとモル・ガブリエル修道院を訪れます。',
+      },
     },
   },
   {
@@ -213,6 +273,18 @@ export const HOME_ROUTES: HomeRoute[] = [
         title: 'هضاب البحر الأسود الشرقية',
         summary:
           'في طرابزون شاهد جداريات آيا صوفيا، ثم اصعد إلى دير سوميلا في وادي ألتين دره. في اليوم الثاني توجّه إلى أوزون غول، وفي الثالث إلى ريزه على طول وادي فيرتينا حتى قلعة زيل وهضبة آيدر. وفي صباح صافٍ لا تفوّت بحر الغيوم في هضبة بوكوت.',
+      },
+      de: {
+        title: 'Hochland des östlichen Schwarzen Meeres',
+        summary: 'Besichtigen Sie in Trabzon die Fresken der Hagia Sophia und fahren Sie dann hinauf zum Sumela-Kloster im Altındere-Tal. Fahren Sie am zweiten Tag nach Uzungöl; überqueren Sie am dritten Tag Rize und folgen Sie dem Fırtına-Tal bis nach Zilkale und Ayder. Verpassen Sie an einem klaren Morgen nicht das Wolkenmeer auf dem Pokut-Plateau.',
+      },
+      es: {
+        title: 'Tierras altas del este del Mar Negro',
+        summary: 'En Trebisonda, vea los frescos de Santa Sofía y luego suba en coche al Monasterio de Sümela, en el valle de Altındere. El segundo día vaya a Uzungöl; el tercero, cruce a Rize y siga el valle de Fırtına hasta Zilkale y Ayder. En una mañana despejada, no se pierda el mar de nubes en la meseta de Pokut.',
+      },
+      ja: {
+        title: '東黒海高地',
+        summary: 'トラブゾンではアヤソフィアのフレスコ画を見学し、アルトゥンドレ渓谷のスメラ音楽院（修道院）へ車で向かいます。2日目はウズングルへ、3日目はリゼに入り、ルトゥナ渓谷沿いにジルカレとアイデルへ向かいます。晴れた日の朝には、ポクト高原の雲海をお見逃しなく。',
       },
     },
   },

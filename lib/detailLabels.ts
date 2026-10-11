@@ -38,4 +38,25 @@ export const DETAIL_LABELS: Record<
     photos: 'الصور',
     noPhotosYet: 'لم تتم إضافة صور بعد.',
   },
+  de: {
+    description: 'Beschreibung',
+    story: 'Geschichte',
+    visitTips: 'Besuchstipps',
+    photos: 'Fotos',
+    noPhotosYet: 'Noch keine Fotos hinzugefügt.',
+  },
+  es: {
+    description: 'Descripción',
+    story: 'Historia',
+    visitTips: 'Consejos para la visita',
+    photos: 'Fotos',
+    noPhotosYet: 'Aún no se han añadido fotos.',
+  },
+  ja: {
+    description: '説明',
+    story: 'ストーリー',
+    visitTips: '見学のヒント',
+    photos: '写真',
+    noPhotosYet: '写真はまだ追加されていません。',
+  },
 };

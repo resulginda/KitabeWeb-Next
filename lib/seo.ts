@@ -7,6 +7,19 @@ import { fitMetaDescription } from './metaDescription';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
 
+const OG_LOCALES: Partial<Record<Locale, string>> = {
+  tr: 'tr_TR',
+  en: 'en_US',
+  de: 'de_DE',
+  es: 'es_ES',
+  ja: 'ja_JP',
+};
+
+/** Open Graph locale (ru/ar mevcut davranışla aynı: yalın kod). */
+export function ogLocale(locale: Locale): string {
+  return OG_LOCALES[locale] ?? locale;
+}
+
 function absolutePlaceUrl(locale: Locale, citySlug: string, placeSlugParts: string[]): string {
   const path = encodePathSegments(`/${locale}/${citySlug}/${placeSlugParts.join('/')}`);
   return `${SITE}${path}`;
@@ -35,6 +48,27 @@ function placeMetaSuffixes(locale: Locale, city: string, district: string): stri
       `${where}: история, советы для посещения и карта на Kitabe.`,
       'История, советы и карта на Kitabe.',
       'Карта и советы на Kitabe.',
+    ];
+  }
+  if (locale === 'de') {
+    return [
+      `Planen Sie Ihren Besuch in ${where}: Geschichte, Besuchstipps und Karte auf Kitabe.`,
+      'Geschichte, Besuchstipps und Karte auf Kitabe.',
+      'Karte und Tipps auf Kitabe.',
+    ];
+  }
+  if (locale === 'es') {
+    return [
+      `Planifique su visita a ${where}: historia, consejos de visita y mapa en Kitabe.`,
+      'Historia, consejos de visita y mapa en Kitabe.',
+      'Mapa y consejos en Kitabe.',
+    ];
+  }
+  if (locale === 'ja') {
+    return [
+      `${where}の歴史、見学のヒント、地図をKitabeでチェック。`,
+      '歴史、見学のヒント、地図はKitabeで。',
+      '地図とヒントはKitabeで。',
     ];
   }
   return [
@@ -85,7 +119,7 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
       title,
       description: metaDesc,
       siteName: DEFAULT_OG.siteName,
-      locale: locale === 'tr' ? 'tr_TR' : locale === 'en' ? 'en_US' : locale,
+      locale: ogLocale(locale),
       images: [{ url: image, width: 1200, height: 630, alt: name }],
     },
     twitter: {

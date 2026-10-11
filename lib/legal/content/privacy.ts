@@ -306,4 +306,226 @@ export const PRIVACY_CONTENT: LegalContentMap = {
       },
     ],
   },
+  de: {
+    title: 'Datenschutzerklärung',
+    metaDescription: 'Datenschutzerklärung von Kitabe. Wie wir Ihre personenbezogenen Daten auf kitabe.org und in mobilen Apps erheben, verwenden und schützen.',
+    sections: [
+      {
+        title: 'Verantwortlicher',
+        paragraphs: [
+          'Verantwortlicher gemäß dem anwendbaren türkischen Datenschutzgesetz (KVKK):',
+          'Resul GINDA · Talas/Kayseri, Türkei · info@kitabe.org',
+        ],
+      },
+      {
+        title: 'Personenbezogene Daten, die wir verarbeiten',
+        list: [
+          'Identität: Vorname, Nachname',
+          'Kontakt: E-Mail-Adresse',
+          'Nutzung: Favoriten, Routen, Ortsempfehlungen',
+          'Standort: nur, wenn Sie die Erlaubnis erteilen',
+          'Technische Daten: Geräteinformationen, IP-Adresse, Cookies',
+        ],
+      },
+      {
+        title: 'Zwecke der Verarbeitung',
+        list: [
+          'Bereitstellung von Web- und mobilen Diensten',
+          'Kontoverwaltung und Authentifizierung',
+          'Favoriten- und Routenfunktionen',
+          'Überprüfung von von Nutzern eingereichten Orten',
+          'Analysen und Verbesserung des Dienstes',
+          'Einhaltung gesetzlicher Vorschriften',
+        ],
+      },
+      {
+        title: 'Dienste von Drittanbietern',
+        paragraphs: [
+          'Wir verwenden möglicherweise Google Firebase (Authentifizierung, Benachrichtigungen), Google AdMob (Werbung in der mobilen App), Google AdSense (Werbung auf der Website), Google Analytics (Nutzungsstatistiken) und Meta Pixel (Werbemessung). Jeder Anbieter hat seine eigene Datenschutzerklärung: https://policies.google.com/privacy und https://www.facebook.com/privacy/policy',
+        ],
+      },
+      {
+        title: 'Cookies und Werbung',
+        paragraphs: [
+          'Die Werbung auf dieser Website wird von Google AdSense bereitgestellt. Drittanbieter, einschließlich Google, verwenden Cookies, um Werbung basierend auf Ihren vorherigen Besuchen dieser Website oder anderer Websites zu schalten.',
+          'Durch die Verwendung von Werbe-Cookies durch Google können Google und seine Partner Anzeigen basierend auf Ihren Besuchen dieser Website und/oder anderer Websites im Internet schalten.',
+          'Sie können personalisierte Werbung in den Google-Anzeigeneinstellungen deaktivieren: https://adssettings.google.com — Sie können auch die Verwendung von Cookies für personalisierte Werbung durch andere Drittanbieter unter https://www.aboutads.info/choices deaktivieren.',
+          'Erfahren Sie, wie Google Informationen von Websites verwendet, die seine Dienste nutzen: https://policies.google.com/technologies/partner-sites',
+          'Besucher aus dem Europäischen Wirtschaftsraum, dem Vereinigten Königreich und der Schweiz werden vor dem Setzen von Werbe- und Mess-Cookies über eine von Google zertifizierte Consent-Management-Plattform um ihre Einwilligung gebeten. Sie können Ihre Auswahl jederzeit im Einwilligungsdialog ändern.',
+          'Google Analytics und Meta Pixel verwenden Cookies, um zu messen, wie die Website genutzt wird. Diese Tools werden nicht auf Seiten zum Zurücksetzen des Passworts oder zur E-Mail-Verifizierung ausgeführt.',
+          'Sie können Cookies in Ihren Browsereinstellungen löschen oder blockieren; einige Funktionen der Website funktionieren dann möglicherweise nicht wie erwartet.',
+        ],
+      },
+      {
+        title: 'Speicherdauer',
+        paragraphs: [
+          'Daten werden so lange gespeichert, wie dies für die angegebenen Zwecke erforderlich und gesetzlich vorgeschrieben ist.',
+        ],
+      },
+      {
+        title: 'Ihre Rechte',
+        list: [
+          'Zu erfahren, ob Ihre Daten verarbeitet werden',
+          'Informationen über die Verarbeitung anzufordern',
+          'Berichtigung oder Löschung zu beantragen',
+          'Der Verarbeitung zu widersprechen, sofern zutreffend',
+        ],
+      },
+      {
+        title: 'Kontolöschung',
+        paragraphs: [
+          'Löschen Sie Ihr Konto in den App-Einstellungen oder senden Sie eine E-Mail an info@kitabe.org. Die Löschung ist endgültig.',
+        ],
+      },
+      {
+        title: 'Kontakt',
+        paragraphs: ['Datenschutzanfragen: info@kitabe.org'],
+      },
+    ],
+  },
+  es: {
+    title: 'Política de Privacidad',
+    metaDescription: 'Política de privacidad de Kitabe. Cómo recopilamos, usamos y protegemos sus datos personales en kitabe.org y en las aplicaciones móviles.',
+    sections: [
+      {
+        title: 'Responsable del Tratamiento de Datos',
+        paragraphs: [
+          'Responsable del tratamiento de datos según la ley turca aplicable de protección de datos (KVKK):',
+          'Resul GINDA · Talas/Kayseri, Turquía · info@kitabe.org',
+        ],
+      },
+      {
+        title: 'Datos Personales que Tratamos',
+        list: [
+          'Identidad: nombre, apellido',
+          'Contacto: dirección de correo electrónico',
+          'Uso: favoritos, rutas, sugerencias de lugares',
+          'Ubicación: solo cuando usted otorga permiso',
+          'Técnicos: información del dispositivo, dirección IP, cookies',
+        ],
+      },
+      {
+        title: 'Fines del Tratamiento',
+        list: [
+          'Provisión de servicios web y móviles',
+          'Gestión de cuentas y autenticación',
+          'Funciones de favoritos y rutas',
+          'Revisión de lugares enviados por los usuarios',
+          'Analítica y mejora del servicio',
+          'Cumplimiento legal',
+        ],
+      },
+      {
+        title: 'Servicios de Terceros',
+        paragraphs: [
+          'Podemos utilizar Google Firebase (autenticación, notificaciones), Google AdMob (anuncios en la aplicación móvil), Google AdSense (anuncios en el sitio web), Google Analytics (estadísticas de uso) y Meta Pixel (medición de anuncios). Cada proveedor tiene su propia política de privacidad: https://policies.google.com/privacy y https://www.facebook.com/privacy/policy',
+        ],
+      },
+      {
+        title: 'Cookies y Publicidad',
+        paragraphs: [
+          'Los anuncios en este sitio web son publicados por Google AdSense. Proveedores terceros, incluido Google, utilizan cookies para mostrar anuncios basados en sus visitas anteriores a este sitio web u otros sitios web.',
+          'El uso de cookies publicitarias por parte de Google le permite a este y a sus socios mostrarle anuncios basados en sus visitas a este sitio y/u otros sitios en Internet.',
+          'Puede inhabilitar la publicidad personalizada en la Configuración de Anuncios de Google: https://adssettings.google.com — También puede inhabilitar el uso de cookies de terceros para publicidad personalizada en https://www.aboutads.info/choices',
+          'Obtenga más información sobre cómo Google utiliza la información de los sitios que usan sus servicios: https://policies.google.com/technologies/partner-sites',
+          'A los visitantes del Espacio Económico Europeo, el Reino Unido y Suiza se les solicita su consentimiento a través de una plataforma de gestión de consentimiento certificada por Google antes de que se instalen cookies publicitarias y de medición. Puede cambiar su elección en cualquier momento desde el diálogo de consentimiento.',
+          'Google Analytics y Meta Pixel utilizan cookies para medir cómo se usa el sitio. Estas herramientas no se ejecutan en páginas de restablecimiento de contraseña o verificación de correo electrónico.',
+          'Puede eliminar o bloquear las cookies en la configuración de su navegador; es posible que algunas funciones del sitio dejen de funcionar como se espera.',
+        ],
+      },
+      {
+        title: 'Conservación',
+        paragraphs: [
+          'Los datos se conservarán durante el tiempo necesario para los fines indicados y según lo exija la ley.',
+        ],
+      },
+      {
+        title: 'Sus Derechos',
+        list: [
+          'Saber si sus datos son objeto de tratamiento',
+          'Solicitar información sobre el tratamiento',
+          'Solicitar la rectificación o supresión',
+          'Oponerse al tratamiento cuando proceda',
+        ],
+      },
+      {
+        title: 'Eliminación de la Cuenta',
+        paragraphs: [
+          'Elimine su cuenta en la configuración de la aplicación o envíe un correo electrónico a info@kitabe.org. La eliminación es permanente.',
+        ],
+      },
+      {
+        title: 'Contacto',
+        paragraphs: ['Consultas sobre privacidad: info@kitabe.org'],
+      },
+    ],
+  },
+  ja: {
+    title: 'プライバシーポリシー',
+    metaDescription: 'Kitabeのプライバシーポリシー。kitabe.orgおよびモバイルアプリにおけるお客様の個人情報の収集、利用、保護方法について説明しています。',
+    sections: [
+      {
+        title: 'データ管理者',
+        paragraphs: [
+          '適用されるトルコ個人情報保護法（KVKK）に基づくデータ管理者：',
+          'レスル・ギンダ（Resul GINDA） · トルコ、カイセリ・タラス（Talas/Kayseri, Turkey） · info@kitabe.org',
+        ],
+      },
+      {
+        title: '当社が処理する個人情報',
+        list: [
+          '本人情報：名、姓',
+          '連絡先：メールアドレス',
+          '利用状況：お気に入り、ルート、スポットの提案',
+          '位置情報：許可を与えた場合のみ',
+          '技術情報：デバイス情報、IPアドレス、Cookie',
+        ],
+      },
+      {
+        title: '処理の目的',
+        list: [
+          'ウェブおよびモバイルサービスの提供',
+          'アカウント管理と認証',
+          'お気に入りおよびルート機能',
+          'ユーザーから投稿されたスポットの審査',
+          'アクセス解析とサービスの改善',
+          '法的遵守',
+        ],
+      },
+      {
+        title: 'サードパーティサービス',
+        paragraphs: [
+          '当社は、Google Firebase（認証、通知）、Google AdMob（モバイルアプリ内広告）、Google AdSense（ウェブサイト上の広告）、Google Analytics（利用統計）、Meta Pixel（広告効果測定）を使用する場合があります。各プロバイダーには独自のプライバシーポリシーが適用されます：https://policies.google.com/privacy および https://www.facebook.com/privacy/policy',
+        ],
+      },
+      {
+        title: 'Cookieと広告',
+        paragraphs: [
+          '当ウェブサイト上の広告はGoogle AdSenseによって配信されます。Googleを含むサードパーティベンダーは、ユーザーの当サイトや他のウェブサイトへの過去のアクセス履歴に基づいて広告を配信するためにCookieを使用します。',
+          'Googleが広告用Cookieを使用することにより、Googleやパートナーは、ユーザーが当サイトやインターネット上の他のサイトにアクセスした実績に基づいて、適切な広告をユーザーに表示できるようになります。',
+          'パーソナライズ広告は、Google広告設定（https://adssettings.google.com）で無効にすることができます。また、パーソナライズ広告に使用されるサードパーティベンダーのCookieについても、https://www.aboutads.info/choices で無効にすることができます。',
+          'Googleのサービスを使用するサイトから収集した情報のGoogleによる使用方法については、こちらをご覧ください：https://policies.google.com/technologies/partner-sites',
+          '欧州経済領域（EEA）、英国、スイスからの訪問者には、広告および測定用Cookieが設定される前に、Google認定の同意管理プラットフォームを通じて同意が求められます。選択内容は、同意ダイアログからいつでも変更できます。',
+          'Google AnalyticsおよびMeta Pixelは、サイトの利用状況を測定するためにCookieを使用します。これらのツールは、パスワードの再設定ページやメールアドレスの確認ページでは実行されません。',
+          'ブラウザの設定でCookieを削除またはブロックすることができますが、その場合、サイトの一部機能が期待通りに動作しないことがあります。',
+        ],
+      },
+      {
+        title: '保存期間',
+        paragraphs: ['データは、明示された目的のために必要な期間、および法律で義務付けられている期間保存されます。'],
+      },
+      {
+        title: 'お客様の権利',
+        list: ['データが処理されているかどうかを知る権利', '処理に関する情報の開示を請求する権利', '訂正または削除を請求する権利', '該当する場合にデータ処理に異議を唱える権利'],
+      },
+      {
+        title: 'アカウントの削除',
+        paragraphs: ['アプリの設定からアカウントを削除するか、info@kitabe.orgまでメールでお問い合わせください。削除は永続的なものです。'],
+      },
+      {
+        title: 'お問い合わせ',
+        paragraphs: ['プライバシーに関するお問い合わせ：info@kitabe.org'],
+      },
+    ],
+  },
 };

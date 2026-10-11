@@ -10,6 +10,9 @@ const LANGUAGE_NAMES: Record<Locale, string> = {
   en: 'English',
   ru: 'Русский',
   ar: 'العربية',
+  de: 'Deutsch',
+  es: 'Español',
+  ja: '日本語',
 };
 
 /** SEO içerik sayfaları — bayrak emoji yerine kod + doğrudan locale URL yönlendirmesi */
