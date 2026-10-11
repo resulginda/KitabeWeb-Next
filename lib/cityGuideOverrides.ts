@@ -1,4 +1,5 @@
 import type { Locale } from './places';
+import { localeFallbacks } from './locales';
 
 /**
  * Elle veya scripts/generate-city-guides.mjs ile üretilmiş şehir rehberleri.
@@ -558,5 +559,8 @@ export const CITY_GUIDE_OVERRIDES: Record<string, CityGuideOverride> = {
 export function cityGuideParagraphs(citySlug: string, locale: Locale): string[] {
   const guide = CITY_GUIDE_OVERRIDES[citySlug];
   if (!guide) return [];
-  return guide[locale] ?? guide.tr ?? [];
+  for (const l of localeFallbacks(locale)) {
+    if (guide[l]?.length) return guide[l];
+  }
+  return [];
 }

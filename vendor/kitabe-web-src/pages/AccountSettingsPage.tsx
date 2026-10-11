@@ -5,6 +5,7 @@ import { useAuth, type DeleteAccountProof } from '../contexts/AuthContext';
 import GoogleSignInButton from '../components/GoogleSignInButton';
 import AvatarContent from '../components/AvatarContent';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LANGUAGE_OPTIONS, type Language } from '../config/languages';
 import { PageShell, PageSection, PageLoginRequired } from '../components/PageShell';
 
 type SettingsSection = 'profile' | 'password' | 'language' | 'danger';
@@ -311,12 +312,11 @@ const AccountSettingsPage = () => {
               <select
                 id="settings-lang"
                 value={currentLanguage}
-                onChange={(e) => setLanguage(e.target.value as 'tr' | 'en' | 'ru' | 'ar')}
+                onChange={(e) => setLanguage(e.target.value as Language)}
               >
-                <option value="tr">{t('language.turkish')}</option>
-                <option value="en">{t('language.english')}</option>
-                <option value="ru">{t('language.russian')}</option>
-                <option value="ar">{t('language.arabic')}</option>
+                {LANGUAGE_OPTIONS.map((lang) => (
+                  <option key={lang.code} value={lang.code}>{lang.name}</option>
+                ))}
               </select>
             </div>
           </PageSection>

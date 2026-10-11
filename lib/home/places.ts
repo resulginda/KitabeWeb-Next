@@ -1,5 +1,6 @@
 import { getCityLabel } from '../citySlugLabel';
 import { encodePathSegments } from '../detectLocale';
+import { placeSlugPath } from '../locales';
 import {
   getListingByFilter,
   mapWithConcurrency,
@@ -22,7 +23,7 @@ export type HomePlace = {
 };
 
 export function localizedPlacePath(place: ListingPlace, locale: Locale): string | null {
-  const full = place.slug?.[locale];
+  const full = placeSlugPath(place.slug, locale);
   if (full && full.includes('/')) return `/${locale}/${full}`;
   if (locale === 'tr' && place.detailPath) return place.detailPath;
   return null;

@@ -2,14 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LANGUAGE_OPTIONS as languages, type Language } from '../config/languages';
 import { PageShell, PageSection } from '../components/PageShell';
-
-const languages = [
-  { code: 'tr' as const, name: 'Türkçe', flag: '🇹🇷' },
-  { code: 'en' as const, name: 'English', flag: '🇬🇧' },
-  { code: 'ru' as const, name: 'Русский', flag: '🇷🇺' },
-  { code: 'ar' as const, name: 'العربية', flag: '🇸🇦' },
-];
 
 export default function LanguageSelectionPage() {
   const { t } = useTranslation();
@@ -17,7 +11,7 @@ export default function LanguageSelectionPage() {
   const { currentLanguage, setLanguage } = useLanguage();
   const [selectedLang, setSelectedLang] = useState(currentLanguage);
 
-  const handleSelectLanguage = async (langCode: typeof languages[0]['code']) => {
+  const handleSelectLanguage = async (langCode: Language) => {
     setSelectedLang(langCode);
     setLanguage(langCode);
     navigate('/home', { replace: true });
@@ -47,7 +41,7 @@ export default function LanguageSelectionPage() {
           </div>
           <button
             className="btn btn-primary"
-            onClick={() => handleSelectLanguage((selectedLang || 'tr') as typeof languages[0]['code'])}
+            onClick={() => handleSelectLanguage(selectedLang || 'tr')}
           >
             {t('common.done')}
           </button>

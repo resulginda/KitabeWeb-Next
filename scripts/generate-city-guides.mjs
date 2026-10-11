@@ -27,12 +27,16 @@ const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || '';
 const MODEL =
   process.env.OPENROUTER_MODEL || 'anthropic/claude-sonnet-4';
 
+/** Varsayılan üretim dilleri; yeni diller --lang de ile tek tek seçilir. */
 const LOCALES = ['tr', 'en', 'ru', 'ar'];
 const LOCALE_NAMES = {
   tr: 'Turkish',
   en: 'English',
   ru: 'Russian',
   ar: 'Arabic',
+  de: 'German',
+  es: 'Spanish',
+  ja: 'Japanese',
 };
 
 const PRIORITY_CITIES = [
@@ -177,6 +181,7 @@ function writeOverrides(map) {
     .join(',\n');
 
   const content = `import type { Locale } from './places';
+import { localeFallbacks } from './locales';
 
 /**
  * Elle veya scripts/generate-city-guides.mjs ile üretilmiş şehir rehberleri.
@@ -190,7 +195,10 @@ ${entries}
 export function cityGuideParagraphs(citySlug: string, locale: Locale): string[] {
   const guide = CITY_GUIDE_OVERRIDES[citySlug];
   if (!guide) return [];
-  return guide[locale] ?? guide.tr ?? [];
+  for (const l of localeFallbacks(locale)) {
+    if (guide[l]?.length) return guide[l];
+  }
+  return [];
 }
 `;
 
@@ -228,6 +236,7 @@ Ortam: OPENROUTER_API_KEY (zorunlu), OPENROUTER_MODEL (opsiyonel)
     if (!cities.length) cities = hubs.slice(0, 8);
   }
 
+  if (opts.lang && !LOCALE_NAMES[opts.lang]) throw new Error(`Bilinmeyen dil: ${opts.lang}`);
   const langs = opts.lang ? [opts.lang] : LOCALES;
   const existing = readExistingOverrides();
 

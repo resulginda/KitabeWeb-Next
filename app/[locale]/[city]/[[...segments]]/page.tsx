@@ -33,6 +33,7 @@ import {
   type Locale,
 } from '@/lib/places';
 import { encodePathSegments } from '@/lib/detectLocale';
+import { placeSlugPath } from '@/lib/locales';
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -62,7 +63,7 @@ export async function generateStaticParams() {
 
   for (const place of index) {
     for (const locale of LOCALES) {
-      const full = place.slug?.[locale];
+      const full = placeSlugPath(place.slug, locale);
       if (!full) continue;
       // Arapça slug'lar NFD saklanıyor; statik sayfa anahtarını NFC'ye sabitle
       const [city, ...rest] = full.normalize('NFC').split('/');

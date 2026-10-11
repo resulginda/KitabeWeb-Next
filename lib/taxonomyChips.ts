@@ -2,6 +2,7 @@ import { cache } from 'react';
 import { TURKIYE_ILCELER } from '@kitabe/data/turkiyeIllerIlceler';
 import { getCityLabel } from './citySlugLabel';
 import { encodePathSegments } from './detectLocale';
+import { localeFallbacks } from './locales';
 import {
   buildListingPath,
   getTaxonomyIndex,
@@ -80,7 +81,7 @@ const getCategoryLabelMap = cache(async (locale: Locale): Promise<Map<string, st
     const cats: RawCategory[] = json.data ?? [];
 
     const add = (entry: RawCategory) => {
-      const name = entry.name?.[locale] ?? entry.name?.tr;
+      const name = localeFallbacks(locale).map((l) => entry.name?.[l]).find(Boolean);
       if (!name) return;
       map.set(entry.id.toLowerCase(), name);
       map.set(slugifyAscii(name), name);

@@ -1,12 +1,13 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { ensureI18n, loadI18nLanguage, type I18nLanguage } from '../i18n';
+import type { Language } from '../config/languages';
 import {
   getInitialAppLanguage,
   hasManualLanguageChoice,
   persistLanguageChoice,
 } from '../utils/detectLocale';
 
-export type Language = 'tr' | 'en' | 'ru' | 'ar';
+export type { Language };
 
 export type SeoLocaleSwitchResolver = (
   target: Language,

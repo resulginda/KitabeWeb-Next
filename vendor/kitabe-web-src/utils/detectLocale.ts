@@ -1,4 +1,6 @@
-export type AppLanguage = 'tr' | 'en' | 'ru' | 'ar';
+import { isEnabledLanguage, type Language } from '../config/languages';
+
+export type AppLanguage = Language;
 
 export const DEFAULT_LANGUAGE: AppLanguage = 'tr';
 const LANG_KEY = 'kitabe_language';
@@ -6,8 +8,7 @@ const MANUAL_KEY = 'kitabe_language_manual';
 
 export function resolveLanguageFromTag(tag: string): AppLanguage | null {
   const base = tag.toLowerCase().split('-')[0];
-  if (base === 'tr' || base === 'en' || base === 'ru' || base === 'ar') return base;
-  return null;
+  return isEnabledLanguage(base) ? base : null;
 }
 
 /** navigator.languages / Accept-Language benzeri liste */
@@ -34,8 +35,7 @@ export function hasManualLanguageChoice(): boolean {
 export function getStoredLanguage(): AppLanguage | null {
   if (typeof window === 'undefined') return null;
   const saved = localStorage.getItem(LANG_KEY);
-  if (saved === 'tr' || saved === 'en' || saved === 'ru' || saved === 'ar') return saved;
-  return null;
+  return isEnabledLanguage(saved) ? saved : null;
 }
 
 /** Manuel seçim yoksa her ziyarette tarayıcı dili; varsa kayıtlı tercih */

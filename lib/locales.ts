@@ -39,3 +39,16 @@ export function localeFallbacks(locale: Locale): Locale[] {
   if (LEGACY_LOCALES.includes(locale)) return [locale, 'tr', 'en'];
   return [locale, 'en', 'tr'];
 }
+
+/** Kendi slug'ı olmayan diller İngilizce slug'ı kullanır: /de/istanbul/hagia-sophia (backend ile aynı kural). */
+export function slugLocale(locale: Locale): Locale {
+  return LEGACY_LOCALES.includes(locale) ? locale : 'en';
+}
+
+/** Yerin bu dildeki "şehir/yer" slug yolu. */
+export function placeSlugPath(
+  slug: Partial<Record<string, string>> | null | undefined,
+  locale: Locale
+): string | undefined {
+  return slug?.[slugLocale(locale)] || undefined;
+}

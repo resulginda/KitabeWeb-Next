@@ -11,14 +11,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
+import { KEY, SOURCE, setDelayMs, translateFlat, usage } from './lib/translate-ui.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/(\w:)/, '$1')), '..');
-const API = process.env.KITABE_API_URL || 'https://api.kitabe.org';
-const KEY = process.env.KITABE_INTERNAL_KEY || process.env.N8N_INTERNAL_KEY || '';
 const BASE_LOCALES = ['tr', 'en', 'ru', 'ar'];
-const SOURCE = 'en';
 const MANUAL_NAME = /slug|flag|language_names|lang_names/i;
-const BATCH_CHARS = 3500;
 
 const args = process.argv.slice(2);
 const flag = (name) => args.includes(name);
@@ -141,57 +138,7 @@ function rebuild(v, prefix, map) {
   return v;
 }
 
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const usage = { promptTokens: 0, completionTokens: 0, calls: 0 };
-
-const DELAY_MS = Number(opt('--delay-ms', '4000'));
-const RETRY_WAITS_MS = [20000, 40000, 60000, 90000, 120000, 180000];
-
-async function translateBatch(items, lang, context) {
-  for (let attempt = 0; attempt <= RETRY_WAITS_MS.length; attempt++) {
-    await sleep(DELAY_MS);
-    const res = await fetch(`${API}/api/internal/translate-ui`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'X-Kitabe-Internal-Key': KEY },
-      body: JSON.stringify({ items, targetLang: lang, sourceLang: SOURCE, context }),
-    }).catch((e) => ({ ok: false, status: 0, json: async () => ({ message: e.message }) }));
-    const json = await res.json().catch(() => ({}));
-    const u = json.data?.usage;
-    if (u) for (const k of Object.keys(usage)) usage[k] += u[k] || 0;
-    if (res.ok) return json.data;
-    if ((res.status === 429 || res.status === 0 || res.status >= 500) && attempt < RETRY_WAITS_MS.length) {
-      const wait = RETRY_WAITS_MS[attempt];
-      console.log(`   ${lang}: HTTP ${res.status} — ${wait / 1000} sn bekleniyor…`);
-      await sleep(wait);
-      continue;
-    }
-    throw new Error(`translate-ui HTTP ${res.status}: ${json.message || ''}`);
-  }
-  throw new Error('translate-ui: tekrar denemeler tükendi (kota?)');
-}
-
-/** Düz metin haritasını parça parça çevir. */
-async function translateFlat(flat, lang, context) {
-  const result = {};
-  const failed = [];
-  let batch = {};
-  let size = 0;
-  const flush = async () => {
-    if (!Object.keys(batch).length) return;
-    const d = await translateBatch(batch, lang, context);
-    Object.assign(result, d.items);
-    failed.push(...d.failed);
-    batch = {};
-    size = 0;
-  };
-  for (const [k, v] of Object.entries(flat)) {
-    if (size + v.length > BATCH_CHARS) await flush();
-    batch[k] = v;
-    size += v.length + k.length;
-  }
-  await flush();
-  return { result, failed };
-}
+setDelayMs(Number(opt('--delay-ms', '4000')));
 
 function collect(sf) {
   const found = [];

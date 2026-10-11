@@ -1,6 +1,6 @@
 import { cache } from 'react';
 import { encodePathSegments } from './detectLocale';
-import { ALL_LOCALES, LOCALES, localeFallbacks, type Locale } from './locales';
+import { ALL_LOCALES, LOCALES, localeFallbacks, placeSlugPath, type Locale } from './locales';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.kitabe.org';
 /** Sunucu tarafı fetch — backend rate-limit bypass (REVALIDATE_SECRET ile aynı) */
@@ -186,13 +186,13 @@ export const resolvePlaceForDetail = cache(async (
 
   // Tam path herhangi bir dilde eşleşirse (index NFD, hedef NFC → iki taraf da NFC)
   const entry = index.find((row) =>
-    LOCALES.some((l) => row.slug[l] && row.slug[l].normalize('NFC') === targetPath)
+    LOCALES.some((l) => placeSlugPath(row.slug, l)?.normalize('NFC') === targetPath)
   );
   if (entry) return getPlaceById(entry.id);
 
   // Yer slug'ı doğru, şehir slug'ı yanlış (örn. /ar/amasya/... → ar/أماسيا/...)
   const placeOnly = index.find((row) => {
-    const path = row.slug[locale];
+    const path = placeSlugPath(row.slug, locale);
     if (!path) return false;
     const parts = path.normalize('NFC').split('/');
     return parts.length >= 2 && parts.slice(1).join('/') === slug;
@@ -204,7 +204,7 @@ export const resolvePlaceForDetail = cache(async (
 
 /** Kanonik detay path'i — redirect için */
 export function canonicalPlacePath(place: SeoPlace, locale: Locale): string | null {
-  const full = place.slug?.[locale];
+  const full = placeSlugPath(place.slug, locale);
   if (!full) return null;
   const [city, ...rest] = full.split('/');
   if (!city || rest.length === 0) return null;

@@ -4,19 +4,26 @@ import { initReactI18next } from 'react-i18next';
 // senkron hazır. Yavaş bağlantıda ham anahtar ("common.xxx") flash'ı önlenir.
 import trTranslation from './locales/tr.json';
 import enTranslation from './locales/en.json';
+import type { Language } from '../config/languages';
 
-export type I18nLanguage = 'tr' | 'en' | 'ru' | 'ar';
+export type I18nLanguage = Language;
 
-// Yalnızca ru/ar talep üzerine (lazy) yüklenir; tr+en zaten bundle içinde.
-const lazyLoaders: Record<'ru' | 'ar', () => Promise<{ default: Record<string, unknown> }>> = {
+// tr+en bundle içinde; diğer diller talep üzerine (lazy) yüklenir.
+const lazyLoaders: Record<
+  Exclude<I18nLanguage, 'tr' | 'en'>,
+  () => Promise<{ default: Record<string, unknown> }>
+> = {
   ru: () => import('./locales/ru.json'),
   ar: () => import('./locales/ar.json'),
+  de: () => import('./locales/de.json'),
+  es: () => import('./locales/es.json'),
+  ja: () => import('./locales/ja.json'),
 };
 
 /**
  * i18n instance'ı SENKRON ve DOLU başlatılır (tr + en gömülü). Böylece ilk
  * render'da useTranslation gerçek metinleri döndürür; "common.xxx" gibi ham
- * anahtarlar hiçbir zaman görünmez. ru/ar kullanıcıları kendi paketleri
+ * anahtarlar hiçbir zaman görünmez. Diğer dillerin kullanıcıları kendi paketleri
  * yüklenene kadar (kısa süre) en/tr fallback görür — ham anahtar değil.
  */
 if (!i18n.isInitialized) {
@@ -35,11 +42,7 @@ if (!i18n.isInitialized) {
 let loadingPromise: Promise<typeof i18n> | null = null;
 
 async function addBundles(locale: I18nLanguage) {
-  // tr ve en zaten gömülü; sadece ru/ar lazy yüklenir.
-  if (
-    (locale === 'ru' || locale === 'ar') &&
-    !i18n.hasResourceBundle(locale, 'translation')
-  ) {
+  if (locale !== 'tr' && locale !== 'en' && !i18n.hasResourceBundle(locale, 'translation')) {
     const primary = await lazyLoaders[locale]();
     i18n.addResourceBundle(locale, 'translation', primary.default, true, true);
   }

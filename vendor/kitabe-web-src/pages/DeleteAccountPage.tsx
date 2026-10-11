@@ -22,7 +22,10 @@ const DeleteAccountPage = () => {
       tr: 'SİL',
       en: 'DELETE',
       ru: 'УДАЛИТЬ',
-      ar: 'حذف'
+      ar: 'حذف',
+      de: 'LÖSCHEN',
+      es: 'ELIMINAR',
+      ja: '削除'
     };
     return confirmTexts[lang] || 'SİL';
   };

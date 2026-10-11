@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { pickText, type Locale, type SeoPlace, LOCALES } from './places';
+import { placeSlugPath } from './locales';
 import { encodePathSegments } from './detectLocale';
 import { absoluteOgImage, DEFAULT_OG } from './og';
 import { HUB_SLUGS } from './listings';
@@ -92,14 +93,14 @@ export function buildPlaceMetadata(place: SeoPlace, locale: Locale): Metadata {
   const story = pickText(place.story as never, locale).replace(/[#*_>]+/g, ' ');
   const metaDesc = fitMetaDescription(description, [story], placeMetaSuffixes(locale, city, district));
 
-  const fullSlug = place.slug?.[locale] ?? '';
+  const fullSlug = placeSlugPath(place.slug, locale) ?? '';
   const [citySlug, ...rest] = fullSlug.split('/');
   const canonical = absolutePlaceUrl(locale, citySlug, rest);
   const image = absoluteOgImage(place.imageUrl || place.thumbnailUrl);
 
   const languages: Record<string, string> = {};
   for (const loc of LOCALES) {
-    const s = place.slug?.[loc];
+    const s = placeSlugPath(place.slug, loc);
     if (!s) continue;
     const [c, ...r] = s.split('/');
     languages[loc] = absolutePlaceUrl(loc, c, r);
@@ -145,7 +146,7 @@ export function buildPlaceJsonLd(
   const name = pickText(place.name as never, locale);
   const description = pickText(place.description as never, locale);
   const cityLabel = pickText(place.city as never, locale);
-  const fullSlug = place.slug?.[locale] ?? '';
+  const fullSlug = placeSlugPath(place.slug, locale) ?? '';
   const [citySlug, ...rest] = fullSlug.split('/');
   const placeUrl = absolutePlaceUrl(locale, citySlug, rest);
   const hubSlug = HUB_SLUGS[locale];

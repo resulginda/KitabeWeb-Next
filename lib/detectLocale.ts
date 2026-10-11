@@ -1,4 +1,4 @@
-import { LOCALES, isEnabledLocale, type Locale } from '@/lib/locales';
+import { LOCALES, isEnabledLocale, placeSlugPath, type Locale } from '@/lib/locales';
 
 export { LOCALES, type Locale };
 export const DEFAULT_LOCALE: Locale = 'tr';
@@ -59,7 +59,7 @@ export function slugPathForLocale(
   slugMap: Record<string, string> | undefined,
   locale: Locale
 ): string | null {
-  const full = slugMap?.[locale];
+  const full = placeSlugPath(slugMap, locale);
   if (!full) return null;
   const [city, ...rest] = full.split('/');
   if (!city || rest.length === 0) return null;

@@ -1,6 +1,7 @@
 import { FEATURED_EXPLORE_CITIES } from '@kitabe/data/featuredExploreCities';
 import { TURKIYE_ILLER } from '@kitabe/data/turkiyeIllerIlceler';
 import type { Locale } from './places';
+import { localeFallbacks } from './locales';
 
 export function cityNameToSlug(name: string): string {
   return name
@@ -82,7 +83,8 @@ export function getCityLabel(citySlug: string, locale: Locale): string {
   const tr = SLUG_TO_TR[slug] ?? LEGACY_SLUG_TO_TR[slug];
   if (tr) {
     if (locale === 'tr') return tr;
-    if (locale === 'en') return asciiLabel(tr);
+    const order = localeFallbacks(locale);
+    if (order.indexOf('en') < order.indexOf('tr')) return asciiLabel(tr);
     return tr;
   }
 

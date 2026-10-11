@@ -34,8 +34,17 @@ const API_BASE = process.env.API_BASE_URL || 'https://api.kitabe.org';
 const OPENROUTER_KEY = process.env.OPENROUTER_API_KEY || '';
 const MODEL = process.env.OPENROUTER_MODEL || 'anthropic/claude-sonnet-4';
 
+/** Varsayılan üretim dilleri; yeni diller --langs de,es,ja ile seçilir. */
 const LOCALES = ['tr', 'en', 'ru', 'ar'];
-const LOCALE_NAMES = { tr: 'Turkish', en: 'English', ru: 'Russian', ar: 'Modern Standard Arabic' };
+const LOCALE_NAMES = {
+  tr: 'Turkish',
+  en: 'English',
+  ru: 'Russian',
+  ar: 'Modern Standard Arabic',
+  de: 'German',
+  es: 'Spanish',
+  ja: 'Japanese',
+};
 const MAX_PLACES_IN_PROMPT = 25;
 
 function parseArgs() {
@@ -54,7 +63,7 @@ function parseArgs() {
   };
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
-    if (a === '--langs') opts.langs = args[++i].split(',').map((s) => s.trim()).filter((l) => LOCALES.includes(l));
+    if (a === '--langs') opts.langs = args[++i].split(',').map((s) => s.trim()).filter((l) => LOCALE_NAMES[l]);
     else if (a === '--kind') opts.kind = args[++i];
     else if (a === '--min-single') opts.minSingle = Number(args[++i]) || opts.minSingle;
     else if (a === '--min-double') opts.minDouble = Number(args[++i]) || opts.minDouble;

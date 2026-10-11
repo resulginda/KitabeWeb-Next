@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useCallback, type React
 import { API_BASE_URL } from '../config/api';
 import type { Place, GooglePlacePhoto } from '../types/place';
 import { useLanguage } from './LanguageContext';
-import { getLocalizedText, getLocalizedArray } from '../utils/multilang';
+import { getLocalizedText, getLocalizedArray, type Language } from '../utils/multilang';
 
 interface PlacesContextType {
   places: Place[];
@@ -43,16 +43,16 @@ function mapApiPlaceToPlace(apiPlace: Record<string, unknown>, lang: string): Pl
   const period = apiPlace.period;
   return {
     id: String(apiPlace.id),
-    name: typeof name === 'string' ? name : getLocalizedText(name as Record<string, string>, lang as 'tr' | 'en' | 'ru' | 'ar'),
-    city: typeof city === 'string' ? city : getLocalizedText(city as Record<string, string>, lang as 'tr' | 'en' | 'ru' | 'ar'),
-    district: typeof district === 'string' ? district : getLocalizedText(district as Record<string, string>, lang as 'tr' | 'en' | 'ru' | 'ar'),
+    name: typeof name === 'string' ? name : getLocalizedText(name as Record<string, string>, lang as Language),
+    city: typeof city === 'string' ? city : getLocalizedText(city as Record<string, string>, lang as Language),
+    district: typeof district === 'string' ? district : getLocalizedText(district as Record<string, string>, lang as Language),
     category: (category as Place['category']) ?? [],
-    description: typeof description === 'string' ? description : getLocalizedText(description as Record<string, string>, lang as 'tr' | 'en' | 'ru' | 'ar'),
+    description: typeof description === 'string' ? description : getLocalizedText(description as Record<string, string>, lang as Language),
     latitude: Number(apiPlace.latitude) || 0,
     longitude: Number(apiPlace.longitude) || 0,
-    story: story != null ? (typeof story === 'string' ? story : getLocalizedText(story as Record<string, string>, lang as 'tr' | 'en' | 'ru' | 'ar')) : undefined,
-    visitTips: visitTips != null ? getLocalizedArray(visitTips as string[] | Record<string, string[]>, lang as 'tr' | 'en' | 'ru' | 'ar') : undefined,
-    period: period != null ? (typeof period === 'string' ? period : getLocalizedText(period as Record<string, string>, lang as 'tr' | 'en' | 'ru' | 'ar')) : undefined,
+    story: story != null ? (typeof story === 'string' ? story : getLocalizedText(story as Record<string, string>, lang as Language)) : undefined,
+    visitTips: visitTips != null ? getLocalizedArray(visitTips as string[] | Record<string, string[]>, lang as Language) : undefined,
+    period: period != null ? (typeof period === 'string' ? period : getLocalizedText(period as Record<string, string>, lang as Language)) : undefined,
     isUnesco: Boolean(apiPlace.isUnesco),
     imageUrl: typeof apiPlace.imageUrl === 'string' ? apiPlace.imageUrl : undefined,
     photos: Array.isArray(apiPlace.photos) ? (apiPlace.photos as string[]) : undefined,

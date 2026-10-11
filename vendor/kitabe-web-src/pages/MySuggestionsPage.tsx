@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useLanguage } from '../contexts/LanguageContext';
+import { dateLocale } from '../config/languages';
 import { usePlaces } from '../contexts/PlacesContext';
 import { apiFetch } from '../utils/apiClient';
 import { getLocalizedText } from '../utils/multilang';
@@ -110,15 +111,7 @@ const MySuggestionsPage = () => {
     if (!ts) return '';
     try {
       const date = new Date(ts);
-      const locale =
-        currentLanguage === 'tr'
-          ? 'tr-TR'
-          : currentLanguage === 'en'
-            ? 'en-US'
-            : currentLanguage === 'ru'
-              ? 'ru-RU'
-              : 'ar-SA';
-      return date.toLocaleDateString(locale, {
+      return date.toLocaleDateString(dateLocale(currentLanguage), {
         year: 'numeric',
         month: 'long',
         day: 'numeric',

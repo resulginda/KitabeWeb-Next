@@ -3,6 +3,7 @@ import { encodePathSegments } from '@/lib/detectLocale';
 import { buildListingPath, getTaxonomyIndex } from '@/lib/listings';
 import { shouldIndexTaxonomy } from '@/lib/listingQuality';
 import { getPlaceIndex, LOCALES, type Locale } from '@/lib/places';
+import { placeSlugPath } from '@/lib/locales';
 
 const SITE = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://kitabe.org';
 
@@ -24,13 +25,13 @@ function placeEntriesForLocale(
   const entries: MetadataRoute.Sitemap = [];
 
   for (const place of index) {
-    const slug = place.slug?.[locale];
+    const slug = placeSlugPath(place.slug, locale);
     if (!slug) continue;
     const [city, ...rest] = slug.split('/');
 
     const alternates: Record<string, string> = {};
     for (const loc of LOCALES) {
-      const s = place.slug?.[loc];
+      const s = placeSlugPath(place.slug, loc);
       if (!s) continue;
       const [c, ...r] = s.split('/');
       alternates[loc] = `${SITE}${encodePathSegments(`/${loc}/${c}/${r.join('/')}`)}`;

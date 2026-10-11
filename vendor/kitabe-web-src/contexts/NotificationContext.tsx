@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { API_BASE_URL } from '../config/api';
 import { useAuth } from './AuthContext';
+import type { Language } from '../config/languages';
 
 export interface Notification {
   id: string;
@@ -33,12 +34,7 @@ export type NotificationType =
   | 'new_contact_form'
   | 'security_alert';
 
-export type MultilingualText = {
-  tr: string;
-  en: string;
-  ru?: string;
-  ar?: string;
-};
+export type MultilingualText = { tr: string; en: string } & Partial<Record<Language, string>>;
 
 interface NotificationContextType {
   notifications: Notification[];

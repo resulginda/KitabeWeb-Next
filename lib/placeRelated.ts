@@ -6,6 +6,7 @@ import {
   type ListingPlace,
 } from './listings';
 import { encodePathSegments } from './detectLocale';
+import { placeSlugPath } from './locales';
 import { pickText, type Locale, type MultilingualText, type SeoPlace } from './places';
 import { getCityFilterChips, type FilterChip } from './taxonomyChips';
 
@@ -61,7 +62,7 @@ function neighborsAfter(list: ListingPlace[], selfId: string, count: number): Li
 }
 
 export async function getPlaceRelated(place: SeoPlace, locale: Locale): Promise<PlaceRelated | null> {
-  const full = place.slug?.[locale];
+  const full = placeSlugPath(place.slug, locale);
   if (!full) return null;
   const slugCity = full.normalize('NFC').split('/')[0];
   if (!slugCity) return null;

@@ -1,4 +1,8 @@
-export type ExploreCityLocale = 'tr' | 'en' | 'ru' | 'ar';
+import { ALL_LANGUAGES, type Language } from './languages';
+
+export type ExploreCityLocale = Language;
+
+const LOCALE_HUB_PATH = new RegExp(`^/(${ALL_LANGUAGES.join('|')})(/|$)`);
 
 export type HeaderLinkId = 'cities' | 'blog' | 'about' | 'contact' | 'suggest';
 
@@ -22,7 +26,7 @@ export const HEADER_LINKS: HeaderLinkConfig[] = [
     id: 'cities',
     labelKey: 'header.cities',
     getHref: (locale) => buildLocaleHubUrl(locale),
-    isActive: (pathname) => /^\/(tr|en|ru|ar)(\/|$)/.test(pathname),
+    isActive: (pathname) => LOCALE_HUB_PATH.test(pathname),
   },
   {
     id: 'blog',

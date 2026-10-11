@@ -19,14 +19,8 @@ import StarRating from '../components/StarRating';
 import { PhotoLightbox } from '../components/PhotoLightbox';
 import { notifyAdminsAndEditorsAboutNewPhoto } from '../services/notificationService';
 import type { Place } from '../types/place';
+import { dateLocale } from '../config/languages';
 import './DetailPage.css';
-
-const DATE_LOCALES: Record<string, string> = {
-  tr: 'tr-TR',
-  en: 'en-US',
-  ru: 'ru-RU',
-  ar: 'ar-SA',
-};
 
 /** Mobil tarayıcı: iOS -> Apple Maps, diger -> OpenStreetMap. */
 function externalMapOpenUrl(lat: number, lng: number, label?: string): string {
@@ -674,7 +668,7 @@ const DetailPage = ({
                         <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
                           {rating.createdAt?.toDate
                             ? new Date(rating.createdAt.toDate()).toLocaleDateString(
-                                DATE_LOCALES[currentLanguage] || 'en-US'
+                                dateLocale(currentLanguage)
                               )
                             : ''}
                         </span>

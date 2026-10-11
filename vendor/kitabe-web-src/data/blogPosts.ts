@@ -1,4 +1,6 @@
-export type BlogLang = 'tr' | 'en' | 'ru' | 'ar';
+import { dateLocale, languageFallbacks, type Language } from '../config/languages';
+
+export type BlogLang = Language;
 
 export type BlogCategoryKey = 'culturalHeritage' | 'travelGuide' | 'tourism' | 'museums';
 
@@ -40,7 +42,9 @@ const BASE: BlogPostBase[] = [
   { id: 'kapadokya-balon-turu', date: '2025-12-05', readMinutes: 6, categoryKey: 'travelGuide' },
 ];
 
-const COPY: Record<BlogPostId, Record<BlogLang, { title: string; excerpt: string; content: string }>> = {
+type BlogCopy = { title: string; excerpt: string; content: string };
+
+const COPY: Record<BlogPostId, Partial<Record<BlogLang, BlogCopy>> & { tr: BlogCopy }> = {
   'kahverengi-tabela-nedir': {
     tr: {
       title: "Türkiye'de Kahverengi Tabela Nedir?",
@@ -486,29 +490,27 @@ A Cappadocia balloon flight is truly unforgettable.`,
   },
 };
 
-const DATE_LOCALES: Record<BlogLang, string> = {
-  tr: 'tr-TR',
-  en: 'en-US',
-  ru: 'ru-RU',
-  ar: 'ar-SA',
-};
-
 export function getBlogDateLocale(lang: BlogLang): string {
-  return DATE_LOCALES[lang] ?? 'en-US';
+  return dateLocale(lang);
+}
+
+function pickCopy(id: BlogPostId, lang: BlogLang): BlogCopy {
+  const copies = COPY[id];
+  for (const l of languageFallbacks(lang)) {
+    const copy = copies[l];
+    if (copy) return copy;
+  }
+  return copies.tr;
 }
 
 export function getBlogPost(id: string, lang: BlogLang): BlogPost | null {
   const base = BASE.find((p) => p.id === id);
-  const copy = COPY[id as BlogPostId]?.[lang] ?? COPY[id as BlogPostId]?.tr;
-  if (!base || !copy) return null;
-  return { ...base, ...copy };
+  if (!base) return null;
+  return { ...base, ...pickCopy(base.id, lang) };
 }
 
 export function getAllBlogPosts(lang: BlogLang): BlogPost[] {
-  return BASE.map((base) => {
-    const copy = COPY[base.id][lang] ?? COPY[base.id].tr;
-    return { ...base, ...copy };
-  });
+  return BASE.map((base) => ({ ...base, ...pickCopy(base.id, lang) }));
 }
 
 export function isBlogPostId(id: string): id is BlogPostId {

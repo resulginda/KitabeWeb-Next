@@ -1,10 +1,7 @@
+import type { Language } from '../config/languages';
+
 // Çok dilli metin tipi
-export type MultilingualText = {
-  tr?: string;
-  en?: string;
-  ru?: string;
-  ar?: string;
-};
+export type MultilingualText = Partial<Record<Language, string>>;
 
 // Yeni hiyerarşik kategori yapısı
 export type CategoryStructure = {

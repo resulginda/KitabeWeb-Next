@@ -117,12 +117,18 @@ export async function notifyAdminsAndEditorsAboutNewPhoto(
     en: 'New Photo Pending',
     ru: 'Новое фото ожидает',
     ar: 'صورة جديدة في الانتظار',
+    de: 'Neues Foto wartet auf Prüfung',
+    es: 'Nueva foto pendiente',
+    ja: '新しい写真が承認待ちです',
   };
   const message: MultilingualText = {
     tr: `${userName} ${getLocalizedText(placeName, 'tr')} için yeni bir fotoğraf yükledi`,
     en: `${userName} uploaded a new photo for ${getLocalizedText(placeName, 'en')}`,
     ru: `${userName} загрузил новое фото для ${getLocalizedText(placeName, 'ru') || getLocalizedText(placeName, 'en')}`,
     ar: `${userName} رفع صورة جديدة لـ ${getLocalizedText(placeName, 'ar') || getLocalizedText(placeName, 'en')}`,
+    de: `${userName} hat ein neues Foto für ${getLocalizedText(placeName, 'de')} hochgeladen`,
+    es: `${userName} subió una nueva foto de ${getLocalizedText(placeName, 'es')}`,
+    ja: `${userName}さんが${getLocalizedText(placeName, 'ja')}の新しい写真をアップロードしました`,
   };
   await sendNotificationToMultipleUsers(
     getToken,
@@ -153,12 +159,18 @@ export async function notifyAdminsAndEditorsAboutNewRating(
     en: 'New Comment Pending',
     ru: 'Новый комментарий ожидает',
     ar: 'تعليق جديد في الانتظار',
+    de: 'Neuer Kommentar wartet auf Prüfung',
+    es: 'Nuevo comentario pendiente',
+    ja: '新しいコメントが承認待ちです',
   };
   const message: MultilingualText = {
     tr: `${userName} ${getLocalizedText(placeName, 'tr')} için yeni bir yorum yazdı`,
     en: `${userName} wrote a new comment for ${getLocalizedText(placeName, 'en')}`,
     ru: `${userName} написал новый комментарий для ${getLocalizedText(placeName, 'ru') || getLocalizedText(placeName, 'en')}`,
     ar: `${userName} كتب تعليقاً جديداً لـ ${getLocalizedText(placeName, 'ar') || getLocalizedText(placeName, 'en')}`,
+    de: `${userName} hat einen neuen Kommentar zu ${getLocalizedText(placeName, 'de')} geschrieben`,
+    es: `${userName} escribió un nuevo comentario sobre ${getLocalizedText(placeName, 'es')}`,
+    ja: `${userName}さんが${getLocalizedText(placeName, 'ja')}に新しいコメントを書きました`,
   };
   await sendNotificationToMultipleUsers(
     getToken,
@@ -184,12 +196,18 @@ export async function notifyUserAboutPhotoApproval(
     en: 'Your Photo Was Approved',
     ru: 'Ваше фото одобрено',
     ar: 'تمت الموافقة على صورتك',
+    de: 'Ihr Foto wurde freigegeben',
+    es: 'Tu foto ha sido aprobada',
+    ja: '写真が承認されました',
   };
   const message: MultilingualText = {
     tr: `${getLocalizedText(placeName, 'tr')} için eklediğiniz fotoğraf onaylandı ve yayınlandı.`,
     en: `Your photo for ${getLocalizedText(placeName, 'en')} has been approved and published.`,
     ru: `Ваше фото для ${getLocalizedText(placeName, 'ru') || getLocalizedText(placeName, 'en')} было одобрено и опубликовано.`,
     ar: `تمت الموافقة على صورتك لـ ${getLocalizedText(placeName, 'ar') || getLocalizedText(placeName, 'en')} ونشرها.`,
+    de: `Ihr Foto für ${getLocalizedText(placeName, 'de')} wurde freigegeben und veröffentlicht.`,
+    es: `Tu foto de ${getLocalizedText(placeName, 'es')} ha sido aprobada y publicada.`,
+    ja: `${getLocalizedText(placeName, 'ja')}に投稿した写真が承認され、公開されました。`,
   };
   await sendNotification(
     getToken,
@@ -215,6 +233,9 @@ export async function notifyUserAboutPhotoRejection(
     en: 'Your Photo Was Rejected',
     ru: 'Ваше фото отклонено',
     ar: 'تم رفض صورتك',
+    de: 'Ihr Foto wurde abgelehnt',
+    es: 'Tu foto ha sido rechazada',
+    ja: '写真は承認されませんでした',
   };
   const reasonText = rejectionReason
     ? {
@@ -222,13 +243,19 @@ export async function notifyUserAboutPhotoRejection(
         en: ` Reason: ${rejectionReason}`,
         ru: ` Причина: ${rejectionReason}`,
         ar: ` السبب: ${rejectionReason}`,
+        de: ` Grund: ${rejectionReason}`,
+        es: ` Motivo: ${rejectionReason}`,
+        ja: ` 理由: ${rejectionReason}`,
       }
-    : { tr: '', en: '', ru: '', ar: '' };
+    : { tr: '', en: '', ru: '', ar: '', de: '', es: '', ja: '' };
   const message: MultilingualText = {
     tr: `${getLocalizedText(placeName, 'tr')} için eklediğiniz fotoğraf reddedildi.${reasonText.tr}`,
     en: `Your photo for ${getLocalizedText(placeName, 'en')} has been rejected.${reasonText.en}`,
     ru: `Ваше фото для ${getLocalizedText(placeName, 'ru') || getLocalizedText(placeName, 'en')} было отклонено.${reasonText.ru}`,
     ar: `تم رفض صورتك لـ ${getLocalizedText(placeName, 'ar') || getLocalizedText(placeName, 'en')}.${reasonText.ar}`,
+    de: `Ihr Foto für ${getLocalizedText(placeName, 'de')} wurde abgelehnt.${reasonText.de}`,
+    es: `Tu foto de ${getLocalizedText(placeName, 'es')} ha sido rechazada.${reasonText.es}`,
+    ja: `${getLocalizedText(placeName, 'ja')}に投稿した写真は承認されませんでした。${reasonText.ja}`,
   };
   await sendNotification(
     getToken,
@@ -254,12 +281,18 @@ export async function notifyUserAboutRatingApproval(
     en: 'Your Comment Was Approved',
     ru: 'Ваш комментарий одобрен',
     ar: 'تمت الموافقة على تعليقك',
+    de: 'Ihr Kommentar wurde freigegeben',
+    es: 'Tu comentario ha sido aprobado',
+    ja: 'コメントが承認されました',
   };
   const message: MultilingualText = {
     tr: `${getLocalizedText(placeName, 'tr')} için yazdığınız yorum onaylandı ve yayınlandı.`,
     en: `Your comment for ${getLocalizedText(placeName, 'en')} has been approved and published.`,
     ru: `Ваш комментарий для ${getLocalizedText(placeName, 'ru') || getLocalizedText(placeName, 'en')} был одобрен и опубликован.`,
     ar: `تمت الموافقة على تعليقك لـ ${getLocalizedText(placeName, 'ar') || getLocalizedText(placeName, 'en')} ونشره.`,
+    de: `Ihr Kommentar zu ${getLocalizedText(placeName, 'de')} wurde freigegeben und veröffentlicht.`,
+    es: `Tu comentario sobre ${getLocalizedText(placeName, 'es')} ha sido aprobado y publicado.`,
+    ja: `${getLocalizedText(placeName, 'ja')}へのコメントが承認され、公開されました。`,
   };
   await sendNotification(
     getToken,
@@ -285,6 +318,9 @@ export async function notifyUserAboutRatingRejection(
     en: 'Your Comment Was Rejected',
     ru: 'Ваш комментарий отклонен',
     ar: 'تم رفض تعليقك',
+    de: 'Ihr Kommentar wurde abgelehnt',
+    es: 'Tu comentario ha sido rechazado',
+    ja: 'コメントは承認されませんでした',
   };
   const reasonText = rejectionReason
     ? {
@@ -292,13 +328,19 @@ export async function notifyUserAboutRatingRejection(
         en: ` Reason: ${rejectionReason}`,
         ru: ` Причина: ${rejectionReason}`,
         ar: ` السبب: ${rejectionReason}`,
+        de: ` Grund: ${rejectionReason}`,
+        es: ` Motivo: ${rejectionReason}`,
+        ja: ` 理由: ${rejectionReason}`,
       }
-    : { tr: '', en: '', ru: '', ar: '' };
+    : { tr: '', en: '', ru: '', ar: '', de: '', es: '', ja: '' };
   const message: MultilingualText = {
     tr: `${getLocalizedText(placeName, 'tr')} için yazdığınız yorum reddedildi.${reasonText.tr}`,
     en: `Your comment for ${getLocalizedText(placeName, 'en')} has been rejected.${reasonText.en}`,
     ru: `Ваш комментарий для ${getLocalizedText(placeName, 'ru') || getLocalizedText(placeName, 'en')} был отклонен.${reasonText.ru}`,
     ar: `تم رفض تعليقك لـ ${getLocalizedText(placeName, 'ar') || getLocalizedText(placeName, 'en')}.${reasonText.ar}`,
+    de: `Ihr Kommentar zu ${getLocalizedText(placeName, 'de')} wurde abgelehnt.${reasonText.de}`,
+    es: `Tu comentario sobre ${getLocalizedText(placeName, 'es')} ha sido rechazado.${reasonText.es}`,
+    ja: `${getLocalizedText(placeName, 'ja')}へのコメントは承認されませんでした。${reasonText.ja}`,
   };
   await sendNotification(
     getToken,

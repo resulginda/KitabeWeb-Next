@@ -1,3 +1,5 @@
+import { isEnabledLanguage } from '../config/languages';
+
 const SITE = 'https://kitabe.org';
 
 /** SPA uygulama rotaları — indexlenmemeli */
@@ -45,7 +47,7 @@ export function spaSeoForPath(pathname: string, locale: string): {
   canonical?: string;
 } {
   if (NOINDEX_EXACT.has(pathname)) {
-    const loc = locale === 'tr' || locale === 'en' || locale === 'ru' || locale === 'ar' ? locale : 'tr';
+    const loc = isEnabledLanguage(locale) ? locale : 'tr';
     return {
       noindex: true,
       canonical: CANONICAL_HUB[pathname] ? `${SITE}/${loc}` : undefined,
