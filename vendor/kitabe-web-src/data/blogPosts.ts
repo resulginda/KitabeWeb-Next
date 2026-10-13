@@ -114,6 +114,21 @@ These signs help both tourists and locals explore cultural heritage and support 
 
 تساعد هذه اللوحات السياح والسكان المحليين على استكشاف التراث الثقافي وتدعم السياحة الثقافية.`,
     },
+    ja: {
+      title: 'トルコの茶色い道路標識とは？',
+      excerpt: '茶色の標識は、トルコ全国の歴史的・文化的名所を示しています。その意味や歴史、そして旅行者にとって重要な理由について学びましょう。',
+      content: '茶色の道路標識は、トルコの歴史的および文化的スポットを指し示す特別な交通標識です。ドライバーや乗客が近くの遺産を発見するのに役立ちます。\n\nこのシステムは1960年代にヨーロッパで始まり、1980年代以降トルコでも一般的になりました。茶色は自然遺産と文化遺産を象徴しています。\n\nトルコでは、茶色の標識は通常以下の場所を示しています：\n- 歴史的なモスクや教会\n- 博物館や遺跡\n- 古代都市や城\n- 自然の驚異や国立公園\n- 伝統的な村や文化的エリア\n\nこれらの標識は、観光客と地元住民の両方が文化遺産を探索し、文化観光を支援するのに役立ちます。',
+    },
+    de: {
+      title: 'Was bedeuten braune Hinweisschilder in der Türkei?',
+      excerpt: 'Braune Schilder kennzeichnen historische und kulturelle Stätten in der ganzen Türkei. Erfahren Sie, was sie bedeuten, welche Geschichte sie haben und warum sie für Reisende wichtig sind.',
+      content: 'Braune Verkehrsschilder sind spezielle Schilder, die auf historische und kulturelle Orte in der Türkei hinweisen. Sie helfen Fahrern und Passagieren dabei, nahegelegene Kulturerbestätten zu entdecken.\n\nDas System geht in Europa auf die 1960er Jahre zurück und ist in der Türkei seit den 1980er Jahren verbreitet. Braun steht dabei für Natur- und Kulturerbe.\n\nIn der Türkei kennzeichnen braune Schilder in der Regel:\n- Historische Moscheen und Kirchen\n- Museen und archäologische Stätten\n- Antike Städte und Burgen\n- Naturwunder und Nationalparks\n- Traditionelle Dörfer und Kulturlandschaften\n\nDiese Schilder helfen sowohl Touristen als auch Einheimischen dabei, das Kulturerbe zu erkunden, und fördern den Kulturtourismus.',
+    },
+    es: {
+      title: '¿Qué son las señales de tráfico marrones en Turquía?',
+      excerpt: 'Las señales marrones marcan sitios históricos y culturales en toda Turquía. Conozca qué significan, su historia y por qué son importantes para los viajeros.',
+      content: 'Las señales de tráfico marrones son señales especiales que indican lugares históricos y culturales en Turquía. Ayudan a los conductores y pasajeros a descubrir los sitios patrimoniales cercanos.\n\nEl sistema se remonta a la década de 1960 en Europa y se generalizó en Turquía a partir de la década de 1980. El marrón representa el patrimonio natural y cultural.\n\nEn Turquía, las señales marrones suelen marcar:\n- Mezquitas e iglesias históricas\n- Museos y yacimientos arqueológicos\n- Ciudades antiguas y castillos\n- Maravillas naturales y parques nacionales\n- Pueblos tradicionales y zonas culturales\n\nEstas señales ayudan tanto a los turistas como a los lugareños a explorar el patrimonio cultural y apoyan el turismo cultural.',
+    },
   },
   'beypazari-gezilecek-yerler': {
     tr: {
@@ -176,6 +191,21 @@ Ideal for a day trip from Ankara.`,
 
 مثالية لرحلة يومية من أنقرة.`,
     },
+    de: {
+      title: 'Beypazarı-Reiseführer: Sehenswürdigkeiten',
+      excerpt: 'Der historische Bezirk Beypazarı in der Nähe von Ankara ist berühmt für osmanische Häuser, Handwerkskunst und die lokale Küche.',
+      content: 'Beypazarı ist ein historischer Bezirk von Ankara, der für seine traditionelle Architektur, sein Kunsthandwerk und seine lokale Küche bekannt ist. Seine Häuser aus der osmanischen Ära und die engen Gassen verzaubern die Besucher.\n\nSehenswürdigkeiten:\n1. Historische Häuser\n2. Beypazarı-Museum\n3. İnözü-Tal\n4. Werkstätten für traditionelles Handwerk\n5. Lokale Köstlichkeiten (Karotten-Delikatesse, Walnusswurst)\n\nIdeal für einen Tagesausflug von Ankara.',
+    },
+    es: {
+      title: 'Guía de viaje de Beypazarı: Lugares para visitar',
+      excerpt: 'El distrito histórico de Beypazarı, cerca de Ankara, es famoso por sus casas otomanas, su artesanía y su cocina local.',
+      content: 'Beypazarı es un distrito histórico de Ankara conocido por su arquitectura tradicional, su artesanía y su gastronomía local. Sus casas de la época otomana y sus calles estrechas encantan a los visitantes.\n\nLugares que no debe perderse:\n1. Casas históricas\n2. Museo de Beypazarı\n3. Valle de İnözü\n4. Talleres de artesanía tradicional\n5. Delicias locales (delicia de zanahoria, salchicha de nuez)\n\nIdeal para una excursión de un día desde Ankara.',
+    },
+    ja: {
+      title: 'ベイパザル旅行ガイド：見どころ',
+      excerpt: 'アンカラ近郊のベイパザルの歴史地区は、オスマン帝国の家屋、工芸品、郷土料理で有名です。',
+      content: 'ベイパザルは、伝統的な建築、手工芸品、地元の食文化で知られるアンカラの歴史地区です。オスマン帝国時代の家々と狭い路地が訪れる人々を魅了します。\n\n必見のスポット：\n1. 歴史的な家屋\n2. ベイパザル博物館\n3. イノズ渓谷\n4. 伝統工芸の工房\n5. 名物料理（ニンジンのお菓子、クルミのソーセージ）\n\nアンカラからの日帰り旅行に最適です。',
+    },
   },
   'unesco-alanlari-turkiye': {
     tr: {
@@ -216,6 +246,21 @@ These sites bring global recognition to Turkey's rich heritage.`,
 من أبرزها: المناطق التاريخية في إسطنبول، غوريمه وكابادوكيا، هيرابوليس-باموكالي، أفسس، غوبكلي تيبه وجامع السليمية.
 
 تمنح هذه المواقع اعترافاً عالمياً بثراء تركيا الثقافي.`,
+    },
+    de: {
+      title: 'Die UNESCO-Welterbestätten in der Türkei',
+      excerpt: 'Die Türkei ist mit 19 Stätten auf der UNESCO-Welterbeliste vertreten.',
+      content: 'Die Türkei hat 19 Einträge auf der UNESCO-Welterbeliste — herausragende Kultur- und Naturschätze der Menschheit.\n\nZu den Höhepunkten gehören die historischen Bereiche von Istanbul, Göreme und Kappadokien, Hierapolis-Pamukkale, Ephesos, Göbekli Tepe und die Selimiye-Moschee.\n\nDiese Stätten verschaffen dem reichen Erbe der Türkei weltweite Anerkennung.',
+    },
+    es: {
+      title: 'Sitios Patrimonio de la Humanidad de la UNESCO en Turquía',
+      excerpt: 'Turquía está representada en la Lista del Patrimonio Mundial de la UNESCO con 19 sitios.',
+      content: 'Turquía cuenta con 19 inscripciones en la Lista del Patrimonio Mundial de la UNESCO, que representan destacados tesoros culturales y naturales de la humanidad.\n\nEntre los lugares más destacados se encuentran las Zonas Históricas de Estambul, Göreme y Capadocia, Hierápolis-Pamukkale, Éfeso, Göbekli Tepe y la Mezquita de Selimiye.\n\nEstos sitios otorgan reconocimiento mundial al rico patrimonio de Turquía.',
+    },
+    ja: {
+      title: 'トルコのユネスコ世界遺産',
+      excerpt: 'トルコは19件の遺産でユネスコ世界遺産リストに登録されています。',
+      content: 'トルコには、人類の卓越した文化的・自然的宝物であるユネスコ世界遺産が19件あります。\n\n主なものには、イスタンブールの歴史地区、ギョレメとカッパドキア、ヒエラポリス・パムッカレ、エフェソス、ギョベクリ・テペ、セリミエ・モスクなどがあります。\n\nこれらの遺産は、トルコの豊かな文化遺産を世界に知らしめています。',
     },
   },
   'kulturel-rotalar-nedir': {
@@ -275,6 +320,21 @@ They support tourism and heritage preservation.`,
 
 تدعم السياحة والحفاظ على التراث.`,
     },
+    de: {
+      title: 'Was sind Kulturstraßen? Kulturtourismus in der Türkei',
+      excerpt: 'Kulturstraßen verbinden historische und kulturelle Stätten entlang thematischer Routen.',
+      content: 'Kulturstraßen sind thematische Routen, die Kulturerbestätten miteinander verbinden.\n\nWichtige Routen in der Türkei:\n1. Seidenstraße\n2. Lykischer Weg\n3. Karischer Weg\n4. Phrygischer Weg\n5. Evliya-Çelebi-Weg\n\nSie unterstützen den Tourismus und die Erhaltung des Kulturerbes.',
+    },
+    es: {
+      title: 'Qué son las rutas culturales: Turismo cultural en Turquía',
+      excerpt: 'Las rutas culturales conectan sitios históricos y culturales a lo largo de itinerarios temáticos.',
+      content: 'Las rutas culturales son itinerarios temáticos que enlazan sitios patrimoniales.\n\nPrincipales rutas en Turquía:\n1. Ruta de la Seda\n2. Ruta Licia\n3. Ruta de Caria\n4. Ruta Frigia\n5. Ruta de Evliya Çelebi\n\nApoyan el turismo y la preservación del patrimonio.',
+    },
+    ja: {
+      title: '文化ルートとは？トルコの文化観光',
+      excerpt: '文化ルートは、テーマに沿った旅程で歴史的・文化的名所を結びます。',
+      content: '文化ルートとは、遺産を結ぶテーマ別の旅程です。\n\nトルコの主なルート：\n1. シルクロード\n2. リキアの道\n3. カリアの道\n4. フリギアの道\n5. エヴリヤ・チェレビの道\n\nこれらは観光と文化財の保護をサポートしています。',
+    },
   },
   'hafta-sonu-gunubirlik-gezi': {
     tr: {
@@ -324,6 +384,21 @@ Perfect for weekend getaways.`,
 قرب أنطاليا: سيده، أسپندوس، تيرميسوس
 
 مثالية لعطلات نهاية الأسبوع.`,
+    },
+    de: {
+      title: 'Ideen für Wochenendausflüge: Die verborgenen Schätze der Türkei',
+      excerpt: 'Planen Sie einen kurzen Wochenendausflug? Entdecken Sie Tagesausflugsziele in der ganzen Türkei.',
+      content: 'Die Türkei bietet unzählige historische Optionen für Tagesausflüge.\n\nIn der Nähe von Istanbul: Polonezköy, Şile, Ağva\nIn der Nähe von Ankara: Beypazarı, Gordion, Kızılcahamam\nIn der Nähe von Izmir: Şirince, Birgi, Foça\nIn der Nähe von Antalya: Side, Aspendos, Termessos\n\nPerfekt für Wochenendausflüge.',
+    },
+    es: {
+      title: 'Ideas de excursiones de fin de semana: Las joyas ocultas de Turquía',
+      excerpt: '¿Planeando una escapada corta de fin de semana? Descubra destinos para excursiones de un día en toda Turquía.',
+      content: 'Turquía ofrece innumerables opciones de excursiones históricas de un día.\n\nCerca de Estambul: Polonezköy, Şile, Ağva\nCerca de Ankara: Beypazarı, Gordion, Kızılcahamam\nCerca de Esmirna: Şirince, Birgi, Foça\nCerca de Antalya: Side, Aspendos, Termessos\n\nPerfecto para escapadas de fin de semana.',
+    },
+    ja: {
+      title: '週末の日帰り旅行のアイデア：トルコの隠れた名所',
+      excerpt: '週末の短い逃避行を計画中ですか？トルコ全土の日帰り旅行先を発見しましょう。',
+      content: 'トルコには数え切れないほどの歴史的な日帰り旅行の選択肢があります。\n\nイスタンブール近郊：ポロネズキョイ、シレ、アヴァ\nアンカラ近郊：ベイパザル、ゴルディオン、クルジャハマム\nイズミル近郊：シリンジェ、ビルギ、フォチャ\nアンタルヤ近郊：シデ、アススペンドス、テルメッソス\n\n週末の小旅行に最適です。',
     },
   },
   'tarihi-camiler-turkiye': {
@@ -383,6 +458,21 @@ They showcase masterpieces of Turkish-Islamic architecture.`,
 
 تعرض روائع العمارة التركية الإسلامية.`,
     },
+    de: {
+      title: 'Die wichtigsten historischen Moscheen der Türkei',
+      excerpt: 'Die Türkei beheimatet prächtige Moscheen aus der osmanischen und seldschukischen Ära.',
+      content: 'Bemerkenswerte historische Moscheen:\n1. Hagia-Sophia-Moschee (Istanbul)\n2. Sultan-Ahmed-Moschee (Istanbul)\n3. Süleymaniye-Moschee (Istanbul)\n4. Selimiye-Moschee (Edirne)\n5. Große Moschee (Bursa)\n6. Große Moschee von Divriği (Sivas)\n7. Kocatepe-Moschee (Ankara)\n\nSie präsentieren Meisterwerke der türkisch-islamischen Architektur.',
+    },
+    es: {
+      title: 'Las mezquitas históricas más importantes de Turquía',
+      excerpt: 'Turquía alberga magníficas mezquitas de las épocas otomana y selyúcida.',
+      content: 'Mezquitas históricas destacadas:\n1. Mezquita de Santa Sofía (Estambul)\n2. Mezquita Azul (Estambul)\n3. Mezquita de Solimán (Estambul)\n4. Mezquita de Selimiye (Edirne)\n5. Gran Mezquita (Bursa)\n6. Gran Mezquita de Divriği (Sivas)\n7. Mezquita de Kocatepe (Ankara)\n\nMuestran obras maestras de la arquitectura turco-islámica.',
+    },
+    ja: {
+      title: 'トルコの最も重要な歴史的モスク',
+      excerpt: 'トルコには、壮麗なオスマン帝国およびセルジューク朝時代のモスクがあります。',
+      content: '主な歴史的モスク：\n1. アヤソフィア・モスク（イスタンブール）\n2. スルタンアフメト・モスク（イスタンブール）\n3. スレイマニ耶・モスク（イスタンブール）\n4. セリミエ・モスク（エディルネ）\n5. ウル・ジャミィ（ブルサ）\n6. ディヴリーイの大モスク（スィヴァス）\n7. コジャテペ・モスク（アンカラ）\n\nこれらはトルコ・イスラム建築の傑作を示しています。',
+    },
   },
   'arkeoloji-muzeleri': {
     tr: {
@@ -441,6 +531,21 @@ They present thousands of years of history.`,
 
 تعرض آلاف السنين من التاريخ.`,
     },
+    de: {
+      title: 'Die besten Archäologiemuseen der Türkei',
+      excerpt: 'Die Türkei beherbergt dank ihrer reichen archäologischen Vergangenheit Museen von Weltrang.',
+      content: 'Top-Archäologiemuseen:\n1. Archäologische Museen Istanbul\n2. Museum für anatolische Zivilisationen (Ankara)\n3. Museum von Antalya\n4. Ephesos-Museum\n5. Zeugma-Mosaikmuseum (Gaziantep)\n6. Çorum-Museum\n7. Bergama-Museum\n\nSie präsentieren Jahrtausende der Geschichte.',
+    },
+    es: {
+      title: 'Los mejores museos de arqueología de Turquía',
+      excerpt: 'Turquía alberga museos de talla mundial gracias a su rico pasado arqueológico.',
+      content: 'Principales museos de arqueología:\n1. Museos Arqueológicos de Estambul\n2. Museo de las Civilizaciones Anatolias (Ankara)\n3. Museo de Antalya\n4. Museo de Éfeso\n5. Museo de Mosaicos de Zeugma (Gaziantep)\n6. Museo de Çorum\n7. Museo de Pérgamo\n\nPresentan miles de años de historia.',
+    },
+    ja: {
+      title: 'トルコのベスト考古学博物館',
+      excerpt: 'トルコは豊かな考古学的過去のおかげで、世界クラスの博物館を擁しています。',
+      content: '主要な考古学博物館：\n1. イスタンブール考古学博物館\n2. アナトリア文明博物館（アンカラ）\n3. アンタルヤ博物館\n4. エフェソス博物館\n5. ゼウグマ・モザイク博物館（ガズィアンテプ）\n6. チョルム博物館\n7. ベルガマ博物館\n\nこれらは数千年の歴史を伝えています。',
+    },
   },
   'kapadokya-balon-turu': {
     tr: {
@@ -486,6 +591,21 @@ A Cappadocia balloon flight is truly unforgettable.`,
 4. الحجز: مسبقاً في الصيف
 
 تجربة لا تُنسى في كابادوكيا.`,
+    },
+    de: {
+      title: 'Heißluftballonfahrt in Kappadokien: Ein magisches Erlebnis',
+      excerpt: 'Eine Heißluftballonfahrt über Kappadokien gehört zu den unvergesslichsten Erlebnissen in der Türkei.',
+      content: 'Was Sie über die Kappadokien-Ballonfahrten wissen sollten:\n1. Beste Zeit: Sonnenaufgang\n2. Sicherheit: internationale Standards\n3. Dauer: ca. 1–1,5 Stunden\n4. Buchung: im Sommer frühzeitig reservieren\n\nEine Ballonfahrt in Kappadokien ist ein unvergessliches Erlebnis.',
+    },
+    es: {
+      title: 'Paseo en globo por Capadocia: Una experiencia mágica',
+      excerpt: 'Un paseo en globo aerostático sobre Capadocia es una de las experiencias más inolvidables de Turquía.',
+      content: 'Lo que debe saber sobre los paseos en globo por Capadocia:\n1. Mejor momento: al amanecer\n2. Seguridad: estándares internacionales\n3. Duración: entre 1 y 1,5 horas\n4. Reserva: reserve con antelación en verano\n\nUn vuelo en globo por Capadocia es verdaderamente inolvidable.',
+    },
+    ja: {
+      title: 'カッパドキアの気球ツアー：魔法のような体験',
+      excerpt: 'カッパドキア上空を飛ぶ熱気球の遊覧飛行は、トルコで最も忘れられない体験の一つです。',
+      content: 'カッパドキアの気球ツアーについて知っておくべきこと：\n1. ベストタイミング：日の出\n2. 安全性：国際基準\n3. 所要時間：約1〜1.5時間\n4. 予約：夏季は早めの予約を\n\nカッパドキアでの気球のフライトは、本当に忘れられない体験になります。',
     },
   },
 };
