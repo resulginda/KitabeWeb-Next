@@ -12,6 +12,7 @@
     "start": "node .next/standalone/server.js",
     "start:next": "next start -p ${PORT:-3000}",
     "lint": "next lint",
+    "test:slugs": "npx --yes tsx --test lib/turkishSlug.test.ts",
     "audit-slugs": "node scripts/audit-slugs.mjs",
     "optimize-images": "node scripts/optimize-images.mjs",
     "generate-city-guides": "node scripts/generate-city-guides.mjs",

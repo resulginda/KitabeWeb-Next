@@ -37,10 +37,11 @@ function slugifyAscii(name: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
-/** Bilinmeyen karakterleri tire yapar (bazı locale slug'ları: Sarıyer → sar-yer). */
+/** Bilinmeyen karakterleri tire yapar; ı her zaman i (Sarıyer → sariyer, Aydın → aydin). */
 function slugifyDash(name: string): string {
   return name
     .toLocaleLowerCase('tr-TR')
+    .replace(/ı/g, 'i')
     .replace(/ğ/g, 'g')
     .replace(/ü/g, 'u')
     .replace(/ş/g, 's')

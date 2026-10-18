@@ -14,16 +14,24 @@ const LABELS: Record<AdPosition, string> = {
   'below-content': 'Reklam',
 };
 
+/**
+ * Yan reklamlar dar ekranda display:none iken push → availableWidth=0 hatası.
+ * Genişlik ölçülebilir olana kadar bekler; gizli kalırsa hiç push etmez.
+ */
 export function AdSlot({ position }: { position: AdPosition }) {
   const pushed = useRef(false);
+  const hostRef = useRef<HTMLElement | null>(null);
   const slotId = getAdSlotId(position);
   const clientId = getAdClientId();
 
   useEffect(() => {
     if (!slotId || pushed.current) return;
+    const host = hostRef.current;
+    if (!host) return;
 
-    const pushAd = () => {
+    const tryPush = () => {
       if (pushed.current) return;
+      if (host.offsetWidth < 2 || host.offsetHeight < 2) return;
       try {
         (window.adsbygoogle = window.adsbygoogle || []).push({});
         pushed.current = true;
@@ -32,18 +40,37 @@ export function AdSlot({ position }: { position: AdPosition }) {
       }
     };
 
-    const schedule =
-      typeof window !== 'undefined' && 'requestIdleCallback' in window
-        ? (cb: () => void) => {
-            const id = window.requestIdleCallback(cb, { timeout: 2500 });
-            return () => window.cancelIdleCallback(id);
-          }
-        : (cb: () => void) => {
-            const id = window.setTimeout(cb, 1);
-            return () => window.clearTimeout(id);
-          };
+    tryPush();
+    if (pushed.current) return undefined;
 
-    return schedule(pushAd);
+    const ro =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => tryPush())
+        : null;
+    ro?.observe(host);
+
+    const onResize = () => tryPush();
+    window.addEventListener('resize', onResize);
+
+    let cancelIdle: (() => void) | undefined;
+    const w = window as Window &
+      typeof globalThis & {
+        requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+        cancelIdleCallback?: (id: number) => void;
+      };
+    if (typeof w.requestIdleCallback === 'function') {
+      const id = w.requestIdleCallback(() => tryPush(), { timeout: 2500 });
+      cancelIdle = () => w.cancelIdleCallback?.(id);
+    } else {
+      const id = globalThis.setTimeout(() => tryPush(), 1);
+      cancelIdle = () => globalThis.clearTimeout(id);
+    }
+
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener('resize', onResize);
+      cancelIdle?.();
+    };
   }, [slotId]);
 
   if (!clientId || !slotId) return null;
@@ -52,6 +79,7 @@ export function AdSlot({ position }: { position: AdPosition }) {
 
   return (
     <aside
+      ref={hostRef}
       className={`ad-slot ad-${position}`}
       aria-label="Advertisement"
       data-ad-position={position}

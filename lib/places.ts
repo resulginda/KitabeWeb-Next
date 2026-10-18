@@ -1,5 +1,6 @@
 import { cache } from 'react';
 import { encodePathSegments } from './detectLocale';
+import { slugPathLookupVariants } from './turkishSlug';
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? 'https://api.kitabe.org';
 /** Sunucu tarafı fetch — backend rate-limit bypass (REVALIDATE_SECRET ile aynı) */
@@ -185,19 +186,28 @@ export const resolvePlaceForDetail = cache(async (
   const targetPath = `${city}/${slug}`;
 
   const index = await getPlaceIndex();
+  const pathVariants = new Set(
+    slugPathLookupVariants(targetPath).map((p) => p.normalize('NFC'))
+  );
 
-  // Tam path herhangi bir dilde eşleşirse (index NFD, hedef NFC → iki taraf da NFC)
+  // Tam path + eski bal-kesir / ayd-n biçimleri (index NFD, hedef NFC)
   const entry = index.find((row) =>
-    LOCALES.some((l) => row.slug[l] && row.slug[l].normalize('NFC') === targetPath)
+    LOCALES.some((l) => {
+      const s = row.slug[l];
+      return s && pathVariants.has(s.normalize('NFC'));
+    })
   );
   if (entry) return getPlaceById(entry.id);
 
-  // Yer slug'ı doğru, şehir slug'ı yanlış (örn. /ar/amasya/... → ar/أماسيا/...)
+  // Yer slug'ı doğru (veya eski ı→tire), şehir slug'ı yanlış
+  const placeVariants = new Set(
+    slugPathLookupVariants(slug).map((p) => p.normalize('NFC'))
+  );
   const placeOnly = index.find((row) => {
     const path = row.slug[locale];
     if (!path) return false;
     const parts = path.normalize('NFC').split('/');
-    return parts.length >= 2 && parts.slice(1).join('/') === slug;
+    return parts.length >= 2 && placeVariants.has(parts.slice(1).join('/'));
   });
   if (placeOnly) return getPlaceById(placeOnly.id);
 
