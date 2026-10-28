@@ -40,6 +40,7 @@ import EditorPanelPage from './pages/EditorPanelPage';
 import AdminPanelPage from './pages/AdminPanelPage';
 import AdminPushBroadcastPage from './pages/AdminPushBroadcastPage';
 import AdminPushLogsPage from './pages/AdminPushLogsPage';
+import AdminFacebookSharePage from './pages/AdminFacebookSharePage';
 import AdminContactFormsPage from './pages/AdminContactFormsPage';
 import AdminHubPage from './pages/AdminHubPage';
 import UserManagementPage from './pages/UserManagementPage';
@@ -94,6 +95,7 @@ function AppContent() {
           <Route path="/admin-hub" element={<AdminHubPage />} />
           <Route path="/admin-push" element={<AdminPushBroadcastPage />} />
           <Route path="/admin-push-logs" element={<AdminPushLogsPage />} />
+          <Route path="/admin-facebook-share" element={<AdminFacebookSharePage />} />
           <Route path="/admin-contact-forms" element={<AdminContactFormsPage />} />
           <Route path="/user-management" element={<UserManagementPage />} />
           <Route path="/account-settings" element={<AccountSettingsPage />} />

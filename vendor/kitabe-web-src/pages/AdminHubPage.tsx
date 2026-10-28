@@ -59,6 +59,11 @@ export default function AdminHubPage() {
       { to: '/editor-panel', icon: 'edit_note', label: t('account.editorPanel') },
       { to: '/admin-push', icon: 'campaign', label: t('account.sendBroadcast') },
       { to: '/admin-push-logs', icon: 'history', label: t('account.pushLogs') },
+      {
+        to: '/admin-facebook-share',
+        icon: 'share',
+        label: t('account.facebookShareLogs', 'Facebook Paylaşımları'),
+      },
     ],
     [t, contactFormsCount, pendingRatings.length, pendingSubmissions.length]
   );

@@ -61,6 +61,7 @@ const SPA_FIRST = new Set([
   'admin-hub',
   'admin-push',
   'admin-push-logs',
+  'admin-facebook-share',
   'admin-contact-forms',
   'user-management',
   'account-settings',
