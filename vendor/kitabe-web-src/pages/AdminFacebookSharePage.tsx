@@ -26,40 +26,83 @@ type ShareLogRow = {
 
 type DailyPick = {
   contentDate: string;
-  createdAt?: string;
-  placeIds: string[];
   places: Array<{
     id: string;
     nameTr?: string;
     cityTr?: string | null;
     slotHour?: number | null;
-    placeIndex?: number;
   }>;
 };
 
 type Summary = {
-  days: number;
   byStatus: Array<{ status: string; count: number }>;
-  byLang: Array<{ lang: string; status: string; count: number }>;
-  todaySlots: ShareLogRow[];
-  latestPick: { content_date?: string; place_ids?: string[]; created_at?: string } | null;
 };
 
-const LANGS = ['', 'tr', 'en', 'ru', 'ar'] as const;
-const STATUSES = ['', 'success', 'failed', 'dry_run', 'pending', 'posted'] as const;
+const LANG_FILTERS = [
+  { value: '', label: 'Tümü' },
+  { value: 'tr', label: 'TR' },
+  { value: 'en', label: 'EN' },
+  { value: 'ru', label: 'RU' },
+  { value: 'ar', label: 'AR' },
+] as const;
 
-function statusTone(status?: string) {
+const STATUS_FILTERS = [
+  { value: '', label: 'Hepsi' },
+  { value: 'success', label: 'Başarılı' },
+  { value: 'failed', label: 'Hata' },
+  { value: 'dry_run', label: 'Dry-run' },
+] as const;
+
+function statusMeta(status?: string) {
   const s = String(status || '').toLowerCase();
-  if (s === 'success' || s === 'posted') return { bg: '#ecfdf3', fg: '#166534', label: s || 'ÔÇö' };
-  if (s === 'dry_run') return { bg: '#eff6ff', fg: '#1d4ed8', label: 'dry_run' };
-  if (s === 'failed') return { bg: '#fef2f2', fg: '#991b1b', label: 'failed' };
-  if (s === 'pending') return { bg: '#fff7ed', fg: '#9a3412', label: 'pending' };
-  return { bg: '#f3f4f6', fg: '#374151', label: s || 'ÔÇö' };
+  if (s === 'success' || s === 'posted') {
+    return { label: 'Başarılı', color: '#166534', bg: 'rgba(22, 101, 52, 0.1)' };
+  }
+  if (s === 'failed') {
+    return { label: 'Hata', color: '#991b1b', bg: 'rgba(153, 27, 27, 0.1)' };
+  }
+  if (s === 'dry_run') {
+    return { label: 'Dry-run', color: '#1d4ed8', bg: 'rgba(29, 78, 216, 0.1)' };
+  }
+  if (s === 'pending') {
+    return { label: 'Bekliyor', color: '#9a3412', bg: 'rgba(154, 52, 18, 0.1)' };
+  }
+  return { label: s || '—', color: 'var(--text-secondary)', bg: 'rgba(0,0,0,0.04)' };
 }
 
 function formatDate(value?: string | null) {
-  if (!value) return 'ÔÇö';
+  if (!value) return '—';
   return new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+function FilterChip({
+  active,
+  label,
+  onClick,
+}: {
+  active: boolean;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        border: active ? '1px solid var(--primary, #8b6914)' : '1px solid var(--border, #e8e0d4)',
+        background: active ? 'var(--primary, #8b6914)' : 'transparent',
+        color: active ? '#fff' : 'var(--text-secondary)',
+        borderRadius: 999,
+        padding: '6px 12px',
+        fontSize: '0.8125rem',
+        fontWeight: 600,
+        cursor: 'pointer',
+        lineHeight: 1.2,
+      }}
+    >
+      {label}
+    </button>
+  );
 }
 
 export default function AdminFacebookSharePage() {
@@ -73,7 +116,6 @@ export default function AdminFacebookSharePage() {
   const [error, setError] = useState<string | null>(null);
   const [lang, setLang] = useState('');
   const [status, setStatus] = useState('');
-  const [contentDate, setContentDate] = useState('');
   const [selected, setSelected] = useState<ShareLogRow | null>(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [detailError, setDetailError] = useState<string | null>(null);
@@ -82,23 +124,22 @@ export default function AdminFacebookSharePage() {
     const q = new URLSearchParams({ limit: '100' });
     if (lang) q.set('lang', lang);
     if (status) q.set('status', status);
-    if (contentDate) q.set('content_date', contentDate);
     return q.toString();
-  }, [lang, status, contentDate]);
+  }, [lang, status]);
 
   const load = useCallback(async () => {
     if (kullanici?.rol !== 'admin') return;
     setError(null);
     const token = await getToken();
     if (!token) {
-      setError('Oturum bulunamad─▒.');
+      setError('Oturum bulunamadı.');
       setLogs([]);
       return;
     }
     const headers = { Authorization: `Bearer ${token}` };
     const [logsRes, picksRes, summaryRes] = await Promise.all([
       fetch(`${API_BASE_URL}/api/admin/facebook-share/logs?${queryString}`, { headers }),
-      fetch(`${API_BASE_URL}/api/admin/facebook-share/daily-picks?limit=10`, { headers }),
+      fetch(`${API_BASE_URL}/api/admin/facebook-share/daily-picks?limit=5`, { headers }),
       fetch(`${API_BASE_URL}/api/admin/facebook-share/summary?days=7`, { headers }),
     ]);
     const logsData = await logsRes.json().catch(() => ({}));
@@ -106,18 +147,15 @@ export default function AdminFacebookSharePage() {
     const summaryData = await summaryRes.json().catch(() => ({}));
 
     if (!logsRes.ok || !logsData.success) {
-      setError(logsData.message || `Log iste─şi ba┼şar─▒s─▒z (${logsRes.status})`);
+      setError(logsData.message || `Log isteği başarısız (${logsRes.status})`);
       setLogs([]);
+      setTotal(0);
     } else {
       setLogs(Array.isArray(logsData.data) ? logsData.data : []);
       setTotal(Number(logsData.total || 0));
     }
-    if (picksRes.ok && picksData.success) {
-      setPicks(Array.isArray(picksData.data) ? picksData.data : []);
-    }
-    if (summaryRes.ok && summaryData.success) {
-      setSummary(summaryData.data as Summary);
-    }
+    setPicks(picksRes.ok && picksData.success && Array.isArray(picksData.data) ? picksData.data : []);
+    setSummary(summaryRes.ok && summaryData.success ? (summaryData.data as Summary) : null);
   }, [getToken, kullanici?.rol, queryString]);
 
   useEffect(() => {
@@ -129,7 +167,7 @@ export default function AdminFacebookSharePage() {
     async (id: number) => {
       const token = await getToken();
       if (!token) {
-        setDetailError('Oturum bulunamad─▒.');
+        setDetailError('Oturum bulunamadı.');
         return;
       }
       setDetailLoading(true);
@@ -141,7 +179,7 @@ export default function AdminFacebookSharePage() {
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.success || !data.data) {
-          setDetailError(data.message || `Detay al─▒namad─▒ (${res.status})`);
+          setDetailError(data.message || `Detay alınamadı (${res.status})`);
           return;
         }
         setSelected(data.data as ShareLogRow);
@@ -154,35 +192,40 @@ export default function AdminFacebookSharePage() {
 
   if (kullanici?.rol !== 'admin') return <Navigate to="/account" replace />;
 
+  const statusRows = (summary?.byStatus || []).filter((r) => r.status && Number(r.count) > 0);
+  const latestPick = picks.find((p) => Array.isArray(p.places) && p.places.length > 0) || null;
+  const showEmpty = !loading && !error && logs.length === 0;
+
   return (
     <PageShell
-      title={t('account.facebookShareLogs', 'Facebook Payla┼ş─▒mlar─▒')}
+      title={t('account.facebookShareLogs', 'Facebook Paylaşımları')}
       backTo="/admin-hub"
       className="kb-page-wide"
     >
-      <div className="kb-admin-toolbar" style={{ flexWrap: 'wrap', gap: 8 }}>
-        <select value={lang} onChange={(e) => setLang(e.target.value)} aria-label="Dil">
-          {LANGS.map((l) => (
-            <option key={l || 'all'} value={l}>
-              {l ? l.toUpperCase() : 'T├╝m diller'}
-            </option>
+      <div className="kb-admin-toolbar" style={{ flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {LANG_FILTERS.map((item) => (
+            <FilterChip
+              key={item.value || 'all-lang'}
+              active={lang === item.value}
+              label={item.label}
+              onClick={() => setLang(item.value)}
+            />
           ))}
-        </select>
-        <select value={status} onChange={(e) => setStatus(e.target.value)} aria-label="Durum">
-          {STATUSES.map((s) => (
-            <option key={s || 'all'} value={s}>
-              {s || 'T├╝m durumlar'}
-            </option>
+        </div>
+        <div style={{ width: 1, height: 22, background: 'var(--border, #e8e0d4)' }} />
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {STATUS_FILTERS.map((item) => (
+            <FilterChip
+              key={item.value || 'all-status'}
+              active={status === item.value}
+              label={item.label}
+              onClick={() => setStatus(item.value)}
+            />
           ))}
-        </select>
-        <input
-          type="date"
-          value={contentDate}
-          onChange={(e) => setContentDate(e.target.value)}
-          aria-label="─░├ğerik tarihi"
-        />
-        <span style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-          {total} kay─▒t
+        </div>
+        <span style={{ marginLeft: 'auto', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          {total} kayıt
         </span>
         <button type="button" onClick={load}>
           <span className="material-icons" style={{ fontSize: 18 }}>
@@ -192,54 +235,63 @@ export default function AdminFacebookSharePage() {
         </button>
       </div>
 
-      {summary ? (
+      {statusRows.length > 0 ? (
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-            gap: 10,
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 8,
             marginBottom: 'var(--gap-md)',
           }}
         >
-          {(summary.byStatus || []).map((row) => {
-            const tone = statusTone(row.status);
+          {statusRows.map((row) => {
+            const meta = statusMeta(row.status);
             return (
               <div
                 key={row.status}
                 style={{
-                  background: tone.bg,
-                  color: tone.fg,
-                  borderRadius: 12,
-                  padding: '10px 12px',
-                  fontSize: '0.875rem',
+                  background: meta.bg,
+                  color: meta.color,
+                  borderRadius: 10,
+                  padding: '8px 12px',
+                  fontSize: '0.8125rem',
+                  fontWeight: 600,
+                  minWidth: 88,
                 }}
               >
-                <div style={{ fontWeight: 700 }}>{tone.label}</div>
-                <div>{row.count}</div>
+                <div style={{ opacity: 0.85, fontWeight: 500 }}>{meta.label}</div>
+                <div style={{ fontSize: '1.125rem', marginTop: 2 }}>{row.count}</div>
               </div>
             );
           })}
         </div>
       ) : null}
 
-      {picks[0] ? (
+      {latestPick ? (
         <div
           style={{
-            background: 'var(--surface, #fff)',
-            border: '1px solid var(--border, #e5e7eb)',
+            border: '1px solid var(--border, #e8e0d4)',
             borderRadius: 14,
-            padding: 14,
+            padding: '14px 16px',
             marginBottom: 'var(--gap-md)',
+            background: 'var(--surface, #fff)',
           }}
         >
-          <div style={{ fontWeight: 700, marginBottom: 8 }}>
-            G├╝nl├╝k se├ğim ┬À {picks[0].contentDate}
+          <div style={{ fontWeight: 700, marginBottom: 8, color: 'var(--text-primary)' }}>
+            Bugünün seçimi · {latestPick.contentDate}
           </div>
           <div style={{ display: 'grid', gap: 6 }}>
-            {picks[0].places.map((p) => (
-              <div key={`${p.id}-${p.slotHour}`} style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                @{p.slotHour}:00 ÔÇö {p.nameTr || p.id}
-                {p.cityTr ? ` ┬À ${p.cityTr}` : ''}
+            {latestPick.places.map((p) => (
+              <div
+                key={`${p.id}-${p.slotHour}`}
+                style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}
+              >
+                <strong style={{ color: 'var(--text-primary)', fontWeight: 600 }}>
+                  {p.slotHour ?? '—'}:00
+                </strong>
+                {' — '}
+                {p.nameTr || p.id}
+                {p.cityTr ? ` · ${p.cityTr}` : ''}
               </div>
             ))}
           </div>
@@ -252,13 +304,17 @@ export default function AdminFacebookSharePage() {
         </div>
       ) : null}
       {error ? <p style={{ color: '#b91c1c', marginBottom: 'var(--gap-md)' }}>{error}</p> : null}
-      {!loading && !error && logs.length === 0 ? (
-        <PageEmpty icon="share" title="Hen├╝z Facebook payla┼ş─▒m kayd─▒ yok." />
+      {showEmpty ? (
+        <PageEmpty
+          icon="share"
+          title="Henüz Facebook paylaşımı yok."
+          subtitle="n8n Daily Share ilk canlı slotları atınca kayıtlar burada listelenir."
+        />
       ) : null}
 
       <div className="kb-log-list">
         {logs.map((log) => {
-          const tone = statusTone(log.status);
+          const meta = statusMeta(log.status);
           return (
             <button
               key={log.id}
@@ -266,30 +322,40 @@ export default function AdminFacebookSharePage() {
               className="kb-log-card"
               onClick={() => openDetail(log.id)}
             >
-              <div className="kb-log-card-date">{formatDate(log.attempted_at)}</div>
-              <div className="kb-log-card-meta">
-                {(log.lang || '?').toUpperCase()} ┬À slot {log.slot_hour ?? 'ÔÇö'} ┬À {log.content_date || 'ÔÇö'}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  gap: 12,
+                  alignItems: 'center',
+                }}
+              >
+                <div className="kb-log-card-date">{formatDate(log.attempted_at)}</div>
                 <span
                   style={{
-                    marginLeft: 8,
-                    background: tone.bg,
-                    color: tone.fg,
+                    background: meta.bg,
+                    color: meta.color,
                     borderRadius: 999,
-                    padding: '2px 8px',
+                    padding: '3px 10px',
                     fontSize: '0.75rem',
                     fontWeight: 700,
+                    whiteSpace: 'nowrap',
                   }}
                 >
-                  {tone.label}
+                  {meta.label}
                 </span>
               </div>
+              <div className="kb-log-card-meta">
+                {(log.lang || '?').toUpperCase()} · {log.slot_hour ?? '—'}:00 ·{' '}
+                {log.content_date || '—'}
+              </div>
               <div className="kb-log-card-title">
-                {log.place_name_tr || log.place_id || 'ÔÇö'}
-                {log.city_tr ? ` ┬À ${log.city_tr}` : ''}
+                {log.place_name_tr || log.place_id || '—'}
+                {log.city_tr ? ` · ${log.city_tr}` : ''}
               </div>
               {log.place_url ? <div className="kb-log-card-meta">{log.place_url}</div> : null}
               {log.facebook_post_id ? (
-                <div className="kb-log-card-meta">Post: {log.facebook_post_id}</div>
+                <div className="kb-log-card-meta">Post ID: {log.facebook_post_id}</div>
               ) : null}
               {log.error ? (
                 <div className="kb-log-card-body" style={{ color: '#991b1b' }}>
@@ -298,7 +364,7 @@ export default function AdminFacebookSharePage() {
               ) : log.message_preview ? (
                 <div className="kb-log-card-body">{String(log.message_preview).slice(0, 160)}</div>
               ) : null}
-              <div className="kb-log-card-footer">Detay i├ğin t─▒kla ÔåÆ</div>
+              <div className="kb-log-card-footer">Detay için tıkla →</div>
             </button>
           );
         })}
@@ -315,58 +381,58 @@ export default function AdminFacebookSharePage() {
         >
           <div
             className="kb-settings-modal"
-            style={{ maxWidth: 900, maxHeight: '85vh', overflowY: 'auto' }}
+            style={{ maxWidth: 720, maxHeight: '85vh', overflowY: 'auto' }}
             onClick={(e) => e.stopPropagation()}
           >
-            <h2>Facebook Payla┼ş─▒m Detay─▒</h2>
-            {detailLoading ? <p>Detay y├╝kleniyor...</p> : null}
+            <h2>Paylaşım detayı</h2>
+            {detailLoading ? <p>Yükleniyor…</p> : null}
             {detailError ? <p style={{ color: '#b91c1c' }}>{detailError}</p> : null}
-            {selected && (
-              <>
-                <p>
-                  <strong>Durum:</strong> {selected.status} ┬À{' '}
-                  <strong>Dil:</strong> {(selected.lang || '').toUpperCase()} ┬À{' '}
-                  <strong>Slot:</strong> {selected.slot_hour ?? 'ÔÇö'}
+            {selected ? (
+              <div style={{ display: 'grid', gap: 10, fontSize: '0.9375rem' }}>
+                <p style={{ margin: 0 }}>
+                  <strong>Durum:</strong> {statusMeta(selected.status).label}
+                  {' · '}
+                  <strong>Dil:</strong> {(selected.lang || '').toUpperCase()}
+                  {' · '}
+                  <strong>Slot:</strong> {selected.slot_hour ?? '—'}:00
                 </p>
-                <p>
+                <p style={{ margin: 0 }}>
                   <strong>Yer:</strong> {selected.place_name_tr || selected.place_id}
                 </p>
-                <p>
+                <p style={{ margin: 0 }}>
                   <strong>URL:</strong>{' '}
                   {selected.place_url ? (
                     <a href={selected.place_url} target="_blank" rel="noreferrer">
                       {selected.place_url}
                     </a>
                   ) : (
-                    'ÔÇö'
+                    '—'
                   )}
                 </p>
-                <p>
-                  <strong>Deneme:</strong> {formatDate(selected.attempted_at)} ┬À{' '}
-                  <strong>Posted:</strong> {formatDate(selected.posted_at)}
+                <p style={{ margin: 0 }}>
+                  <strong>Deneme:</strong> {formatDate(selected.attempted_at)}
+                  {' · '}
+                  <strong>Yayın:</strong> {formatDate(selected.posted_at)}
                 </p>
-                <p>
-                  <strong>Page ID:</strong> {selected.facebook_page_id || 'ÔÇö'}
+                <p style={{ margin: 0 }}>
+                  <strong>Page ID:</strong> {selected.facebook_page_id || '—'}
                 </p>
-                <p>
-                  <strong>Post ID:</strong> {selected.facebook_post_id || 'ÔÇö'}
+                <p style={{ margin: 0 }}>
+                  <strong>Post ID:</strong> {selected.facebook_post_id || '—'}
                 </p>
-                <p>
-                  <strong>content_date:</strong> {selected.content_date || 'ÔÇö'} ┬À{' '}
-                  <strong>run_id:</strong> {selected.run_id || 'ÔÇö'}
+                <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.8125rem' }}>
+                  content_date: {selected.content_date || '—'} · run_id: {selected.run_id || '—'}
                 </p>
                 {selected.message_preview ? (
-                  <p style={{ whiteSpace: 'pre-wrap' }}>
-                    <strong>Mesaj:</strong> {selected.message_preview}
-                  </p>
+                  <p style={{ margin: 0, whiteSpace: 'pre-wrap' }}>{selected.message_preview}</p>
                 ) : null}
                 {selected.error ? (
-                  <p style={{ whiteSpace: 'pre-wrap', color: '#991b1b' }}>
-                    <strong>Hata:</strong> {selected.error}
+                  <p style={{ margin: 0, whiteSpace: 'pre-wrap', color: '#991b1b' }}>
+                    {selected.error}
                   </p>
                 ) : null}
-              </>
-            )}
+              </div>
+            ) : null}
             <div className="kb-settings-modal-actions">
               <button
                 type="button"
