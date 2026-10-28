@@ -75,6 +75,13 @@ function formatDate(value?: string | null) {
   return new Date(value).toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
 }
 
+function readableError(message?: string) {
+  if (!message || /[\u2500-\u259FÃÂÅ]/.test(message)) {
+    return 'Paylaşım kayıtları yüklenemedi.';
+  }
+  return message;
+}
+
 function FilterChip({
   active,
   label,
@@ -85,21 +92,7 @@ function FilterChip({
   onClick: () => void;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      style={{
-        border: active ? '1px solid var(--primary, #8b6914)' : '1px solid var(--border, #e8e0d4)',
-        background: active ? 'var(--primary, #8b6914)' : 'transparent',
-        color: active ? '#fff' : 'var(--text-secondary)',
-        borderRadius: 999,
-        padding: '6px 12px',
-        fontSize: '0.8125rem',
-        fontWeight: 600,
-        cursor: 'pointer',
-        lineHeight: 1.2,
-      }}
-    >
+    <button type="button" className={`kb-fb-chip${active ? ' is-active' : ''}`} onClick={onClick}>
       {label}
     </button>
   );
@@ -147,7 +140,8 @@ export default function AdminFacebookSharePage() {
     const summaryData = await summaryRes.json().catch(() => ({}));
 
     if (!logsRes.ok || !logsData.success) {
-      setError(logsData.message || `Log isteği başarısız (${logsRes.status})`);
+      const detail = logsData.detail ? ` (${logsData.detail})` : '';
+      setError(`${readableError(logsData.message)}${detail}`);
       setLogs([]);
       setTotal(0);
     } else {
@@ -202,8 +196,8 @@ export default function AdminFacebookSharePage() {
       backTo="/admin-hub"
       className="kb-page-wide"
     >
-      <div className="kb-admin-toolbar" style={{ flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+      <div className="kb-fb-bar">
+        <div className="kb-fb-chips">
           {LANG_FILTERS.map((item) => (
             <FilterChip
               key={item.value || 'all-lang'}
@@ -213,8 +207,7 @@ export default function AdminFacebookSharePage() {
             />
           ))}
         </div>
-        <div style={{ width: 1, height: 22, background: 'var(--border, #e8e0d4)' }} />
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+        <div className="kb-fb-chips">
           {STATUS_FILTERS.map((item) => (
             <FilterChip
               key={item.value || 'all-status'}
@@ -224,15 +217,15 @@ export default function AdminFacebookSharePage() {
             />
           ))}
         </div>
-        <span style={{ marginLeft: 'auto', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-          {total} kayıt
-        </span>
-        <button type="button" onClick={load}>
-          <span className="material-icons" style={{ fontSize: 18 }}>
-            refresh
-          </span>
-          Yenile
-        </button>
+        <span className="kb-fb-count">{total} kayıt</span>
+        <div className="kb-admin-toolbar" style={{ marginBottom: 0 }}>
+          <button type="button" onClick={load}>
+            <span className="material-icons" style={{ fontSize: 18 }}>
+              refresh
+            </span>
+            Yenile
+          </button>
+        </div>
       </div>
 
       {statusRows.length > 0 ? (
@@ -303,7 +296,7 @@ export default function AdminFacebookSharePage() {
           <div className="spinner" />
         </div>
       ) : null}
-      {error ? <p style={{ color: '#b91c1c', marginBottom: 'var(--gap-md)' }}>{error}</p> : null}
+      {error ? <p className="kb-fb-error">{error}</p> : null}
       {showEmpty ? (
         <PageEmpty
           icon="share"
