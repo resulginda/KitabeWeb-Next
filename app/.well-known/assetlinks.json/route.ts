@@ -16,10 +16,8 @@ export const dynamic = 'force-static';
 export function GET() {
   const body = [
     {
-      relation: [
-        'delegate_permission/common.handle_all_urls',
-        'delegate_permission/common.get_login_creds',
-      ],
+      // Sadece App Links; password manager ilişkisi Play doğrulamasını gereksiz yere zorlar.
+      relation: ['delegate_permission/common.handle_all_urls'],
       target: {
         namespace: 'android_app',
         package_name: 'com.kitabeapp',

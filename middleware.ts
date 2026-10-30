@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { LEGACY_LEGAL_REDIRECTS } from '@/lib/legal/types';
 import { isBlockedBot } from '@/lib/blockedBots';
+import { isBlockedScraperIp } from '@/lib/blockedScrapers';
 
 const LONG_CACHE = 'public, max-age=31536000, immutable';
 const LOCALES = ['tr', 'en', 'ru', 'ar'];
@@ -168,7 +169,25 @@ function logRequest(request: NextRequest, pathname: string) {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const host = (request.headers.get('host') || request.nextUrl.host || '')
+    .split(':')[0]
+    .toLowerCase();
+
+  // www → apex (Android App Links assetlinks www'de 404 olmasın / tek host)
+  if (host === 'www.kitabe.org') {
+    const url = request.nextUrl.clone();
+    url.hostname = 'kitabe.org';
+    url.protocol = 'https:';
+    return NextResponse.redirect(url, 301);
+  }
+
   logRequest(request, pathname);
+
+  const ip = clientIp(request);
+  // Singapur/Asya bulut scraper IP'leri (Facebook crawler hariç)
+  if (pathname !== '/robots.txt' && isBlockedScraperIp(ip)) {
+    return new NextResponse(null, { status: 403, headers: { 'Cache-Control': 'no-store' } });
+  }
 
   // robots.txt açık kalır ki botlar yasağı okuyabilsin
   if (pathname !== '/robots.txt' && isBlockedBot(request.headers.get('user-agent'))) {

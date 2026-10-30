@@ -16,6 +16,12 @@ export const BLOCKED_BOTS = [
   'PetalBot',
   'DataForSeoBot',
   'BLEXBot',
+  'Baiduspider',
+  'YandexBot',
+  'Sogou',
+  'Scrapy',
+  'python-requests',
+  'Go-http-client',
 ];
 
 const BLOCKED_UA = new RegExp(BLOCKED_BOTS.join('|'), 'i');
