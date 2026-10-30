@@ -169,17 +169,6 @@ function logRequest(request: NextRequest, pathname: string) {
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const host = (request.headers.get('host') || request.nextUrl.host || '')
-    .split(':')[0]
-    .toLowerCase();
-
-  // www → apex (Android App Links assetlinks www'de 404 olmasın / tek host)
-  if (host === 'www.kitabe.org') {
-    const url = request.nextUrl.clone();
-    url.hostname = 'kitabe.org';
-    url.protocol = 'https:';
-    return NextResponse.redirect(url, 301);
-  }
 
   logRequest(request, pathname);
 
