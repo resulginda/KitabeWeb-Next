@@ -44,6 +44,10 @@ const CIDR_LIST = [
   '101.44.0.0/16',
   '190.92.0.0/16',
   '124.243.128.0/17',
+  // 2026-10-31: Chrome/116 ile RU sayfa tarayan Asya/SG scraper (GA4'te Singapore)
+  '43.173.0.0/16',
+  // Aynı oturumda yoğun sahte-Chrome tarama
+  '93.123.109.0/24',
 ].map((c) => parseCidr(c, c)).filter((c): c is Cidr => !!c);
 
 export function isBlockedScraperIp(ip: string | null | undefined): boolean {
