@@ -15,7 +15,7 @@ export function syncWebGaOptOut(role?: string | null): void {
   } catch {
     // ignore
   }
-  const w = window as Window & Record<string, boolean> & { gtag?: (...args: unknown[]) => void };
+  const w = window as unknown as Window & Record<string, boolean> & { gtag?: (...args: unknown[]) => void };
   w[`ga-disable-${GA_ID}`] = optOut;
   if (typeof w.gtag === 'function') {
     try {
