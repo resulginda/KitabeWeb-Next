@@ -15,6 +15,13 @@ export function GoogleAnalytics() {
         (function () {
           try {
             if (/^\\/(reset-password|verify-email)/.test(location.pathname)) return;
+            try {
+              if (localStorage.getItem('kitabe_ga_optout') === '1') {
+                window['ga-disable-${GA_ID}'] = true;
+                return;
+              }
+            } catch (e) {}
+            if (window['ga-disable-${GA_ID}']) return;
             var ua = navigator.userAgent || '';
             if (navigator.webdriver) return;
             if (/bot|crawler|spider|slurp|Keenable|ExaSearch|HeadlessChrome|PhantomJS|Puppeteer|Playwright|Scrapy|python-requests|Bytespider|GPTBot|ClaudeBot|CCBot|OAI-SearchBot|Amzn-SearchBot|AhrefsBot|SemrushBot|DataForSeo|BLEXBot|PetalBot|MJ12bot|DotBot/i.test(ua)) return;

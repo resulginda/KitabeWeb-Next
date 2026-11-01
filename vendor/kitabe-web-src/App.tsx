@@ -41,6 +41,7 @@ import AdminPanelPage from './pages/AdminPanelPage';
 import AdminPushBroadcastPage from './pages/AdminPushBroadcastPage';
 import AdminPushLogsPage from './pages/AdminPushLogsPage';
 import AdminFacebookSharePage from './pages/AdminFacebookSharePage';
+import AdminSocialVideoSharePage from './pages/AdminSocialVideoSharePage';
 import AdminContactFormsPage from './pages/AdminContactFormsPage';
 import AdminHubPage from './pages/AdminHubPage';
 import UserManagementPage from './pages/UserManagementPage';
@@ -96,6 +97,14 @@ function AppContent() {
           <Route path="/admin-push" element={<AdminPushBroadcastPage />} />
           <Route path="/admin-push-logs" element={<AdminPushLogsPage />} />
           <Route path="/admin-facebook-share" element={<AdminFacebookSharePage />} />
+          <Route
+            path="/admin-instagram-share"
+            element={<AdminSocialVideoSharePage platform="instagram" />}
+          />
+          <Route
+            path="/admin-youtube-share"
+            element={<AdminSocialVideoSharePage platform="youtube" />}
+          />
           <Route path="/admin-contact-forms" element={<AdminContactFormsPage />} />
           <Route path="/user-management" element={<UserManagementPage />} />
           <Route path="/account-settings" element={<AccountSettingsPage />} />

@@ -64,6 +64,16 @@ export default function AdminHubPage() {
         icon: 'share',
         label: t('account.facebookShareLogs', 'Facebook Paylaşımları'),
       },
+      {
+        to: '/admin-instagram-share',
+        icon: 'photo_camera',
+        label: t('account.instagramShareLogs', 'Instagram Paylaşımları'),
+      },
+      {
+        to: '/admin-youtube-share',
+        icon: 'smart_display',
+        label: t('account.youtubeShareLogs', 'YouTube Paylaşımları'),
+      },
     ],
     [t, contactFormsCount, pendingRatings.length, pendingSubmissions.length]
   );

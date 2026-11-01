@@ -14,6 +14,7 @@ type ShareLogRow = {
   attempted_at?: string;
   posted_at?: string | null;
   facebook_post_id?: string | null;
+  facebook_post_url?: string | null;
   error?: string | null;
   place_url?: string | null;
   message_preview?: string | null;
@@ -411,7 +412,21 @@ export default function AdminFacebookSharePage() {
                   <strong>Page ID:</strong> {selected.facebook_page_id || '—'}
                 </p>
                 <p style={{ margin: 0 }}>
-                  <strong>Post ID:</strong> {selected.facebook_post_id || '—'}
+                  <strong>Post:</strong>{' '}
+                  {selected.facebook_post_id ? (
+                    <a
+                      href={
+                        selected.facebook_post_url ||
+                        `https://www.facebook.com/${selected.facebook_post_id}`
+                      }
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Gönderiyi aç →
+                    </a>
+                  ) : (
+                    '—'
+                  )}
                 </p>
                 <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '0.8125rem' }}>
                   content_date: {selected.content_date || '—'} · run_id: {selected.run_id || '—'}

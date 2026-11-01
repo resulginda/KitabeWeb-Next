@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { API_BASE_URL } from '../config/api';
 import { getStoredToken, setStoredToken, clearStoredToken } from '../utils/authToken';
+import { syncWebGaOptOut } from '../utils/gaOptOut';
 
 export type Kullanici = {
   id: string;
@@ -74,6 +75,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const getToken = useCallback(async (): Promise<string | null> => {
     return getStoredToken();
   }, []);
+
+  useEffect(() => {
+    syncWebGaOptOut(kullanici?.rol ?? null);
+  }, [kullanici?.rol]);
 
   const fetchUsers = useCallback(async () => {
     if (kullanici?.rol !== 'admin') {
